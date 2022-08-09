@@ -41,7 +41,3 @@ yarn-error.log*
 
 # vscode
 .vscode
-
-# prisma-trpc-generator (use `yarn prisma generate` to generate)
-prisma/generated
- 
