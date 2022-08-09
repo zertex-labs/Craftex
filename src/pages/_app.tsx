@@ -1,11 +1,11 @@
 // src/pages/_app.tsx
 import { withTRPC } from "@trpc/next";
 import type { AppRouter } from "../server/router";
-import type { AppType } from "next/dist/shared/lib/utils";
+import type { AppType, NextWebVitalsMetric } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
+import { GoogleAnalytics, usePageViews, event } from "nextjs-google-analytics";
 import { env } from "../env/client.mjs";
 
 const MyApp: AppType = ({
@@ -23,6 +23,24 @@ const MyApp: AppType = ({
     </>
   );
 };
+
+export function reportWebVitals({
+  id,
+  name,
+  label,
+  value,
+}: NextWebVitalsMetric) {
+  event(
+    name,
+    {
+      category: label === "web-vital" ? "Web Vitals" : "Next.js custom metric",
+      value: Math.round(name === "CLS" ? value * 1000 : value), // values must be integers
+      label: id, // id unique to current page load
+      nonInteraction: true, // avoids affecting bounce rate.
+    },
+    env.NEXT_PUBLIC_GA_ID
+  );
+}
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {
