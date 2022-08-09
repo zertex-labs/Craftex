@@ -1,6 +1,6 @@
+import { trpc } from "@trpc";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { trpc } from "../../utils/trpc";
 
 interface Inputs {
   title: string;

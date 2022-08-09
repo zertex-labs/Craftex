@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createRouter } from "../context";
+import { createRouter } from "@context";
 
 export const PluginDto = z.object({
   title: z.string(),
