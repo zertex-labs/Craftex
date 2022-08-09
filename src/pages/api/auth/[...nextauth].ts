@@ -3,10 +3,11 @@ import DiscordProvider from "next-auth/providers/discord";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "../../../server/db/client";
-import { env } from "../../../env/server.mjs";
+import { prisma } from "@db";
+import { env } from "@env/server";
 
 export const authOptions: NextAuthOptions = {
+  secret: env.AUTH_SECRET,
   // Include user.id on session
   callbacks: {
     session({ session, user }) {
@@ -23,7 +24,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    // ...add more providers here
+    // ...add more providers here 
   ],
 };
 
