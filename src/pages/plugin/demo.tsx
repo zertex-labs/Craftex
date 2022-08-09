@@ -72,7 +72,7 @@ export default function PluginDemo() {
             <li key={p.id}>{p.title}</li>
             <ul>
               {p?.developers?.map((d) => (
-                <li>{`${d.name} (${d.email}) >> ${d.id}`}</li>
+                <li key={`${d.id}`}>{`${d.name} (${d.email}) >> ${d.id}`}</li>
               ))}
             </ul>
           </>
