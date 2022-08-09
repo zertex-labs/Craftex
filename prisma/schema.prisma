@@ -14,11 +14,7 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
-}
-
-// Necessary for Next auth
+// --- Next Auth Start
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -53,6 +49,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    plugins       Plugin[]
 }
 
 model VerificationToken {
@@ -61,4 +58,12 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+// Next Auth End ---
+
+model Plugin {
+    id         String @id @default(cuid())
+    title      String @unique
+    developers User[]
 }
