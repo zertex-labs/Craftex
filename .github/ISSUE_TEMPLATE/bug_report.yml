@@ -1,0 +1,39 @@
+name: 🐜 Bug report
+description: Something not working as expected? Raise it here!
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "We appreciate you taking the time to report a bug. To get the quickest support for your issue, try to be as specific as you can. "
+  - type: textarea
+    id: what-i-did
+    attributes:
+      label: What I did
+      description: What did you do to encounter this bug? Please be as detailed as possible!
+      placeholder: What I did
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What actually happened
+      description: What happened when you did the steps above?
+      placeholder: Describe what happened when you performed the steps above.
+    validations:
+      required: true
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should have happened
+      description: What should have happened when you did the steps above?
+      placeholder: Describe what you would expect to happen when you perform the steps above.
+    validations:
+      required: true
+  - type: textarea
+    id: other
+    attributes:
+      label: Other
+      description: Is there anything else that you think will be relevant in helping to debug this issue?
+      placeholder: It only works on my machine.
+    validations:
+      required: false
