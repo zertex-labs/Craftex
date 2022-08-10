@@ -2,7 +2,6 @@ import { z } from "zod";
 import { createProtectedRouter } from "@protected-router";
 
 export const UserDto = z.object({
-  name: z.string(),
   email: z.string().email(),
 });
 
