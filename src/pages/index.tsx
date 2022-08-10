@@ -20,9 +20,13 @@ const Home: NextPage = () => {
             Welcome {session.user.name} ({session.user.email})
           </h1>
           {typeof session.user.image === "string" && (
-            <Image src={session.user.image} width={64} height={64} />
+            <Image
+              key={session.user.id}
+              src={session.user.image}
+              width={64}
+              height={64}
+            />
           )}
-          <button onClick={() => signOut()}>Sign out</button>
         </div>
       ) : (
         <div>
