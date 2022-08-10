@@ -1,5 +1,5 @@
 import { Theme } from "@emotion/react";
-import { Color, hex } from "../styles";
+import { Color, hex } from "../styles/hex";
 
 declare module "@emotion/react" {
   export interface Theme {

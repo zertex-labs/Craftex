@@ -1,3 +1,4 @@
+import { hex } from "@styles/hex";
 import { Button } from "@styles/buttons";
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -15,7 +16,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Button>Demo Button</Button>
+      <Button theme={{ color: { primary: hex("#f00000") } }}>
+        Demo Button
+      </Button>
 
       {status === "authenticated" && session.user ? (
         <div>
