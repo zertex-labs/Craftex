@@ -8,12 +8,19 @@ import { z } from "zod";
 export const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
 
+  // Prisma
   DATABASE_URL: z.string().url(),
+
+  // NextAuth
   NEXTAUTH_SECRET: z.string(),
   NEXTAUTH_URL: z.string().url(),
+
+  // NextAuth Providers
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
-  AUTH_SECRET: z.string(),
+
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
 });
 
 /**
