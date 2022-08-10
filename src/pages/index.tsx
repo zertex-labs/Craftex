@@ -1,3 +1,4 @@
+import { Button } from "@styles/buttons";
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
@@ -30,10 +31,10 @@ const Home: NextPage = () => {
           )}
         </div>
       ) : (
-        <div>
+        <>
           <h1>Bruh, sign in??</h1>
-          <button onClick={() => signIn()}>Sign in</button>
-        </div>
+          <Button onClick={() => signIn()}>Sign in</Button>
+        </>
       )}
     </>
   );

@@ -1,11 +1,13 @@
 // src/pages/_app.tsx
+import { CacheProvider, ThemeProvider } from "@emotion/react";
 import { env } from "@env/client";
 import { AppRouter } from "@server/router";
-import globalStyles from '@styles/global';
+import globalStyles from "@styles/global";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import type { AppType, NextWebVitalsMetric } from "next/dist/shared/lib/utils";
 import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
+import CraftexTheme from "src/theme";
 import superjson from "superjson";
 
 const MyApp: AppType = ({
@@ -19,7 +21,9 @@ const MyApp: AppType = ({
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
       <SessionProvider session={session}>
         {globalStyles}
-        <Component {...pageProps} />
+        <ThemeProvider theme={CraftexTheme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
       </SessionProvider>
     </>
   );
