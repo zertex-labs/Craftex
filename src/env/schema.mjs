@@ -21,6 +21,9 @@ export const serverSchema = z.object({
 
   GITHUB_CLIENT_ID: z.string(),
   GITHUB_CLIENT_SECRET: z.string(),
+
+  GOOGLE_CLIENT_ID: z.string().endsWith(".apps.googleusercontent.com"),
+  GOOGLE_CLIENT_SECRET: z.string(),
 });
 
 /**
@@ -29,7 +32,7 @@ export const serverSchema = z.object({
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 export const clientSchema = z.object({
-  NEXT_PUBLIC_GA_ID: z.string().startsWith('G-'),
+  NEXT_PUBLIC_GA_ID: z.string().startsWith("G-"),
 });
 
 /**
@@ -39,5 +42,5 @@ export const clientSchema = z.object({
  * @type {{ [k in keyof z.infer<typeof clientSchema>]: z.infer<typeof clientSchema>[k] | undefined }}
  */
 export const clientEnv = {
-  NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID
+  NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
 };
