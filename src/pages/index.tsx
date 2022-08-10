@@ -15,6 +15,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Button>Demo Button</Button>
+
       {status === "authenticated" && session.user ? (
         <div>
           <h1>
