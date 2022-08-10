@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 
@@ -19,6 +19,7 @@ const Home: NextPage = () => {
           <h1>
             Welcome {session.user.name} ({session.user.email})
           </h1>
+          <button onClick={() => signOut()}>Sign out</button>
           {typeof session.user.image === "string" && (
             <Image
               key={session.user.id}
