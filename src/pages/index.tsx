@@ -22,6 +22,7 @@ const Home: NextPage = () => {
           {typeof session.user.image === "string" && (
             <Image
               key={session.user.id}
+              alt={`${session.user.name}'s profile picture`}
               src={session.user.image}
               width={64}
               height={64}
