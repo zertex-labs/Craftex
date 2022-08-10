@@ -22,6 +22,7 @@ const Home: NextPage = () => {
           <h1>
             Welcome {session.user.name} ({session.user.email})
           </h1>
+          <button onClick={() => signOut()}>Sign out</button>
           {typeof session.user.image === "string" && (
             <Image
               key={session.user.id}
