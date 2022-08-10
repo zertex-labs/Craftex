@@ -36,8 +36,6 @@ const protectedPluginRouter = createProtectedRouter().mutation("create", {
           id: true,
         },
       });
-
-      console.log("valid ", validDevelopers);
     }
 
     return db.plugin.create({
