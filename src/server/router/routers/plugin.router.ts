@@ -28,16 +28,13 @@ const protectedPluginRouter = createProtectedRouter().mutation("create", {
   }) => {
     var validDevelopers: { email?: string; id: string }[] = [];
     if (developers && developers.length > 0) {
-      validDevelopers = (
-        await db.user.findMany({
-          where: {
-            email: { in: developers.map((d) => d.email), not: author.email },
-          },
-        })
-      ).map((d) => {
-        return {
-          id: d.id,
-        };
+      validDevelopers = await db.user.findMany({
+        where: {
+          email: { in: developers.map((d) => d.email), not: author.email },
+        },
+        select: {
+          id: true,
+        },
       });
 
       console.log("valid ", validDevelopers);
