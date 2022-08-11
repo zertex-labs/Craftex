@@ -1,5 +1,5 @@
 // src/pages/_app.tsx
-import { CacheProvider, ThemeProvider } from "@emotion/react";
+import Navigation from "@components/Navigation";
 import { env } from "@env/client";
 import { AppRouter } from "@server/router";
 import globalStyles from "@styles/global";
@@ -7,8 +7,9 @@ import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import type { AppType, NextWebVitalsMetric } from "next/dist/shared/lib/utils";
 import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
-import CraftexTheme from "src/theme";
 import superjson from "superjson";
+
+import "@styles/tailwind.css";
 
 const MyApp: AppType = ({
   Component,
@@ -21,9 +22,8 @@ const MyApp: AppType = ({
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
       <SessionProvider session={session}>
         {globalStyles}
-        <ThemeProvider theme={CraftexTheme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <Navigation />
+        <Component {...pageProps} />
       </SessionProvider>
     </>
   );

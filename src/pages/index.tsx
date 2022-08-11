@@ -1,5 +1,4 @@
-import { hex } from "@styles/hex";
-import { Button } from "@styles/buttons";
+import DefaultButton from "@components/Button";
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
@@ -15,10 +14,6 @@ const Home: NextPage = () => {
         <meta name="description" content="Craftex TOOD" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Button theme={{ color: { primary: hex("#f00000") } }}>
-        Demo Button
-      </Button>
 
       {status === "authenticated" && session.user ? (
         <div>
@@ -39,7 +34,7 @@ const Home: NextPage = () => {
       ) : (
         <>
           <h1>Bruh, sign in??</h1>
-          <Button onClick={() => signIn()}>Sign in</Button>
+          <DefaultButton onClick={() => signIn()}>Sign in</DefaultButton>
         </>
       )}
     </>
