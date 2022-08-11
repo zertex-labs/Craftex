@@ -1,7 +1,7 @@
-import styled from "@emotion/styled";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Button from "./Button";
+import styled from "styled-components";
 
 import Logo from "/public/logo.svg";
 import SearchIcon from "/public/search.svg";
