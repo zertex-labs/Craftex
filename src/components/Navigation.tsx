@@ -1,65 +1,127 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import Button from "./Button";
-import styled from "styled-components";
 
+import Link from "next/link";
+import tw from "tailwind-styled-components";
+import OutlineButton from "./buttons/outline";
+import UserHolder from "./UserHolder";
 import Logo from "/public/logo.svg";
 import SearchIcon from "/public/search.svg";
 
-const Search = styled.div``;
+export const NavigationStyled = tw.div`
+  flex
+  flex-row
+  min-w-full
+  justify-between
+  items-center
+  border-b-2
+  border-gray-medium
 
-const LinksHolder = styled.ul``;
+  px-8
+  py-3
+`;
 
-const Link = styled.li``;
+const Search = tw.div`
+  hidden
 
-export const NavigationStyled = styled.div``;
+  lg:flex
+  flex-row
+  items-center
+
+  border
+  border-gray-medium
+  text-gray-medium
+
+  justify-between
+  w-6/12
+
+  px-2
+  py-2
+  text-sm
+
+  rounded-lg
+  focus-within:border
+  focus-within:border-gray-dark
+  focus-within:text-gray-dark
+`;
+
+const LinksHolder = tw.ul`
+  flex
+  flex-row
+  items-center
+  space-x-4
+`;
+
+const CraftexLink = tw.li`
+  text-gray-dark
+  active:text-primary
+
+  border-b
+  border-transparent
+
+  cursor-pointer
+
+  active:border-primary
+`;
+
+const Unauthenticated = tw.div`
+  flex
+  flex-row
+  items-center
+  space-x-2
+`;
 
 export default function Navigation() {
   const { data: session, status } = useSession();
 
   return (
     <NavigationStyled>
-      <Image alt="logo" src={Logo} height={41} width={32} />
-      <Search>
-        <p>What are we building today?</p>
-        <Image alt="🔎" src={SearchIcon} />
-      </Search>
-      <LinksHolder>
-        <Link>Link #1</Link>
-        <Link>Link #2</Link>
-        <Link>Link #3</Link>
-        <Link>Link #4</Link>
-      </LinksHolder>
-      {status === "authenticated" && session.user ? (
-        <>
-          {typeof session.user.image === "string" && (
+      <div className="flex flex-grow space-x-12">
+        <Link href="/">
+          <a>
             <Image
-              key={session.user.id}
-              alt={`${session.user.name}'s profile picture`}
-              src={session.user.image}
-              width={64}
-              height={64}
+              alt="logo"
+              src={Logo}
+              height={32}
+              width={22}
+              className="w-1/12 select-none pointer-events-none"
             />
-          )}
-          <p>{session.user.name}</p>
-          <Button
-            onClick={() => signOut()}
-            theme={{ color: { primary: "red" } }}
-          >
-            Sign Out (temporary)
-          </Button>
-        </>
-      ) : (
-        <>
-          <Button onClick={() => signIn()}>Sign in</Button>
-          <Button
-            onClick={() => signOut()}
-            theme={{ color: { primary: "red" } }}
-          >
-            Sign Out
-          </Button>
-        </>
-      )}
+          </a>
+        </Link>
+
+        <Search>
+          <input
+            type="text"
+            placeholder="What are we building today?"
+            className="w-full pl-1 pr-2 outline-none float-none "
+            maxLength={64}
+          />
+          <Image
+            alt="🔎"
+            src={SearchIcon}
+            className="select-none pointer-events-none"
+          />
+        </Search>
+      </div>
+
+      <div className="flex space-x-6">
+        <LinksHolder>
+          <CraftexLink>Link #1</CraftexLink>
+          <CraftexLink>Link #2</CraftexLink>
+          <CraftexLink>Link #3</CraftexLink>
+          <CraftexLink>Link #4</CraftexLink>
+        </LinksHolder>
+
+        <div className="w-px bg-gray-medium"></div>
+
+        {status === "authenticated" && session.user ? (
+          <UserHolder user={session.user} />
+        ) : (
+          <Unauthenticated>
+            <OutlineButton title="Join" onClick={() => signIn()} />
+          </Unauthenticated>
+        )}
+      </div>
     </NavigationStyled>
   );
 }
