@@ -15,29 +15,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="bg-gray-light h-full">
-        {status === "authenticated" && session.user ? (
-          <div>
-            <h1>
-              Welcome {session.user.name} ({session.user.email})
-            </h1>
-            <button onClick={() => signOut()}>Sign out</button>
-            {typeof session.user.image === "string" && (
-              <Image
-                key={session.user.id}
-                alt={`${session.user.name}'s profile picture`}
-                src={session.user.image}
-                width={64}
-                height={64}
-              />
-            )}
-          </div>
-        ) : (
-          <>
-            <h1>Bruh, sign in??</h1>
-            <OutlineButton onClick={() => signIn()}>Sign in</OutlineButton>
-          </>
-        )}
+      <div className="px-24 py-6">
+        <h1 className="font-bold text-3xl">Homepage</h1>
       </div>
     </>
   );
