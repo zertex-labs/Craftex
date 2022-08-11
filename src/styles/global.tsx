@@ -4,14 +4,19 @@ export default (
   <Global
     styles={css`
       html,
+      body,
+      div#__next {
+        height: 100%;
+      }
+
+      html,
       body {
         line-height: 1.15; /* 1 */
         -ms-text-size-adjust: 100%; /* 2 */
         -webkit-text-size-adjust: 100%; /* 2 */
 
-        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-        font-size: 18px;
+        font-family: -apple-system, BlinkMacSystemFont, Inter, Helvetica, sans-serif;
+        font-size: 14px;
 
         padding: 0;
         margin: 0;
