@@ -15,3 +15,11 @@ yarn prisma db push
 ```yarn
 yarn dev
 ```
+
+<h2>Contributors!</h2>
+
+<a href="https://github.com/zertex-labs/Craftex/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=zertex-labs/Craftex" />
+</a>
+
+<h6><i>Generated with [contrib.rocks](https://contrib.rocks) </i></h6>
