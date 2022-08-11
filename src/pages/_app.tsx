@@ -1,4 +1,5 @@
 // src/pages/_app.tsx
+import Navigation from "@components/Navigation";
 import { CacheProvider, ThemeProvider } from "@emotion/react";
 import { env } from "@env/client";
 import { AppRouter } from "@server/router";
@@ -22,6 +23,8 @@ const MyApp: AppType = ({
       <SessionProvider session={session}>
         {globalStyles}
         <ThemeProvider theme={CraftexTheme}>
+          <a href="#">asasd</a>
+          <Navigation />
           <Component {...pageProps} />
         </ThemeProvider>
       </SessionProvider>
