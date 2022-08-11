@@ -76,31 +76,33 @@ export default function Navigation() {
 
   return (
     <NavigationStyled>
-      <Link href="/">
-        <a>
-          <Image
-            alt="logo"
-            src={Logo}
-            height={32}
-            width={22}
-            className="w-1/12 select-none pointer-events-none"
-          />
-        </a>
-      </Link>
+      <div className="flex flex-grow space-x-12">
+        <Link href="/">
+          <a>
+            <Image
+              alt="logo"
+              src={Logo}
+              height={32}
+              width={22}
+              className="w-1/12 select-none pointer-events-none"
+            />
+          </a>
+        </Link>
 
-      <Search>
-        <input
-          type="text"
-          placeholder="What are we building today?"
-          className="w-full pl-1 pr-2 outline-none float-none "
-          maxLength={64}
-        />
-        <Image
-          alt="🔎"
-          src={SearchIcon}
-          className="select-none pointer-events-none"
-        />
-      </Search>
+        <Search>
+          <input
+            type="text"
+            placeholder="What are we building today?"
+            className="w-full pl-1 pr-2 outline-none float-none "
+            maxLength={64}
+          />
+          <Image
+            alt="🔎"
+            src={SearchIcon}
+            className="select-none pointer-events-none"
+          />
+        </Search>
+      </div>
 
       <div className="flex space-x-6">
         <LinksHolder>
