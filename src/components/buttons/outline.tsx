@@ -18,7 +18,10 @@ export const OutlineStyled = tw.button`
   hover:bg-primary-light/[.05]
 `;
 
-const OutlineButton = ({ title, ...props }: ButtonProps): JSX.Element => {
+const OutlineButton: React.FC<ButtonProps> = ({
+  title,
+  ...props
+}) => {
   return <OutlineStyled {...props}>{title}</OutlineStyled>;
 };
 
