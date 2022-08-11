@@ -19,10 +19,10 @@ export default function Navigation() {
 
   return (
     <NavigationStyled>
-      <Image src={Logo} height={41} width={32} />
+      <Image alt="logo" src={Logo} height={41} width={32} />
       <Search>
         <p>What are we building today?</p>
-        <Image src={SearchIcon} />
+        <Image alt="🔎" src={SearchIcon} />
       </Search>
       <LinksHolder>
         <Link>Link #1</Link>
