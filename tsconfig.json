@@ -12,8 +12,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
+    "jsx": "preserve",
     "incremental": true,
     "noUncheckedIndexedAccess": true,
 
@@ -39,8 +38,8 @@
 
       "@context": ["src/server/router/context.ts"],
       "@protected-router": ["src/server/router/protected-router.ts"],
-      
-      "@trpc": ["src/utils/trpc.ts"],
+
+      "@trpc": ["src/utils/trpc.ts"]
     }
   },
   "include": [
