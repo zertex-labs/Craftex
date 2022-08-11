@@ -23,7 +23,6 @@ const MyApp: AppType = ({
       <SessionProvider session={session}>
         {globalStyles}
         <ThemeProvider theme={CraftexTheme}>
-          <a href="#">asasd</a>
           <Navigation />
           <Component {...pageProps} />
         </ThemeProvider>

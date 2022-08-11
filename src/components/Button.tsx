@@ -1,23 +1,31 @@
 import styled from "@emotion/styled";
 
-export const Button = styled.button(({ theme }) => ({
-  outline: "none",
+export const Button = styled.button(
+  ({
+    theme: {
+      color: { primary },
+    },
+  }) => ({
+    outline: "none",
 
-  border: `1px solid ${theme.color.primary}`,
-  borderRadius: 8,
+    border: `1px solid ${primary}`,
+    borderRadius: 8,
 
-  padding: ".6em 1.1em",
+    padding: ".6em 1.1em",
 
-  fontSize: ".65em",
-  fontWeight: "bolder",
+    fontSize: ".65em",
+    fontWeight: "bolder",
 
-  background: `${theme.color.primary}33`,
+    background: `${primary}33`,
 
-  color: theme.color.primary,
+    color: primary,
 
-  "&:hover": {
-    background: `${theme.color.primary}40`,
-  },
-}));
+    "&:hover": {
+      background: `${
+        primary.startsWith("#") ? primary + "33" : `rgba("${primary}", 0.2)`
+      }`,
+    },
+  })
+);
 
 export default Button;
