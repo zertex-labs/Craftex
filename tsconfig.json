@@ -31,6 +31,8 @@
       "@types/*": ["src/types/*"],
       "@styles/*": ["src/styles/*"],
 
+      "@components/*": ["src/components/*"],
+
       "@env/server": ["src/env/server.mjs"],
       "@env/client": ["src/env/client.mjs"],
       "@env/schema": ["src/env/schema.mjs"],

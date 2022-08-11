@@ -19,3 +19,5 @@ export const Button = styled.button(({ theme }) => ({
     background: `${theme.color.primary}40`,
   },
 }));
+
+export default Button;
