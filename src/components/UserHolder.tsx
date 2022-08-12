@@ -16,8 +16,8 @@ const UserHolderContainer = tw.div`
 `;
 
 const Separator = tw.span`
-  text-gray-medium
-  text-lg
+  text-gray-200
+  text-xl
   pointer-events-none
   select-none
 `;
