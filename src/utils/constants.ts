@@ -1,0 +1,1 @@
+export const ERROR_LENGTH_MS = 5000;

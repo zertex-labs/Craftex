@@ -22,7 +22,7 @@ const OutlineButton: React.FC<ButtonProps> = ({
   title,
   ...props
 }) => {
-  return <OutlineStyled {...props}>{title}</OutlineStyled>;
+  return <OutlineStyled type="button" {...props}>{title}</OutlineStyled>;
 };
 
 export default OutlineButton;
