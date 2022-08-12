@@ -12,11 +12,17 @@ module.exports = {
           darker: "#005141",
         },
         gray: {
-          // https://coolors.co/8e9196-c5c5c5-f9f9f9-1F2938
-          DEFAULT: "#8E9196",
-          medium: "#C5C5C5",
-          light: "#F9F9F9",
-          dark: "#1F2938",
+          // https://coolors.co/f9f9f9-dcdddd-bfc0c1-acadaf-86888b-63666a-54575b-414449-313439-26292e
+          100: "#f9f9f9",
+          200: "#EBEBEB",
+          300: "#bfc0c1",
+          400: "#acadaf",
+          500: "#86888b",
+          600: "#63666a",
+          700: "#54575b",
+          800: "#414449",
+          900: "#313439",
+          1000: "#26292e",
         },
       },
     },
