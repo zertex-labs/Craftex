@@ -1,13 +1,13 @@
+import OutlineButton from "@components/buttons/outline";
+import TextButton from "@components/buttons/text";
+import Error from "@components/Error";
+
 import { trpc } from "@trpc";
+import { ERROR_LENGTH_MS } from "@utils/constants";
 import { signIn, useSession } from "next-auth/react";
-import { useState } from "react";
-import {
-  Controller,
-  SubmitHandler,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
-import Select from "react-select";
+import { useEffect, useState } from "react";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import tw from "tailwind-styled-components";
 import { z } from "zod";
 
 interface Inputs {
@@ -17,10 +17,6 @@ interface Inputs {
   }[];
 }
 
-const options: { value: { email: string }; label: string }[] = [
-  { value: { email: "rexy@gmail.com" }, label: "Chocolate" },
-];
-
 export default function PluginCreate() {
   const {
     register,
@@ -28,6 +24,7 @@ export default function PluginCreate() {
     reset,
     control,
     formState: { errors },
+    clearErrors,
   } = useForm<Inputs>();
 
   const {
@@ -44,6 +41,12 @@ export default function PluginCreate() {
   const { data: session, status } = useSession();
   const [disabled, setDisabled] = useState(false);
 
+  // wipe error after X amount of ms
+  useEffect(() => {
+    if (errors.title?.message)
+      setTimeout(() => clearErrors("title"), ERROR_LENGTH_MS);
+  }, [errors.title?.message]);
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     reset();
 
@@ -56,7 +59,10 @@ export default function PluginCreate() {
       });
     }
 
-    if (!mutationError) setDisabled(false);
+    if (!mutationError) {
+      setDisabled(false);
+      clearErrors();
+    }
   };
 
   if (status !== "authenticated") {
@@ -69,69 +75,137 @@ export default function PluginCreate() {
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          placeholder="Your title here"
-          {...register("title", {
-            required: "The title is required",
-            disabled,
-          })}
-        />
-        {errors.title?.message}
+    <PluginCreateContainer>
+      <PluginForm onSubmit={handleSubmit(onSubmit)}>
+        <InputHolder>
+          <input
+            placeholder="My cool plugin"
+            className="w-full py-1 outline-none float-none text-sm bg-transparent"
+            {...register("title", {
+              required: "The title is required",
+              disabled,
+            })}
+            maxLength={64}
+            name="title"
+          />
+        </InputHolder>
+        <Error error={errors.title?.message} className="pl-1" />
 
-        {developerFields.map((field, index) => (
-          <li key={field.id}>
-            <input
-              key={field.id} // important to include key with field's id
-              placeholder={`[${index}] example@gmail.com`}
-              className={errors?.developers?.[index]?.email ? "error" : ""}
-              {...register(`developers.${index}.email` as const, {
-                required: true,
-                validate: (v) => z.string().email().safeParse(v).success,
-              })}
-            />
+        <div className="w-full pb-2">
+          <ol className="hover:list-decimal space-y-1">
+            {developerFields.map((field, index) => (
+              <li key={`${field.id}-li`}>
+                <InputHolder
+                  className={
+                    errors?.developers?.[index]?.email ? "border-red-400" : ""
+                  }
+                >
+                  <input
+                    key={field.id} // important to include key with field's id
+                    placeholder={`[${index}] example@gmail.com`}
+                    className={`py-1 outline-none float-none text-sm bg-transparent`}
+                    {...register(`developers.${index}.email` as const, {
+                      required: true,
+                      validate: (v) => z.string().email().safeParse(v).success,
+                    })}
+                  />
 
-            {errors?.developers?.[index]?.message}
+                  <div
+                    className="bg-transparent rounded-full hover:bg-gray-100 active:bg-gray-200"
+                    title="Remove Developer"
+                    onClick={() => developerRemove(index)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 p-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                </InputHolder>
+              </li>
+            ))}
+          </ol>
+        </div>
 
-            <button
-              key={field.id}
-              type="button"
-              onClick={() => developerRemove(index)}
-            >
-              Delete
-            </button>
-          </li>
-        ))}
+        <div className="w-full flex justify-between px-8">
+          <OutlineButton
+            title="Add Developer"
+            onClick={() =>
+              developerAppend({
+                email: "",
+              })
+            }
+          />
 
-        <button
-          type="button"
-          onClick={() =>
-            developerAppend({
-              email: "",
-            })
-          }
-        >
-          Add another developer
-        </button>
+          <TextButton type="submit" title="Create" />
 
-        <input type="submit" />
+          <Error error={mutationError?.message}></Error>
+        </div>
+      </PluginForm>
 
-        {mutationError?.message}
-      </form>
-
-      <ul>
+      <ul className="list-disc">
         {plugins?.map((p) => (
           <>
             <li key={p.id}>{p.title}</li>
-            <ul>
+            <ol className="list-decimal pl-8 pb-4">
               {p?.developers?.map((d) => (
                 <li key={`${d.id}`}>{`${d.name} (${d.email}) >> ${d.id}`}</li>
               ))}
-            </ul>
+            </ol>
           </>
         ))}
       </ul>
-    </>
+    </PluginCreateContainer>
   );
 }
+
+const PluginCreateContainer = tw.div`
+  flex
+  flex-col
+  items-center
+  justify-between
+
+  w-full
+  h-2/4
+`;
+
+const PluginForm = tw.form`
+  flex
+  flex-col
+  justify-between
+  items-center
+  space-y-1
+
+  w-1/3
+`;
+
+const InputHolder = tw.div`
+  flex
+  flex-row
+  items-start
+
+  border
+  border-gray-400
+  text-gray-600
+
+  justify-between
+
+  px-2
+  py-1.5
+  w-full
+
+  rounded-lg
+  focus-within:border
+
+  focus-within:border-gray-500
+  focus-within:text-gray-900
+`;

@@ -1,1 +1,1 @@
-type ButtonProps = { title: string } & ButtonHTMLAttributes<string>;
+type ButtonProps = { title: string } & HTMLAttributes<string>;

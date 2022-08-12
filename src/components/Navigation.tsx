@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import tw from "tailwind-styled-components";
 import OutlineButton from "./buttons/outline";
+import TextButton from "./buttons/text";
 import UserHolder from "./UserHolder";
 import Logo from "/public/logo.svg";
 import SearchIcon from "/public/search.svg";
