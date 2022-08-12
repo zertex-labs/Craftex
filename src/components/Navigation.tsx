@@ -14,13 +14,14 @@ export const NavigationStyled = tw.div`
   min-w-full
   justify-between
   items-center
-  border-b-2
-  border-gray-medium
+  border-b
+  border-gray-200
 
-  bg-gray-100
+  bg-white
 
   px-8
   py-3
+  mb-4
 `;
 
 const Search = tw.div`
@@ -55,18 +56,17 @@ const LinksHolder = tw.ul`
 `;
 
 const CraftexLink = tw.li`
-  text-gray-1000
+  text-text
 
   border-b
   border-transparent
 
   cursor-pointer
 
-  active:border-primary
-  active:text-primary
+  active:border-primary-200
+  active:text-primary-200
 
-  hover:text-primary-light
-
+  hover:text-primary-200
 `;
 
 const Unauthenticated = tw.div`
@@ -121,7 +121,7 @@ export default function Navigation() {
 
       <div className="flex space-x-6 items-center">
         <div
-          className="bg-transparent rounded-full hover:bg-gray-200"
+          className="bg-transparent rounded-full hover:bg-gray-100 active:bg-gray-200"
           title="Upload a plugin"
         >
           <Link href="/plugin/create">
@@ -144,7 +144,7 @@ export default function Navigation() {
           </Link>
         </div>
 
-        <div className="w-px h-8 bg-gray-medium"></div>
+        <div className="w-px h-8 bg-gray-200"></div>
 
         {status === "authenticated" && session.user ? (
           <UserHolder user={session.user} />
