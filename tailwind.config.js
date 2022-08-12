@@ -14,7 +14,7 @@ module.exports = {
         gray: {
           // https://coolors.co/f9f9f9-dcdddd-bfc0c1-acadaf-86888b-63666a-54575b-414449-313439-26292e
           100: "#f9f9f9",
-          200: "#EBEBEB",
+          200: "##EBEBEB",
           300: "#bfc0c1",
           400: "#acadaf",
           500: "#86888b",
