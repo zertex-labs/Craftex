@@ -17,6 +17,8 @@ export const NavigationStyled = tw.div`
   border-b-2
   border-gray-medium
 
+  bg-gray-100
+
   px-8
   py-3
 `;
@@ -24,25 +26,25 @@ export const NavigationStyled = tw.div`
 const Search = tw.div`
   hidden
 
-  lg:flex
+  sm:flex
   flex-row
   items-center
 
   border
-  border-gray-medium
-  text-gray-medium
+  border-gray-400
+  text-gray-600
 
   justify-between
-  w-6/12
+  w-1/6
 
   px-2
-  py-2
-  text-sm
+  py-1.5
 
   rounded-lg
   focus-within:border
-  focus-within:border-gray-dark
-  focus-within:text-gray-dark
+
+  focus-within:border-gray-500
+  focus-within:text-gray-900
 `;
 
 const LinksHolder = tw.ul`
@@ -53,8 +55,7 @@ const LinksHolder = tw.ul`
 `;
 
 const CraftexLink = tw.li`
-  text-gray-dark
-  active:text-primary
+  text-gray-1000
 
   border-b
   border-transparent
@@ -62,6 +63,10 @@ const CraftexLink = tw.li`
   cursor-pointer
 
   active:border-primary
+  active:text-primary
+
+  hover:text-primary-light
+
 `;
 
 const Unauthenticated = tw.div`
@@ -76,7 +81,7 @@ export default function Navigation() {
 
   return (
     <NavigationStyled>
-      <div className="flex flex-grow space-x-12">
+      <div className="flex flex-grow space-x-4 items-center">
         <Link href="/">
           <a>
             <Image
@@ -93,26 +98,53 @@ export default function Navigation() {
           <input
             type="text"
             placeholder="What are we building today?"
-            className="w-full pl-1 pr-2 outline-none float-none "
+            className="w-full pl-1 pr-2 outline-none float-none text-xs bg-transparent"
             maxLength={64}
           />
           <Image
             alt="🔎"
             src={SearchIcon}
+            height={16}
+            width={16}
+            color="#54575b" // gray-700
             className="select-none pointer-events-none"
           />
         </Search>
-      </div>
 
-      <div className="flex space-x-6">
         <LinksHolder>
           <CraftexLink>Link #1</CraftexLink>
           <CraftexLink>Link #2</CraftexLink>
           <CraftexLink>Link #3</CraftexLink>
           <CraftexLink>Link #4</CraftexLink>
         </LinksHolder>
+      </div>
 
-        <div className="w-px bg-gray-medium"></div>
+      <div className="flex space-x-6 items-center">
+        <div
+          className="bg-transparent rounded-full hover:bg-gray-200"
+          title="Upload a plugin"
+        >
+          <Link href="/plugin/create">
+            <a>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10 p-2 rounded-full"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="#26292e"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
+              </svg>
+            </a>
+          </Link>
+        </div>
+
+        <div className="w-px h-8 bg-gray-medium"></div>
 
         {status === "authenticated" && session.user ? (
           <UserHolder user={session.user} />

@@ -15,7 +15,7 @@ export default (
         -ms-text-size-adjust: 100%; /* 2 */
         -webkit-text-size-adjust: 100%; /* 2 */
 
-        font-family: -apple-system, BlinkMacSystemFont, Inter, Helvetica, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, sans-serif;
         font-size: 14px;
 
         padding: 0;
