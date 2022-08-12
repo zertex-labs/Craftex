@@ -43,9 +43,10 @@ export default function PluginCreate() {
 
   // wipe error after X amount of ms
   useEffect(() => {
+    console.count("pogu")
     if (errors.title?.message)
       setTimeout(() => clearErrors("title"), ERROR_LENGTH_MS);
-  }, [errors.title?.message]);
+  }, [errors.title?.message, clearErrors]);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     reset();
