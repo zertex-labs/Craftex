@@ -54,7 +54,6 @@ export default function PluginCreate() {
   const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
-    console.count("pogu");
     if (errors.title?.message)
       setTimeout(() => clearErrors("title"), ERROR_LENGTH_MS);
   }, [errors.title?.message, clearErrors]);
