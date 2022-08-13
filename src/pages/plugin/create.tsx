@@ -8,7 +8,8 @@ import {
   useForm,
 } from "react-hook-form";
 import Select from "react-select";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Schema, z, ZodSchema } from "zod";
 
 interface Inputs {
   title: string;
@@ -17,9 +18,14 @@ interface Inputs {
   }[];
 }
 
-const options: { value: { email: string }; label: string }[] = [
-  { value: { email: "rexy@gmail.com" }, label: "Chocolate" },
-];
+const schema: ZodSchema<Inputs> = z.object({
+  title: z.string().min(1).max(64),
+  developers: z
+    .object({
+      email: z.string(),
+    })
+    .array(),
+});
 
 export default function PluginCreate() {
   const {
@@ -28,7 +34,9 @@ export default function PluginCreate() {
     reset,
     control,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
 
   const {
     append: developerAppend,
@@ -44,7 +52,7 @@ export default function PluginCreate() {
   const { data: session, status } = useSession();
   const [disabled, setDisabled] = useState(false);
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<{ title: string }> = (data) => {
     reset();
 
     setDisabled(true);
