@@ -2,13 +2,14 @@ import OutlineButton from "@components/buttons/outline";
 import TextButton from "@components/buttons/text";
 import Error from "@components/Error";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { trpc } from "@trpc";
 import { ERROR_LENGTH_MS } from "@utils/constants";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import tw from "tailwind-styled-components";
-import { z } from "zod";
+import { z, ZodSchema } from "zod";
 
 interface Inputs {
   title: string;
@@ -16,6 +17,15 @@ interface Inputs {
     email: string;
   }[];
 }
+
+const schema: ZodSchema<Inputs> = z.object({
+  title: z.string().min(1).max(64),
+  developers: z
+    .object({
+      email: z.string(),
+    })
+    .array(),
+});
 
 export default function PluginCreate() {
   const {
@@ -25,7 +35,9 @@ export default function PluginCreate() {
     control,
     formState: { errors },
     clearErrors,
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    resolver: zodResolver(schema),
+  });
 
   const {
     append: developerAppend,
@@ -41,9 +53,8 @@ export default function PluginCreate() {
   const { data: session, status } = useSession();
   const [disabled, setDisabled] = useState(false);
 
-  // wipe error after X amount of ms
   useEffect(() => {
-    console.count("pogu")
+    console.count("pogu");
     if (errors.title?.message)
       setTimeout(() => clearErrors("title"), ERROR_LENGTH_MS);
   }, [errors.title?.message, clearErrors]);
