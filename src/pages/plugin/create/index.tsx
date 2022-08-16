@@ -1,10 +1,11 @@
 import { trpc } from "@trpc";
-import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from "@utils/constants";
+import axios from "axios";
+import cuid from "cuid";
 import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
 import { signIn, useSession } from "next-auth/react";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import tw from "tailwind-styled-components";
-import { validationSchema, Inputs } from "./validation";
+import { Inputs, validationSchema } from "./validation";
 
 const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
   return (
@@ -18,7 +19,11 @@ const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
 };
 
 export default function PluginCreate() {
-  const { mutate, error: mutationError } = trpc.useMutation("plugin.create");
+  const {
+    mutate: createPlugin,
+    data: pluginData,
+    error: mutationError,
+  } = trpc.useMutation("plugin.create");
   const { data: plugins } = trpc.useQuery(["plugin.unprotected.all"]);
   const { data: session, status } = useSession();
   const [disabled, setDisabled] = useState(false);
@@ -42,10 +47,32 @@ export default function PluginCreate() {
             title: "",
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, actions) => {
-            console.log({ values, actions });
+          onSubmit={async ({ cover, developers, title }, actions) => {
+            if (!cover || !session.user) return;
+            const id = cuid();
 
-            alert(JSON.stringify(values, null, 2));
+            const { data: uploadData } = await axios.post(
+              "/api/s3/uploadFile",
+              {
+                name: `plugins/${id}`,
+                type: cover.type,
+              }
+            );
+
+            await axios.put(uploadData.url, cover, {
+              headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-type": cover.type,
+                "Cache-Control": "public,max-age=31536000,immutable",
+                "x-amz-acl": "public-read",
+              },
+            });
+
+            createPlugin({
+              id,
+              title,
+              author: session.user,
+            });
 
             actions.setSubmitting(false);
           }}
@@ -73,6 +100,7 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
           id="cover"
           name="cover"
           type="file"
+          accept=".png,.jpg,.jpeg,.webp"
           onChange={(e) => setFieldValue("cover", e.target.files?.[0])}
         />
       </InputHolder>

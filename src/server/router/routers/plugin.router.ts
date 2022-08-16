@@ -1,9 +1,8 @@
-import { z } from "zod";
 import { createRouter } from "@context";
+import type { SessionUser } from "next-auth";
+import { z } from "zod";
 import { createProtectedRouter } from "../protected-router";
 import { UserDto } from "./user.router";
-import { User } from "@prisma/client";
-import type { SessionUser } from "next-auth";
 
 const Author: z.ZodType<SessionUser> = z.lazy(() =>
   z.object({
@@ -18,12 +17,18 @@ export const PluginCreateDto = z.object({
   title: z.string(),
   author: Author,
   developers: UserDto.array().nullish(),
+  id: z.string().cuid().optional()
 });
 
 const protectedPluginRouter = createProtectedRouter().mutation("create", {
   input: PluginCreateDto,
   resolve: async ({
-    input: { title, author, developers },
+    input: {
+      id,
+      title,
+      author,
+      developers,
+    },
     ctx: { prisma: db },
   }) => {
     var validDevelopers: { email?: string; id: string }[] = [];
@@ -40,6 +45,7 @@ const protectedPluginRouter = createProtectedRouter().mutation("create", {
 
     return db.plugin.create({
       data: {
+        id,
         title,
         developers: {
           connect: [{ id: author.id }, ...validDevelopers],

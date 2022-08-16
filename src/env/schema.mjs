@@ -24,6 +24,9 @@ export const serverSchema = z.object({
 
   GOOGLE_CLIENT_ID: z.string().endsWith(".apps.googleusercontent.com"),
   GOOGLE_CLIENT_SECRET: z.string(),
+
+  AWS_ACCESS_KEY: z.string(),
+  AWS_SECRET_KEY: z.string(),
 });
 
 /**
@@ -33,6 +36,7 @@ export const serverSchema = z.object({
  */
 export const clientSchema = z.object({
   NEXT_PUBLIC_GA_ID: z.string().startsWith("G-"),
+  NEXT_PUBLIC_BUCKET: z.string(),
 });
 
 /**
@@ -43,4 +47,5 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
+  NEXT_PUBLIC_BUCKET: process.env.NEXT_PUBLIC_BUCKET,
 };
