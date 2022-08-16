@@ -1,7 +1,15 @@
+import Error from "@components/Error";
 import { trpc } from "@trpc";
 import axios from "axios";
 import cuid from "cuid";
-import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
+import {
+  Field,
+  FieldArray,
+  FieldProps,
+  Form,
+  Formik,
+  FormikProps,
+} from "formik";
 import { signIn, useSession } from "next-auth/react";
 import { useState } from "react";
 import tw from "tailwind-styled-components";
@@ -48,6 +56,7 @@ export default function PluginCreate() {
           }}
           validationSchema={validationSchema}
           onSubmit={async ({ cover, developers, title }, actions) => {
+            console.log("submit");
             if (!cover || !session.user) return;
             const id = cuid();
 
@@ -71,12 +80,15 @@ export default function PluginCreate() {
             createPlugin({
               id,
               title,
+              developers,
               author: session.user,
             });
 
             actions.setSubmitting(false);
+            actions.setFieldValue("cover", null);
+            actions.resetForm();
           }}
-          component={CreateForm}
+          render={CreateForm}
         />
       </PluginFormContainer>
     </PluginCreateContainer>
@@ -85,25 +97,76 @@ export default function PluginCreate() {
 
 const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
   setFieldValue,
+  values,
+  handleBlur,
+  handleChange,
+  errors,
 }) => {
   return (
     <Form>
       <Field
+        onBlur={handleBlur}
+        onChange={handleChange}
         as={InputComponent}
-        id="title"
         name="title"
         placeholder="First Name"
       />
+      {errors.title && <Error error={errors.title} className="pl-1" />}
 
       <InputHolder>
         <input
-          id="cover"
           name="cover"
           type="file"
           accept=".png,.jpg,.jpeg,.webp"
           onChange={(e) => setFieldValue("cover", e.target.files?.[0])}
+          onBlur={handleBlur}
         />
       </InputHolder>
+      {errors.cover && <Error error={errors.cover} className="pl-1" />}
+
+      <FieldArray
+        name="developers"
+        render={({ remove, push }) => (
+          <div>
+            {values.developers.map((developer, index) => (
+              <InputHolder
+                className={errors?.developers?.[index] ? "border-red-400" : ""}
+              >
+                <Field
+                  name={`developers[${index}].email`}
+                  placeholder={`[${index}] example@gmail.com`}
+                  className={`py-1 outline-none float-none text-sm bg-transparent`}
+                  value={developer.email}
+                />
+
+                <div
+                  className="bg-transparent rounded-full hover:bg-gray-100 active:bg-gray-200"
+                  title="Remove Developer"
+                  onClick={() => remove(index)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 p-1"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+              </InputHolder>
+            ))}
+            <button type="button" onClick={() => push({ email: "" })}>
+              Add Developer
+            </button>
+          </div>
+        )}
+      />
 
       <button type="submit">Submit</button>
     </Form>
