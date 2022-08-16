@@ -23,3 +23,5 @@ yarn dev
 </a>
 
 <h6><i>Generated with [contrib.rocks](https://contrib.rocks) </i></h6>
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=7d9fe05d4c14&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
