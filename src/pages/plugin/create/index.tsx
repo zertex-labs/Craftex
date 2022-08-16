@@ -130,6 +130,7 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
           <div>
             {values.developers.map((developer, index) => (
               <InputHolder
+                key={index}
                 className={errors?.developers?.[index] ? "border-red-400" : ""}
               >
                 <Field

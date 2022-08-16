@@ -1,7 +1,7 @@
 import { s3 } from "@utils/s3";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -25,6 +25,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).json({ message: err });
   }
 };
+
+export default handler;
 
 export const config = {
   api: {
