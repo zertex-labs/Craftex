@@ -1,4 +1,6 @@
+import { CreateBucketCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import OutlineButton from "@components/buttons/outline";
+import { s3 } from "@utils/s3";
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
