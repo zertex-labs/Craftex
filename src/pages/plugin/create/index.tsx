@@ -11,6 +11,7 @@ import {
   FormikProps,
 } from "formik";
 import { signIn, useSession } from "next-auth/react";
+import React from "react";
 import { useState } from "react";
 import tw from "tailwind-styled-components";
 import { Inputs, validationSchema } from "./validation";
@@ -38,10 +39,10 @@ export default function PluginCreate() {
 
   if (status !== "authenticated") {
     return (
-      <>
+      <React.Fragment>
         <h1>Please sign in.</h1>
         <button onClick={() => signIn()}>Sign in</button>
-      </>
+      </React.Fragment>
     );
   }
 

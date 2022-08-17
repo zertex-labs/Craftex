@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react";
+import React, { HTMLAttributes } from "react";
 import tw from "tailwind-styled-components";
 
 export type ErrorProps = {
@@ -11,7 +11,11 @@ export const ErrorStyled = tw.span`
 `;
 
 const Error: React.FC<ErrorProps> = ({ error, ...props }) => {
-  return <>{error && <ErrorStyled {...props}>{error}</ErrorStyled>}</>;
+  return (
+    <React.Fragment>
+      {error && <ErrorStyled {...props}>{error}</ErrorStyled>}
+    </React.Fragment>
+  );
 };
 
 export default Error;
