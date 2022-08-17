@@ -30,7 +30,7 @@ export default function PluginView(
 
   const { data: plugin, isFetching } = trpc.useQuery(
     ["plugin.unprotected.byId", { id }],
-    { onError: () => redirect("/"), refetchOnWindowFocus: false }
+    { onError: () => redirect("/"), staleTime: Infinity }
   );
 
   return (
