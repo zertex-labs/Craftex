@@ -10,6 +10,7 @@ import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import superjson from "superjson";
 
 import "@styles/tailwind.css";
+import React from "react";
 
 const MyApp: AppType = ({
   Component,
@@ -18,7 +19,7 @@ const MyApp: AppType = ({
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
 
   return (
-    <>
+    <React.Fragment>
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
       <SessionProvider session={session}>
         {globalStyles}
@@ -26,7 +27,7 @@ const MyApp: AppType = ({
         <Component {...pageProps} />
         <ReactQueryDevtools initialIsOpen={false} />
       </SessionProvider>
-    </>
+    </React.Fragment>
   );
 };
 
