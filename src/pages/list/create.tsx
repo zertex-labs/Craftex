@@ -5,6 +5,7 @@ import React, { ChangeEvent, useState } from "react";
 import tw from "tailwind-styled-components";
 import { object, string } from "yup";
 import Error from "@components/Error";
+import { InputHolder } from "@components/InputHolder";
 
 interface Inputs {
   pluginName: string;
@@ -68,7 +69,7 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
 
       {(filteredPlugins?.length ?? 0) > 0 ? (
         <React.Fragment>
-					<h1>{filteredPlugins?.length}</h1>
+          <h1>{filteredPlugins?.length}</h1>
           <ul>
             {filteredPlugins?.map((plugin) => (
               <li key={plugin.id}>
@@ -99,25 +100,3 @@ const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
     </InputHolder>
   );
 };
-
-const InputHolder = tw.div`
-  flex
-  flex-row
-  items-start
-
-  border
-  border-gray-400
-  text-gray-600
-
-  justify-between
-
-  px-2
-  py-1.5
-  w-full
-
-  rounded-lg
-  focus-within:border
-
-  focus-within:border-gray-500
-  focus-within:text-gray-900
-`;
