@@ -3,11 +3,13 @@ import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { unstable_getServerSession as getServerSession } from "next-auth";
 
+
 import { authOptions as nextAuthOptions } from "@api/auth/[...nextauth]";
 import { prisma } from "@server/db/client";
+import { appRouter } from ".";
 
 export const createContext = async (
-  opts?: trpcNext.CreateNextContextOptions,
+  opts?: trpcNext.CreateNextContextOptions
 ) => {
   const req = opts?.req;
   const res = opts?.res;
