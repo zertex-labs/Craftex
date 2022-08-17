@@ -1,8 +1,8 @@
-// src/pages/_app.tsx
 import Navigation from "@components/Navigation";
 import { env } from "@env/client";
 import { AppRouter } from "@server/router";
 import globalStyles from "@styles/global";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
 import type { AppType, NextWebVitalsMetric } from "next/dist/shared/lib/utils";
@@ -24,6 +24,7 @@ const MyApp: AppType = ({
         {globalStyles}
         <Navigation />
         <Component {...pageProps} />
+        <ReactQueryDevtools initialIsOpen={false} />
       </SessionProvider>
     </>
   );
