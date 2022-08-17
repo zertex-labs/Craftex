@@ -1,34 +1,43 @@
 import { createRouter } from "@context";
+import { Prisma } from "@prisma/client";
 import type { SessionUser } from "next-auth";
-import { z } from "zod";
+import { string, object, ZodType, lazy, number } from "zod";
 import { createProtectedRouter } from "../protected-router";
 import { UserDto } from "./user.router";
 
-const Author: z.ZodType<SessionUser> = z.lazy(() =>
-  z.object({
-    id: z.string().cuid(),
-    name: z.string(),
-    email: z.string().email(),
-    image: z.string(),
+const Author: ZodType<SessionUser> = lazy(() =>
+  object({
+    id: string().cuid(),
+    name: string(),
+    email: string().email(),
+    image: string(),
   })
 );
 
-export const PluginCreateDto = z.object({
-  title: z.string(),
+export const PluginCreateDto = object({
+  title: string(),
   author: Author,
   developers: UserDto.array().nullish(),
-  id: z.string().cuid().optional()
+  id: string().cuid().optional(),
+});
+
+function makePluginSelect<T extends Prisma.PluginSelect>(
+  select: Prisma.Subset<T, Prisma.PluginSelect>
+): T {
+  return select;
+}
+
+const defaultPluginSelect = makePluginSelect({
+  id: true,
+  title: true,
+  developers: true,
+  stars: true,
 });
 
 const protectedPluginRouter = createProtectedRouter().mutation("create", {
   input: PluginCreateDto,
   resolve: async ({
-    input: {
-      id,
-      title,
-      author,
-      developers,
-    },
+    input: { id, title, author, developers },
     ctx: { prisma: db },
   }) => {
     var validDevelopers: { email?: string; id: string }[] = [];
@@ -58,16 +67,30 @@ const protectedPluginRouter = createProtectedRouter().mutation("create", {
   },
 });
 
-const unprotectedPluginRouter = createRouter().query("all", {
-  resolve: ({ ctx: { prisma: db } }) =>
-    db.plugin.findMany({
-      select: {
-        id: true,
-        title: true,
-        developers: true,
-      },
+const unprotectedPluginRouter = createRouter()
+  .query("all", {
+    resolve: ({ ctx: { prisma: db } }) =>
+      db.plugin.findMany({
+        select: defaultPluginSelect,
+      }),
+  })
+  .query("filtered", {
+    input: object({
+      filter: string().min(2),
+      limit: number().default(10),
     }),
-});
+    resolve: ({ input: { filter, limit }, ctx: { prisma: db } }) =>
+      db.plugin.findMany({
+        where: {
+          title: { startsWith: filter },
+        },
+        orderBy: {
+          stars: "desc",
+        },
+        select: defaultPluginSelect,
+        take: limit,
+      }),
+  });
 
 export const pluginRouter = createRouter()
   .merge(protectedPluginRouter)
