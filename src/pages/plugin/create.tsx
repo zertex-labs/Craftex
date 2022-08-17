@@ -1,4 +1,5 @@
 import Error from "@components/Error";
+import { InputHolder } from "@components/InputHolder";
 import { trpc } from "@trpc";
 import axios from "axios";
 import cuid from "cuid";
@@ -193,26 +194,4 @@ const PluginFormContainer = tw.div`
   space-y-1
 
   w-1/3
-`;
-
-const InputHolder = tw.div`
-  flex
-  flex-row
-  items-start
-
-  border
-  border-gray-400
-  text-gray-600
-
-  justify-between
-
-  px-2
-  py-1.5
-  w-full
-
-  rounded-lg
-  focus-within:border
-
-  focus-within:border-gray-500
-  focus-within:text-gray-900
 `;
