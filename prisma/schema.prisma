@@ -43,7 +43,7 @@ model Session {
 
 model User {
     id            String    @id @default(cuid())
-    name          String?   
+    name          String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
@@ -67,4 +67,5 @@ model Plugin {
     id         String @id @default(cuid())
     title      String @unique
     developers User[]
+    stars      Int    @default(0)
 }
