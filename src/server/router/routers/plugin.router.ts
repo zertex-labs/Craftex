@@ -90,6 +90,20 @@ const unprotectedPluginRouter = createRouter()
         select: defaultPluginSelect,
         take: limit,
       }),
+  })
+  .query("byId", {
+    input: object({
+      id: string().cuid(),
+    }),
+    resolve: ({ input: { id }, ctx: { prisma: db } }) =>
+      db.plugin.findFirst({
+        where: {
+          id: {
+            equals: id,
+          },
+        },
+        select: defaultPluginSelect,
+      }),
   });
 
 export const pluginRouter = createRouter()
