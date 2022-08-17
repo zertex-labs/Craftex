@@ -11,8 +11,8 @@ import {
   FormikProps,
 } from "formik";
 import { signIn, useSession } from "next-auth/react";
-import React from "react";
-import { useState } from "react";
+import Link from "next/link";
+import React, { useState } from "react";
 import tw from "tailwind-styled-components";
 import { Inputs, validationSchema } from "./validation";
 
@@ -28,14 +28,9 @@ const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
 };
 
 export default function PluginCreate() {
-  const {
-    mutate: createPlugin,
-    data: pluginData,
-    error: mutationError,
-  } = trpc.useMutation("plugin.create");
-  const { data: plugins } = trpc.useQuery(["plugin.unprotected.all"]);
+  const { mutate: createPlugin, data: lastCreatedPlugin } =
+    trpc.useMutation("plugin.create");
   const { data: session, status } = useSession();
-  const [disabled, setDisabled] = useState(false);
 
   if (status !== "authenticated") {
     return (
@@ -92,6 +87,11 @@ export default function PluginCreate() {
           render={CreateForm}
         />
       </PluginFormContainer>
+      {lastCreatedPlugin && (
+        <Link href={`/plugin/${lastCreatedPlugin.id}`}>
+          <a>Success! Go to plugin page</a>
+        </Link>
+      )}
     </PluginCreateContainer>
   );
 }
