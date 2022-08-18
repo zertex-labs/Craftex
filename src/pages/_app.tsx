@@ -1,4 +1,3 @@
-import { NavbarComponent, SidebarComponent } from "@components/Navigation";
 import { env } from "@env/client";
 import { AppRouter } from "@server/router";
 import { withTRPC } from "@trpc/next";
@@ -8,6 +7,8 @@ import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
+import NavbarComponent from "@components/NavbarComponent";
+import SidebarComponent from "@components/SidebarComponent";
 import "@utils/tailwind.css";
 import React from "react";
 

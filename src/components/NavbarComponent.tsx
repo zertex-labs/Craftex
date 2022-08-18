@@ -2,19 +2,20 @@ import { Dropdown, Navbar, Sidebar, TextInput, Tooltip } from "flowbite-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 import { AiFillCodeSandboxCircle, AiOutlineSearch } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 import { FiUpload } from "react-icons/fi";
 import OutlineButton from "./buttons/OutlineButton";
 import ResourceCreateDropdown from "./PluginCreateIcon";
 
-export function NavbarComponent() {
+function NavbarComponent() {
   const { data: session, status } = useSession();
 
   return (
     <div className="border-b border-gray-100">
       <Navbar fluid={true} rounded={true} aria-label="Navigation Bar">
-        <Link href="/">
+        <Link href="/" shallow={true}>
           <a className="flex">
             <Image
               alt="logo"
@@ -94,42 +95,4 @@ export function NavbarComponent() {
   );
 }
 
-export const SidebarComponent = () => (
-  <div className="flex h-full overflow-hidden bg-white pt-0.5">
-    <Sidebar aria-label="Sidebar">
-      <Sidebar.Items>
-        <Sidebar.ItemGroup>
-          <TextInput
-            placeholder="What we building today?"
-            type="text"
-            sizing="sm"
-            icon={AiOutlineSearch}
-          />
-        </Sidebar.ItemGroup>
-        <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Dashboard
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Kanban
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Inbox
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Users
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Products
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Sign In
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
-            Sign Up
-          </Sidebar.Item>
-        </Sidebar.ItemGroup>
-      </Sidebar.Items>
-    </Sidebar>
-  </div>
-);
+export default React.memo(NavbarComponent);
