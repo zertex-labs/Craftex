@@ -2,7 +2,7 @@ import { createSSG } from "@server/router";
 import { trpc } from "@utils/trpc";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import React, { useReducer } from "react";
+import React from "react";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ id: string }>

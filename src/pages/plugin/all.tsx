@@ -1,6 +1,4 @@
-import { createSSG } from "@server/router";
 import { trpc } from "@utils/trpc";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import React from "react";
 
@@ -34,7 +32,9 @@ export default function PluginView() {
       {plugins?.map((plugin) => (
         <React.Fragment key={plugin.id}>
           <Link href={`/plugin/view/${plugin.id}`}>
-            <a><h1>{plugin.title}</h1></a>
+            <a>
+              <h1>{plugin.title}</h1>
+            </a>
           </Link>
           <pre>{JSON.stringify(plugin, null, 2)}</pre>
         </React.Fragment>

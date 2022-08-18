@@ -2,10 +2,8 @@ import useDebounce from "@utils/hooks/useDebounce";
 import { trpc } from "@utils/trpc";
 import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
 import React, { ChangeEvent, useState } from "react";
-import tw from "tailwind-styled-components";
 import { object, string } from "yup";
 import Error from "@components/Error";
-import { InputHolder } from "@components/InputHolder";
 
 interface Inputs {
   pluginName: string;
@@ -92,11 +90,9 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
 
 const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
   return (
-    <InputHolder>
-      <input
-        className="w-full py-1 outline-none float-none text-sm bg-transparent"
-        {...props}
-      />
-    </InputHolder>
+    <input
+      className="w-full py-1 outline-none float-none text-sm bg-transparent"
+      {...props}
+    />
   );
 };

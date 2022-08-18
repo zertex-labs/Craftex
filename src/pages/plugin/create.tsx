@@ -1,5 +1,4 @@
 import Error from "@components/Error";
-import { InputHolder } from "@components/InputHolder";
 import { trpc } from "@trpc";
 import axios from "axios";
 import cuid from "cuid";
@@ -14,17 +13,14 @@ import {
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
-import tw from "tailwind-styled-components";
 import { Inputs, validationSchema } from "./_validation";
 
 const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
   return (
-    <InputHolder>
-      <input
-        className="w-full py-1 outline-none float-none text-sm bg-transparent"
-        {...props}
-      />
-    </InputHolder>
+    <input
+      className="w-full py-1 outline-none float-none text-sm bg-transparent"
+      {...props}
+    />
   );
 };
 
@@ -43,8 +39,8 @@ export default function PluginCreate() {
   }
 
   return (
-    <PluginCreateContainer>
-      <PluginFormContainer>
+    <div>
+      <div>
         <Formik<Inputs>
           initialValues={{
             cover: undefined,
@@ -87,13 +83,13 @@ export default function PluginCreate() {
           }}
           render={CreateForm}
         />
-      </PluginFormContainer>
+      </div>
       {lastCreatedPlugin && (
         <Link href={`/plugin/${lastCreatedPlugin.id}`}>
           <a>Success! Go to plugin page</a>
         </Link>
       )}
-    </PluginCreateContainer>
+    </div>
   );
 }
 
@@ -115,15 +111,13 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
       />
       {errors.title && <Error error={errors.title} className="pl-1" />}
 
-      <InputHolder>
-        <input
-          name="cover"
-          type="file"
-          accept=".png,.jpg,.jpeg,.webp"
-          onChange={(e) => setFieldValue("cover", e.target.files?.[0])}
-          onBlur={handleBlur}
-        />
-      </InputHolder>
+      <input
+        name="cover"
+        type="file"
+        accept=".png,.jpg,.jpeg,.webp"
+        onChange={(e) => setFieldValue("cover", e.target.files?.[0])}
+        onBlur={handleBlur}
+      />
       {errors.cover && <Error error={errors.cover} className="pl-1" />}
 
       <FieldArray
@@ -131,7 +125,7 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
         render={({ remove, push }) => (
           <div>
             {values.developers.map((developer, index) => (
-              <InputHolder
+              <div
                 key={index}
                 className={errors?.developers?.[index] ? "border-red-400" : ""}
               >
@@ -162,7 +156,7 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
                     />
                   </svg>
                 </div>
-              </InputHolder>
+              </div>
             ))}
             <button type="button" onClick={() => push({ email: "" })}>
               Add Developer
@@ -175,23 +169,3 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
     </Form>
   );
 };
-
-const PluginCreateContainer = tw.div`
-  flex
-  flex-col
-  items-center
-  justify-between
-
-  w-full
-  h-2/4
-`;
-
-const PluginFormContainer = tw.div`
-  flex
-  flex-col
-  justify-between
-  items-center
-  space-y-1
-
-  w-1/3
-`;
