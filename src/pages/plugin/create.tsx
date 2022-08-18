@@ -15,7 +15,7 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import tw from "tailwind-styled-components";
-import { Inputs, validationSchema } from "./validation";
+import { Inputs, validationSchema } from "./_validation";
 
 const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
   return (
