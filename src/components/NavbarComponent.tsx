@@ -7,7 +7,7 @@ import { AiFillCodeSandboxCircle, AiOutlineSearch } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 import { FiUpload } from "react-icons/fi";
 import OutlineButton from "./buttons/OutlineButton";
-import ResourceCreateDropdown from "./PluginCreateIcon";
+import ResourceCreateDropdown from "./ResourceCreateDropdown";
 
 function NavbarComponent() {
   const { data: session, status } = useSession();
