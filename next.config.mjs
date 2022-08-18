@@ -17,6 +17,7 @@ export default defineNextConfig({
   swcMinify: true,
   images: {
     domains: [
+      "cdn.craftex.dev",
       "cdn.discordapp.com",
       "lh3.googleusercontent.com",
       "avatars.githubusercontent.com",

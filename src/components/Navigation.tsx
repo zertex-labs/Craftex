@@ -1,162 +1,133 @@
-import { signIn, useSession } from "next-auth/react";
+import { Dropdown, Navbar, Sidebar, TextInput, Tooltip } from "flowbite-react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-
 import Link from "next/link";
-import tw from "tailwind-styled-components";
-import OutlineButton from "./buttons/outline";
-import TextButton from "./buttons/text";
-import UserHolder from "./UserHolder";
-import Logo from "/public/logo.svg";
-import SearchIcon from "/public/search.svg";
+import { AiFillCodeSandboxCircle, AiOutlineSearch } from "react-icons/ai";
+import { BiChevronDown } from "react-icons/bi";
+import { FiUpload } from "react-icons/fi";
+import OutlineButton from "./buttons/OutlineButton";
+import ResourceCreateDropdown from "./PluginCreateIcon";
 
-export default function Navigation() {
+export function NavbarComponent() {
   const { data: session, status } = useSession();
 
   return (
-    <NavigationStyled>
-      <div className="flex flex-grow space-x-4 items-center">
-        <Link href="/">
-          <a>
-            <Image
-              alt="logo"
-              src={Logo}
-              height={32}
-              width={22}
-              className="w-1/12 select-none pointer-events-none"
-            />
-          </a>
-        </Link>
-
-        <Search>
-          <input
-            type="text"
-            placeholder="What are we building today?"
-            className="w-full pl-1 pr-2 outline-none float-none text-xs bg-transparent"
-            maxLength={64}
-          />
+    <div className="border-b border-gray-100">
+      <Navbar fluid={true} rounded={true} aria-label="Navigation Bar">
+        <Navbar.Brand href="/">
           <Image
-            alt="🔎"
-            src={SearchIcon}
-            height={16}
-            width={16}
-            color="#54575b" // gray-700
-            className="select-none pointer-events-none"
+            alt="logo"
+            src="https://cdn.craftex.dev/brand/logo"
+            height={32}
+            width={22}
+            className="mr-3 h-6 sm:h-9 select-none pointer-events-none"
           />
-        </Search>
 
-        <LinksHolder>
-          <Link href="/plugin/create" as={CraftexLink}>
-            <a>plugin/create</a>
-          </Link>
-          <Link href="/plugin/all" as={CraftexLink}>
-            <a>plugin/all</a>
-          </Link>
-        </LinksHolder>
-      </div>
+          <span className="pl-2 self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+            Craftex
+          </span>
+        </Navbar.Brand>
+        
+        <Navbar.Toggle />
 
-      <div className="flex space-x-6 items-center">
-        <div
-          className="bg-transparent rounded-full hover:bg-gray-100 active:bg-gray-200"
-          title="Upload a plugin"
-        >
-          <Link href="/plugin/create">
-            <a>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 p-2 rounded-full"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="#26292e"
-                strokeWidth={2}
+        <div className="flex md:order-2">
+          {status === "authenticated" && session.user ? (
+            <div className="flex items-center gap-1">
+              <ResourceCreateDropdown />
+
+              <div className="w-1 h-full border-l p-1 border-gray-100"></div>
+
+              <Dropdown
+                arrowIcon={false}
+                inline={true}
+                label={
+                  session.user.image &&
+                  typeof session.user?.image === "string" ? (
+                    <Image
+                      key={session.user.id}
+                      alt={`${session.user.name}'s profile picture`}
+                      src={session.user.image}
+                      width={32}
+                      height={32}
+                      className="rounded-full select-none pointer-events-none"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 p-1 bg-primary-200 rounded-full">
+                      <BiChevronDown className="text-3xl text-text-light" />
+                    </div>
+                  )
+                }
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                />
-              </svg>
-            </a>
-          </Link>
+                <Dropdown.Header>
+                  <span className="block text-sm">{session.user.name}</span>
+                  <span className="block truncate text-sm font-medium">
+                    {session.user.email}
+                  </span>
+                </Dropdown.Header>
+                <Dropdown.Item>Dashboard</Dropdown.Item>
+                <Dropdown.Item>Settings</Dropdown.Item>
+                <Dropdown.Item>Earnings</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={() => signOut()}>
+                  Sign out
+                </Dropdown.Item>
+              </Dropdown>
+            </div>
+          ) : (
+            <OutlineButton text="Join" onClick={() => signIn()} />
+          )}
         </div>
 
-        <div className="w-px h-8 bg-gray-200"></div>
-
-        {status === "authenticated" && session.user ? (
-          <UserHolder user={session.user} />
-        ) : (
-          <Unauthenticated>
-            <OutlineButton title="Join" onClick={() => signIn()} />
-          </Unauthenticated>
-        )}
-      </div>
-    </NavigationStyled>
+        <Navbar.Collapse>
+          <Navbar.Link href="/navbars" active={true}>
+            Home
+          </Navbar.Link>
+          <Navbar.Link href="/navbars">About</Navbar.Link>
+          <Navbar.Link href="/navbars">Services</Navbar.Link>
+          <Navbar.Link href="/navbars">Pricing</Navbar.Link>
+          <Navbar.Link href="/navbars">Contact</Navbar.Link>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
   );
 }
 
-export const NavigationStyled = tw.div`
-  flex
-  flex-row
-  min-w-full
-  justify-between
-  items-center
-  border-b
-  border-gray-200
-
-  bg-white
-
-  px-8
-  py-3
-  mb-4
-`;
-
-const Search = tw.div`
-  hidden
-
-  sm:flex
-  flex-row
-  items-center
-
-  border
-  border-gray-400
-  text-gray-600
-
-  justify-between
-  w-1/6
-
-  px-2
-  py-1.5
-
-  rounded-lg
-  focus-within:border
-
-  focus-within:border-gray-500
-  focus-within:text-gray-900
-`;
-
-const LinksHolder = tw.ul`
-  flex
-  flex-row
-  items-center
-  space-x-4
-`;
-
-const CraftexLink = tw.li`
-  text-text
-
-  border-b
-  border-transparent
-
-  cursor-pointer
-
-  active:border-primary-200
-  active:text-primary-200
-
-  hover:text-primary-200
-`;
-
-const Unauthenticated = tw.div`
-  flex
-  flex-row
-  items-center
-  space-x-2
-`;
+export const SidebarComponent = () => (
+  <div className="flex h-full overflow-hidden bg-white pt-0.5">
+    <Sidebar aria-label="Sidebar">
+      <Sidebar.Items>
+        <Sidebar.ItemGroup>
+          <TextInput
+            placeholder="What we building today?"
+            type="text"
+            sizing="sm"
+            icon={AiOutlineSearch}
+          />
+        </Sidebar.ItemGroup>
+        <Sidebar.ItemGroup>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Dashboard
+          </Sidebar.Item>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Kanban
+          </Sidebar.Item>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Inbox
+          </Sidebar.Item>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Users
+          </Sidebar.Item>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Products
+          </Sidebar.Item>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Sign In
+          </Sidebar.Item>
+          <Sidebar.Item href="#" icon={AiFillCodeSandboxCircle}>
+            Sign Up
+          </Sidebar.Item>
+        </Sidebar.ItemGroup>
+      </Sidebar.Items>
+    </Sidebar>
+  </div>
+);

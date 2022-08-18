@@ -1,4 +1,3 @@
-import OutlineButton from "@components/buttons/outline";
 import { s3 } from "@utils/s3";
 import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -17,9 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="px-24 py-6">
-        <h1 className="font-bold text-3xl">Homepage</h1>
-      </div>
+      <h1 className="font-bold text-3xl">Homepage</h1>
     </React.Fragment>
   );
 };
