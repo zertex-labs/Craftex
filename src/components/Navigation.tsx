@@ -14,20 +14,22 @@ export function NavbarComponent() {
   return (
     <div className="border-b border-gray-100">
       <Navbar fluid={true} rounded={true} aria-label="Navigation Bar">
-        <Navbar.Brand href="/">
-          <Image
-            alt="logo"
-            src="https://cdn.craftex.dev/brand/logo"
-            height={32}
-            width={22}
-            className="mr-3 h-6 sm:h-9 select-none pointer-events-none"
-          />
+        <Link href="/">
+          <a className="flex">
+            <Image
+              alt="logo"
+              src="https://cdn.craftex.dev/brand/logo"
+              height={32}
+              width={22}
+              className="mr-3 h-6 sm:h-9 select-none pointer-events-none"
+            />
 
-          <span className="pl-2 self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            Craftex
-          </span>
-        </Navbar.Brand>
-        
+            <span className="pl-2 self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+              Craftex
+            </span>
+          </a>
+        </Link>
+
         <Navbar.Toggle />
 
         <div className="flex md:order-2">
