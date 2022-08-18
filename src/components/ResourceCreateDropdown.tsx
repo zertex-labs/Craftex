@@ -2,7 +2,6 @@ import { Dropdown } from "flowbite-react";
 import Link from "next/link";
 import { IconType } from "react-icons";
 import { FiUpload } from "react-icons/fi";
-import { json } from "stream/consumers";
 import DefaultColors from "tailwindcss/colors";
 
 type Color = keyof typeof DefaultColors;
