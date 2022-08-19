@@ -10,6 +10,7 @@ import superjson from "superjson";
 import { SiteLayout } from "@components/SiteLayout";
 import "@utils/tailwind.css";
 import React from "react";
+import { MantineProvider } from "@mantine/core";
 
 const MyApp: AppType = ({
   Component,
@@ -23,9 +24,17 @@ const MyApp: AppType = ({
       <ReactQueryDevtools initialIsOpen={false} />
 
       <SessionProvider session={session}>
-        <SiteLayout>
-          <Component {...pageProps} />
-        </SiteLayout>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme: "light",
+          }}
+        >
+          <SiteLayout>
+            <Component {...pageProps} />
+          </SiteLayout>
+        </MantineProvider>
       </SessionProvider>
     </React.Fragment>
   );
