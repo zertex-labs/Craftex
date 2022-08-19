@@ -1,4 +1,3 @@
-import { NavbarComponent, SidebarComponent } from "@components/Navigation";
 import { env } from "@env/client";
 import { AppRouter } from "@server/router";
 import { withTRPC } from "@trpc/next";
@@ -8,6 +7,7 @@ import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
+import { SiteLayout } from "@components/SiteLayout";
 import "@utils/tailwind.css";
 import React from "react";
 
@@ -20,17 +20,12 @@ const MyApp: AppType = ({
   return (
     <React.Fragment>
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
+      <ReactQueryDevtools initialIsOpen={false} />
+
       <SessionProvider session={session}>
-        <div className="flex h-screen w-full flex-col overflow-hidden">
-          <NavbarComponent />
-          <div className="flex h-full overflow-hidden ">
-            <SidebarComponent />
-            <main className="flex-1 overflow-auto p-4">
-              <Component {...pageProps} />
-            </main>
-          </div>
-        </div>
-        <ReactQueryDevtools initialIsOpen={false} />
+        <SiteLayout>
+          <Component {...pageProps} />
+        </SiteLayout>
       </SessionProvider>
     </React.Fragment>
   );

@@ -1,7 +1,8 @@
 import { Dropdown } from "flowbite-react";
+import Link from "next/link";
+import { useRef } from "react";
 import { IconType } from "react-icons";
 import { FiUpload } from "react-icons/fi";
-import { json } from "stream/consumers";
 import DefaultColors from "tailwindcss/colors";
 
 type Color = keyof typeof DefaultColors;
@@ -56,17 +57,19 @@ const ResourceCreateDropdown = () => (
     >
       <Dropdown.Item>
         <DropdownItem
-          title="Update available"
+          title="Upload new plugin"
           description="A new software version is available for download."
           color="teal"
+          redirect="/plugin/create"
           icon={FiUpload}
         />
       </Dropdown.Item>
       <Dropdown.Item>
         <DropdownItem
-          title="Update available"
+          title="Create new list"
           description="A new software version is available for download."
           color="violet"
+          redirect="/list/create"
           icon={FiUpload}
         />
       </Dropdown.Item>
@@ -79,23 +82,28 @@ const DropdownItem: React.FC<{
   description: string;
   icon: IconType;
   color: keyof SupportedColors;
-}> = ({ description, title, icon: Icon, color }) => {
-  const { light, dark } = supportedColors[color];
+  redirect: string;
+}> = ({ description, title, icon: Icon, color, redirect }) => {
+  const {
+    current: { dark, light },
+  } = useRef(supportedColors[color]);
 
   return (
-    <div className="flex !items-start">
-      <div
-        className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${light.background} ${light.text} ${dark.background} ${dark.text}`}
-      >
-        <Icon className="h-5 w-5" />
-      </div>
-      <div className="ml-3 text-sm font-normal">
-        <span className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-          {title}
-        </span>
-        <div className="mb-2 text-sm font-normal">{description}</div>
-      </div>
-    </div>
+    <Link href={redirect}>
+      <a className="flex !items-start">
+        <div
+          className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${light.background} ${light.text} ${dark.background} ${dark.text}`}
+        >
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="ml-3 text-sm font-normal">
+          <span className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+            {title}
+          </span>
+          <div className="mb-2 text-sm font-normal">{description}</div>
+        </div>
+      </a>
+    </Link>
   );
 };
 

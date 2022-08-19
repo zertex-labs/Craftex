@@ -81,7 +81,7 @@ export default function PluginCreate() {
             actions.setFieldValue("cover", null);
             actions.resetForm();
           }}
-          render={CreateForm}
+          component={CreateForm}
         />
       </div>
       {lastCreatedPlugin && (
