@@ -1,5 +1,6 @@
 import { Dropdown } from "flowbite-react";
 import Link from "next/link";
+import { useRef } from "react";
 import { IconType } from "react-icons";
 import { FiUpload } from "react-icons/fi";
 import DefaultColors from "tailwindcss/colors";
@@ -83,7 +84,9 @@ const DropdownItem: React.FC<{
   color: keyof SupportedColors;
   redirect: string;
 }> = ({ description, title, icon: Icon, color, redirect }) => {
-  const { light, dark } = supportedColors[color];
+  const {
+    current: { dark, light },
+  } = useRef(supportedColors[color]);
 
   return (
     <Link href={redirect}>
