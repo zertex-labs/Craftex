@@ -58,7 +58,7 @@ const ResourceCreateDropdown = () => (
       <Dropdown.Item>
         <DropdownItem
           title="Upload new plugin"
-          description="A new software version is available for download."
+          description="Upload your plugin"
           color="teal"
           redirect="/plugin/create"
           icon={FiUpload}
@@ -67,7 +67,7 @@ const ResourceCreateDropdown = () => (
       <Dropdown.Item>
         <DropdownItem
           title="Create new list"
-          description="A new software version is available for download."
+          description="Share a list with your favorite plugins"
           color="violet"
           redirect="/list/create"
           icon={FiUpload}
@@ -97,10 +97,10 @@ const DropdownItem: React.FC<{
           <Icon className="h-5 w-5" />
         </div>
         <div className="ml-3 text-sm font-normal">
-          <span className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+          <span className="mb-1 text-sm font-semibold text-text dark:text-white">
             {title}
           </span>
-          <div className="mb-2 text-sm font-normal">{description}</div>
+          <div className="mb-2 text-xs font-normal text-gray-500">{description}</div>
         </div>
       </a>
     </Link>
