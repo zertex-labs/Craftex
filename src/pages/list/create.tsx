@@ -1,97 +1,79 @@
-import Error from "@components/Error";
-import useDebounce from "@utils/hooks/useDebounce";
+import { List, Text, TextInput } from "@mantine/core";
+import { useForm, zodResolver } from "@mantine/form";
+import { useDebouncedState } from "@mantine/hooks";
 import { trpc } from "@utils/trpc";
-import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
-import React, { ChangeEvent, useState } from "react";
-import { number, object, string } from "zod";
+import type { Plugin } from "@utils/types/craftex";
+import React, { useEffect } from "react";
+import { object, string, ZodType } from "zod";
 
 interface Inputs {
   pluginName: string;
 }
 
-const pluginNameValidation = string().min(
-  2,
-  "Plugin name must be at least 2 characters"
-);
-
-const validationSchema = object({
-  pluginName: pluginNameValidation,
+const Schema: ZodType<Inputs> = object({
+  pluginName: string().min(2, "Plugin name must be at least 2 characters"),
 });
 
 export default function ListCreate() {
+  const [pluginName, setPluginName] = useDebouncedState("", 500);
+
+  const { data } = trpc.useQuery(
+    [
+      "plugin.unprotected.filtered",
+      {
+        filter: pluginName,
+      },
+    ],
+    { enabled: Schema.safeParse({ pluginName }).success }
+  );
+
+  const { onSubmit, getInputProps, setFieldError } = useForm<Inputs>({
+    validate: zodResolver(Schema),
+    validateInputOnChange: true,
+    initialValues: { pluginName: "" },
+  });
+
+  useEffect(() => {
+    if (!data) return;
+
+    if (data.length < 1)
+      setFieldError("pluginName", "We couldn't find a plugin with that name");
+  }, [data]);
+
   return (
     <React.Fragment>
-      <h1>List Create</h1>
+      <h1>List Create {Schema.safeParse({ pluginName }).success + ""}</h1>
 
-      <Formik<Inputs>
-        // validationSchema={Schema} TODO Currently no valdiation schema. Formik will be removed and validation will be added from alpha/mantine
-        initialValues={{
-          pluginName: "",
-        }}
-        onSubmit={async ({ pluginName }, actions) => {
-          console.log(pluginName);
-        }}
-        component={CreateForm}
-      />
+      <form onSubmit={onSubmit((values) => console.log(values))}>
+        <TextInput
+          withAsterisk
+          label="Plugin name"
+          onInput={({ currentTarget: { value } }) => setPluginName(value)}
+          {...getInputProps("pluginName")}
+        />
+      </form>
+
+      <ul>{data && data.map((p) => <PluginShowcase plugin={p} />)}</ul>
     </React.Fragment>
   );
 }
 
-const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
-  setFieldValue,
-  errors,
-}) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const { data: filteredPlugins, isFetching } = trpc.useQuery(
-    ["plugin.unprotected.filtered", { filter: debouncedSearchTerm }],
-    {
-      enabled: pluginNameValidation.safeParse(debouncedSearchTerm).success,
-    }
-  );
-
-  return (
-    <Form>
-      <Field
-        name="pluginName"
-        as={InputComponent}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-          setFieldValue("pluginName", e.target.value);
-          setSearchTerm(e.target.value);
-        }}
-      />
-
-      {isFetching && <h1>Loading...</h1>}
-
-      {(filteredPlugins?.length ?? 0) > 0 ? (
-        <React.Fragment>
-          <h1>{filteredPlugins?.length}</h1>
-          <ul>
-            {filteredPlugins?.map((plugin) => (
-              <li key={plugin.id}>
-                {plugin.title} - {plugin.stars}
-              </li>
-            ))}
-          </ul>
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          {errors.pluginName && <Error error={errors.pluginName} />}
-          {debouncedSearchTerm.length > 0 && !errors.pluginName && (
-            <h1>No results found :/</h1>
-          )}
-        </React.Fragment>
-      )}
-    </Form>
-  );
-};
-
-const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
-  return (
-    <input
-      className="w-full py-1 outline-none float-none text-sm bg-transparent"
-      {...props}
-    />
-  );
-};
+const PluginShowcase: React.FC<{ plugin: Plugin }> = ({ plugin }) => (
+  <li key={plugin.id}>
+    <Text
+      variant="gradient"
+      gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+      size="xl"
+      weight={600}
+    >
+      {plugin.title}
+    </Text>
+    <List>
+      {plugin.developers.map((developer) => (
+        <List.Item>
+          {developer.name} ({developer.email})
+        </List.Item>
+      ))}
+    </List>
+  </li>
+);
