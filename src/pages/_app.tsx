@@ -2,7 +2,7 @@ import { env } from "@env/client";
 import { AppRouter } from "@server/router";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
-import type { AppType, NextWebVitalsMetric } from "next/dist/shared/lib/utils";
+import type { NextWebVitalsMetric } from "next/dist/shared/lib/utils";
 import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
@@ -15,7 +15,8 @@ import {
 } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import "@utils/tailwind.css";
-import { setCookies } from "cookies-next";
+import { getCookie, setCookies } from "cookies-next";
+import { GetServerSidePropsContext } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import React, { useState } from "react";
@@ -40,7 +41,7 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
       value || (colorScheme === "dark" ? "light" : "dark");
     setColorScheme(nextColorScheme);
     setCookies("mantine-color-scheme", nextColorScheme, {
-      maxAge: 60 * 60 * 24 * 30,
+      maxAge: 60 * 60 * 24 * 30, // 30 days
     });
   };
 
@@ -109,6 +110,10 @@ const getBaseUrl = () => {
 
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
+
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+  colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
+});
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
