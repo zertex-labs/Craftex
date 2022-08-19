@@ -8,37 +8,80 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
 import { SiteLayout } from "@components/SiteLayout";
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider,
+} from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import "@utils/tailwind.css";
-import React from "react";
-import { MantineProvider } from "@mantine/core";
+import { setCookies } from "cookies-next";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import React, { useState } from "react";
+import { rtlCache } from "rtl-cache";
 
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+function App(props: AppProps & { colorScheme: ColorScheme }) {
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
+
+  // TODO use setRtl...
+  const [rtl, setRtl] = useState(false);
+
+  const {
+    Component,
+    pageProps: { session, ...pageProps },
+  } = props;
+  const [colorScheme, setColorScheme] = useState<ColorScheme>(
+    props.colorScheme
+  );
+
+  const toggleColorScheme = (value?: ColorScheme) => {
+    const nextColorScheme =
+      value || (colorScheme === "dark" ? "light" : "dark");
+    setColorScheme(nextColorScheme);
+    setCookies("mantine-color-scheme", nextColorScheme, {
+      maxAge: 60 * 60 * 24 * 30,
+    });
+  };
 
   return (
     <React.Fragment>
+      <Head>
+        <title>Craftex</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+        <link rel="craftex icon" href="/favicon.svg" />
+      </Head>
+
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
       <ReactQueryDevtools initialIsOpen={false} />
 
-      <SessionProvider session={session}>
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            colorScheme: "light",
-          }}
-        >
-          <SiteLayout>
-            <Component {...pageProps} />
-          </SiteLayout>
-        </MantineProvider>
-      </SessionProvider>
+      <div dir={rtl ? "rtl" : "ltr"}>
+        <SessionProvider session={session}>
+          <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
+          >
+            <MantineProvider
+              theme={{ colorScheme, dir: rtl ? "rtl" : "ltr" }}
+              emotionCache={rtl ? rtlCache : undefined}
+              withGlobalStyles
+              withNormalizeCSS
+            >
+              <NotificationsProvider>
+                <SiteLayout>
+                  <Component {...pageProps} />
+                </SiteLayout>
+              </NotificationsProvider>
+            </MantineProvider>
+          </ColorSchemeProvider>
+        </SessionProvider>
+      </div>
     </React.Fragment>
   );
-};
+}
 
 export function reportWebVitals({
   id,
@@ -77,4 +120,4 @@ export default withTRPC<AppRouter>({
     };
   },
   ssr: false,
-})(MyApp);
+})(App);
