@@ -1,11 +1,10 @@
-import { Dropdown, Navbar, Sidebar, TextInput, Tooltip } from "flowbite-react";
+import { Dropdown, Navbar } from "flowbite-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
-import { AiFillCodeSandboxCircle, AiOutlineSearch } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
-import { FiUpload } from "react-icons/fi";
 import OutlineButton from "./buttons/OutlineButton";
 import ResourceCreateDropdown from "./ResourceCreateDropdown";
 
@@ -82,17 +81,28 @@ function NavbarComponent() {
         </div>
 
         <Navbar.Collapse>
-          <Navbar.Link href="/navbars" active={true}>
-            Home
-          </Navbar.Link>
-          <Navbar.Link href="/navbars">About</Navbar.Link>
-          <Navbar.Link href="/navbars">Services</Navbar.Link>
-          <Navbar.Link href="/navbars">Pricing</Navbar.Link>
-          <Navbar.Link href="/navbars">Contact</Navbar.Link>
+          <NavbarLink href="/plugin/create" title="@plugin/create" />
+          <NavbarLink href="/plugin/all" title="@plugin/all" />
+          <NavbarLink href="/list/create" title="@list/create" />
         </Navbar.Collapse>
       </Navbar>
     </div>
   );
 }
+
+const NavbarLink: React.FC<{ href: string; title: string }> = ({
+  href,
+  title,
+}) => {
+  const { pathname } = useRouter();
+
+  return (
+    <Link href={href}>
+      <a className={`${pathname === href ? "text-primary-200" : ""} `}>
+        {title}
+      </a>
+    </Link>
+  );
+};
 
 export default React.memo(NavbarComponent);
