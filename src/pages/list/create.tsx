@@ -1,17 +1,18 @@
+import Error from "@components/Error";
 import useDebounce from "@utils/hooks/useDebounce";
 import { trpc } from "@utils/trpc";
 import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
 import React, { ChangeEvent, useState } from "react";
-import { object, string } from "yup";
-import Error from "@components/Error";
+import { number, object, string } from "zod";
 
 interface Inputs {
   pluginName: string;
 }
 
-const pluginNameValidation = string()
-  .min(2, "Plugin name must be at least 2 characters")
-  .required("This field is required");
+const pluginNameValidation = string().min(
+  2,
+  "Plugin name must be at least 2 characters"
+);
 
 const validationSchema = object({
   pluginName: pluginNameValidation,
@@ -23,7 +24,7 @@ export default function ListCreate() {
       <h1>List Create</h1>
 
       <Formik<Inputs>
-        validationSchema={validationSchema}
+        // validationSchema={Schema} TODO Currently no valdiation schema. Formik will be removed and validation will be added from alpha/mantine
         initialValues={{
           pluginName: "",
         }}
@@ -46,7 +47,7 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
   const { data: filteredPlugins, isFetching } = trpc.useQuery(
     ["plugin.unprotected.filtered", { filter: debouncedSearchTerm }],
     {
-      enabled: pluginNameValidation.isValidSync(debouncedSearchTerm),
+      enabled: pluginNameValidation.safeParse(debouncedSearchTerm).success,
     }
   );
 
@@ -62,8 +63,6 @@ const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
       />
 
       {isFetching && <h1>Loading...</h1>}
-
-      {pluginNameValidation.isValidSync(debouncedSearchTerm)}
 
       {(filteredPlugins?.length ?? 0) > 0 ? (
         <React.Fragment>
