@@ -13,11 +13,7 @@ const ERROR_MESSAGES: string[] = [
   "Something's wrong here",
   "Something blew up :/",
   "Whoops! That page doesn't exist",
-<<<<<<< HEAD
   "In case you haven't noticed, you've fallen right into my trap",
-=======
-  "In case you haven't noticed, you've falled right into my trap",
->>>>>>> 6df213832e546174e9cce2fde2c9d8b00b58c3ab
   "Wow! Great page idea, unfortunately it doesn't exist",
   "We don't know the crafting recipe for this page",
 ];
