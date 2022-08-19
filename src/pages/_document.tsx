@@ -13,7 +13,11 @@ export default class _Document extends Document {
       styles: (
         <>
           {initialProps.styles}
-          <ServerStyles html={initialProps.html} server={stylesServer} />
+          <ServerStyles
+            html={initialProps.html}
+            server={stylesServer}
+            key="styles"
+          />
         </>
       ),
     };
