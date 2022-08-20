@@ -138,7 +138,21 @@ function HeaderComponent({
             <Menu shadow="md" width={200}>
               <Menu.Target>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <Button px={8} variant="outline" compact>
+                  <Button
+                    style={{
+                      color:
+                        colorScheme === "light"
+                          ? theme.primaryColor
+                          : theme.colors.brand[6],
+                      borderColor:
+                        colorScheme === "light"
+                          ? theme.primaryColor
+                          : theme.colors.brand[6],
+                    }}
+                    px={8}
+                    variant="outline"
+                    compact
+                  >
                     {session.user.name}
                   </Button>
 
