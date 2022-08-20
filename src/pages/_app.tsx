@@ -21,7 +21,7 @@ import Head from "next/head";
 import React, { useState } from "react";
 import { rtlCache } from "rtl-cache";
 import SiteLayout from "@components/layout";
-
+import { CustomColors as colors } from "../config/mantine";
 function App(props: AppProps & { colorScheme: ColorScheme }) {
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
 
@@ -66,7 +66,14 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
             toggleColorScheme={toggleColorScheme}
           >
             <MantineProvider
-              theme={{ colorScheme, dir: rtl ? "rtl" : "ltr" }}
+              theme={{
+                colorScheme,
+                dir: rtl ? "rtl" : "ltr",
+                colors: {
+                  ...colors,
+                },
+                primaryColor: "brand",
+              }}
               emotionCache={rtl ? rtlCache : undefined}
               withGlobalStyles
               withNormalizeCSS
