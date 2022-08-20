@@ -4,7 +4,7 @@ import { useDebouncedState } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
-import React, { useEffect } from "react";
+import React from "react";
 import { object, string, ZodType } from "zod";
 
 interface Inputs {
