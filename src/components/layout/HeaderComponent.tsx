@@ -1,6 +1,5 @@
 import { Burger, Header, MediaQuery, Text } from "@mantine/core";
 import React from "react";
-import { AiFillCodeSandboxCircle, AiOutlineSearch } from "react-icons/ai";
 import { LayoutComponentProps } from "./types";
 
 const HeaderComponent: React.FC<LayoutComponentProps> = ({
