@@ -27,7 +27,16 @@ export default function ListCreate() {
         filter: pluginName,
       },
     ],
-    { enabled: Schema.safeParse({ pluginName }).success }
+    {
+      enabled: Schema.safeParse({ pluginName }).success,
+      onSuccess: (data) => {
+        if (data.length < 1)
+          setFieldError(
+            "pluginName",
+            "We couldn't find a plugin with that name"
+          );
+      },
+    }
   );
 
   const { onSubmit, getInputProps, setFieldError } = useForm<Inputs>({
@@ -35,14 +44,7 @@ export default function ListCreate() {
     validateInputOnChange: true,
     initialValues: { pluginName: "" },
   });
-
-  useEffect(() => {
-    if (!data) return;
-
-    if (data.length < 1)
-      setFieldError("pluginName", "We couldn't find a plugin with that name");
-  }, [data]);
-
+  
   return (
     <React.Fragment>
       <h1>List Create {Schema.safeParse({ pluginName }).success + ""}</h1>
@@ -56,7 +58,9 @@ export default function ListCreate() {
         />
       </form>
 
-      <ul>{data && data.map((p) => <PluginShowcase plugin={p} />)}</ul>
+      <ul>
+        {data && data.map((p) => <PluginShowcase key={p.id} plugin={p} />)}
+      </ul>
     </React.Fragment>
   );
 }
@@ -75,7 +79,7 @@ const PluginShowcase: React.FC<{ plugin: Plugin }> = ({ plugin }) => (
     </Text>
     <List>
       {plugin.developers.map((developer) => (
-        <List.Item>
+        <List.Item key={developer.id}>
           {developer.name} ({developer.email})
         </List.Item>
       ))}
