@@ -7,7 +7,6 @@ import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
-import { SiteLayout } from "@components/SiteLayout";
 import {
   ColorScheme,
   ColorSchemeProvider,
@@ -21,6 +20,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import React, { useState } from "react";
 import { rtlCache } from "rtl-cache";
+import SiteLayout from "@components/layout";
 
 function App(props: AppProps & { colorScheme: ColorScheme }) {
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
