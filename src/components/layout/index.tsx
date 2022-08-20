@@ -11,7 +11,7 @@ import NavbarComponent from "./NavbarComponent";
 
 const SiteLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useMantineTheme();
-  const [opened, { toggle }] = useDisclosure(false);
+  const [opened, { toggle, close }] = useDisclosure(false);
 
   return (
     <AppShell
@@ -51,16 +51,10 @@ const SiteLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ]}
           theme={theme}
           opened={opened}
-          toggle={toggle}
+          close={close}
         />
       }
-      header={
-        <HeaderComponent
-          theme={theme}
-          opened={opened}
-          toggle={toggle}
-        />
-      }
+      header={<HeaderComponent theme={theme} opened={opened} toggle={toggle} />}
     >
       {children}
     </AppShell>

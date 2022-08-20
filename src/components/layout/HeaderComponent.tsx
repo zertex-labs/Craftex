@@ -92,7 +92,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-function HeaderComponent({ theme, opened, toggle }: LayoutComponentProps) {
+function HeaderComponent({
+  theme,
+  opened,
+  toggle,
+}: LayoutComponentProps & { toggle: () => void }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { dir, toggleDirection } = useDirectionContext();
   const { data: session, status } = useSession();

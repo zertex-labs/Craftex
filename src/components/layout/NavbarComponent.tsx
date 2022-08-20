@@ -64,8 +64,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const NavbarComponent: React.FC<
-  LayoutComponentProps & { links: NavbarLink[] }
-> = ({ opened, links: rawLinks }) => {
+  LayoutComponentProps & { links: NavbarLink[]; close: () => void }
+> = ({ opened, close, links: rawLinks }) => {
   const { classes, cx } = useStyles();
   const [active, setActive] = useState("Billing");
 
@@ -77,6 +77,7 @@ const NavbarComponent: React.FC<
         })}
         onClick={(event) => {
           setActive(item.label);
+          close();
         }}
       >
         <item.icon className={classes.linkIcon} stroke={1.5} />

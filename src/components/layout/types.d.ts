@@ -5,7 +5,6 @@ export type LayoutComponentProps = {
   theme: MantineTheme;
   
   opened: boolean;
-  toggle: () => void
 };
 export type HeaderLink = {
   label: string;
