@@ -7,43 +7,23 @@ import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  MantineProvider,
-} from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
+import SiteLayout from "@components/layout";
+import { ColorScheme } from "@mantine/core";
 import "@utils/tailwind.css";
-import { getCookie, setCookies } from "cookies-next";
 import { GetServerSidePropsContext } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import React, { useState } from "react";
-import { rtlCache } from "rtl-cache";
-import SiteLayout from "@components/layout";
-import { CustomColors as colors } from "../config/mantine";
-function App(props: AppProps & { colorScheme: ColorScheme }) {
-  usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
+import React from "react";
+import MantineLayer from "./_mantine";
+import dynamic from "next/dynamic";
 
-  // TODO use setRtl...
-  const [rtl, setRtl] = useState(false);
+function App(props: AppProps) {
+  usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
 
   const {
     Component,
     pageProps: { session, ...pageProps },
   } = props;
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(
-    props.colorScheme
-  );
-
-  const toggleColorScheme = (value?: ColorScheme) => {
-    const nextColorScheme =
-      value || (colorScheme === "dark" ? "light" : "dark");
-    setColorScheme(nextColorScheme);
-    setCookies("mantine-color-scheme", nextColorScheme, {
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-    });
-  };
 
   return (
     <React.Fragment>
@@ -59,34 +39,13 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
       <ReactQueryDevtools initialIsOpen={false} />
 
-      <div dir={rtl ? "rtl" : "ltr"}>
+      <MantineLayer>
         <SessionProvider session={session}>
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
-          >
-            <MantineProvider
-              theme={{
-                colorScheme,
-                dir: rtl ? "rtl" : "ltr",
-                colors: {
-                  ...colors,
-                },
-                primaryColor: "brand",
-              }}
-              emotionCache={rtl ? rtlCache : undefined}
-              withGlobalStyles
-              withNormalizeCSS
-            >
-              <NotificationsProvider>
-                <SiteLayout>
-                  <Component {...pageProps} />
-                </SiteLayout>
-              </NotificationsProvider>
-            </MantineProvider>
-          </ColorSchemeProvider>
+          <SiteLayout>
+            <Component {...pageProps} />
+          </SiteLayout>
         </SessionProvider>
-      </div>
+      </MantineLayer>
     </React.Fragment>
   );
 }
@@ -117,10 +76,6 @@ const getBaseUrl = () => {
 
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
-
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie("mantine-color-scheme", ctx) || "light",
-});
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
