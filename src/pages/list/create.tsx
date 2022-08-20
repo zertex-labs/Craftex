@@ -1,6 +1,7 @@
 import { List, Text, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { useDebouncedState } from "@mantine/hooks";
+import { NextLink } from "@mantine/next";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
 import React, { useEffect } from "react";
@@ -13,6 +14,8 @@ interface Inputs {
 const Schema: ZodType<Inputs> = object({
   pluginName: string().min(2, "Plugin name must be at least 2 characters"),
 });
+
+// TODO
 
 export default function ListCreate() {
   const [pluginName, setPluginName] = useDebouncedState("", 500);
@@ -65,6 +68,8 @@ const PluginShowcase: React.FC<{ plugin: Plugin }> = ({ plugin }) => (
       gradient={{ from: "indigo", to: "cyan", deg: 45 }}
       size="xl"
       weight={600}
+      component={NextLink}
+      href={`/plugin/view/${plugin.id}`}
     >
       {plugin.title}
     </Text>
