@@ -2,15 +2,12 @@ import { MantineTheme } from "@mantine/core";
 import { SetStateAction } from "react";
 
 export type LayoutComponentProps = {
-  theme: MantineTheme;
-  
+  links: NavigationLink[];
   opened: boolean;
 };
-export type HeaderLink = {
+
+export type NavigationLink = {
   label: string;
   link: string;
 };
 
-export type NavbarLink = HeaderLink & {
-  icon: TablerIcon;
-};

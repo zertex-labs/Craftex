@@ -29,7 +29,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 import { useDirectionContext } from "./DirectionContext";
-import type { HeaderLink, LayoutComponentProps } from "./types";
+import type { NavigationLink, LayoutComponentProps } from "./types";
 
 export const HEADER_HEIGHT = 56;
 
@@ -88,15 +88,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 function HeaderComponent({
-  theme,
   opened,
   toggle,
   links,
-}: LayoutComponentProps & { toggle: () => void; links: HeaderLink[] }) {
+}: LayoutComponentProps & { toggle: () => void }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { dir, toggleDirection } = useDirectionContext();
   const { data: session, status } = useSession();
-  const { classes } = useStyles();
+  const { classes, theme } = useStyles();
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.header}>

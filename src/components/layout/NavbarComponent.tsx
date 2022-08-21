@@ -1,32 +1,26 @@
 import {
-  createStyles,
-  Navbar,
-  TextInput,
-  Code,
-  UnstyledButton,
-  Badge,
-  Text,
-  Group,
   ActionIcon,
-  Tooltip,
+  Badge,
+  clsx,
+  Code,
+  createStyles,
+  Group,
+  Navbar,
   ScrollArea,
+  Text,
+  TextInput,
+  Tooltip,
 } from "@mantine/core";
+import { useViewportSize } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
-import {
-  IconBulb,
-  IconUser,
-  IconCheckbox,
-  IconSearch,
-  IconPlus,
-  IconSelector,
-  IconStar,
-} from "@tabler/icons";
+import { IconPlus, IconSearch, IconStar } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import { HEADER_HEIGHT } from "./HeaderComponent";
-import { LayoutComponentProps, NavbarLink } from "./types";
+import { LayoutComponentProps } from "./types";
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -92,13 +86,53 @@ const useStyles = createStyles((theme) => ({
       color: theme.colorScheme === "dark" ? theme.white : theme.black,
     },
   },
+
+  links: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+
+  link: {
+    padding: `8px 10px`,
+    borderRadius: theme.radius.md,
+
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    },
+  },
+
+  linkActive: {
+    "&, &:hover": {
+      backgroundColor: theme.fn.variant({
+        variant: "light",
+        color: theme.primaryColor,
+      }).background,
+      color: theme.fn.variant({ variant: "light", color: theme.primaryColor })
+        .color,
+    },
+  },
 }));
 
 const NavbarComponent: React.FC<
   LayoutComponentProps & { close: () => void }
-> = ({ close, opened, theme }) => {
-  const { classes } = useStyles();
+> = ({ opened, links, close }) => {
+  const { pathname } = useRouter();
+
+  const { classes, theme, cx } = useStyles();
   const { data: session, status } = useSession();
+  const { width } = useViewportSize();
+
+  useEffect(() => {
+    if (width <= theme.breakpoints.sm && opened) close();
+  }, [width]);
 
   const { data: plugins } = trpc.useQuery(
     ["plugin.unprotected.byUser", { userId: session?.user!.id ?? "" }],
@@ -122,17 +156,57 @@ const NavbarComponent: React.FC<
         rightSectionWidth={70}
         rightSection={<Code className={classes.searchCode}>Ctrl + K</Code>}
         pb="xs"
+        sx={
+          opened
+            ? {
+                borderBottom: `1px solid ${
+                  theme.colorScheme === "dark"
+                    ? theme.colors.dark[4]
+                    : theme.colors.gray[3]
+                }`,
+              }
+            : {}
+        }
+        readOnly
+      />
+
+      {opened && (
+        <Navbar.Section
+          style={{ marginBottom: 0 }}
+          py="xs"
+          className={classes.section}
+        >
+          <div className={classes.links}>
+            {links.map((link) => (
+              <Text
+                key={link.link}
+                component={NextLink}
+                href={link.link}
+                className={cx(classes.link, {
+                  [classes.linkActive]: pathname === link.link,
+                })}
+                onClick={() => close()}
+              >
+                {link.label}
+              </Text>
+            ))}
+          </div>
+        </Navbar.Section>
+      )}
+
+      <Group
+        px={2}
+        pt="xs"
+        pb={5}
+        position="apart"
         sx={{
-          borderBottom: `1px solid ${
+          borderTop: `1px solid ${
             theme.colorScheme === "dark"
               ? theme.colors.dark[4]
               : theme.colors.gray[3]
           }`,
         }}
-        readOnly
-      />
-
-      <Group px={2} pt="xs" pb={5} position="apart">
+      >
         <Text size="xs" weight={500} color="dimmed">
           Plugins
         </Text>

@@ -8,6 +8,26 @@ import {
 } from "@tabler/icons";
 import HeaderComponent from "./HeaderComponent";
 import NavbarComponent from "./NavbarComponent";
+import { NavigationLink } from "./types";
+
+const links: NavigationLink[] = [
+  {
+    link: "/",
+    label: "Home",
+  },
+  {
+    link: "/plugin/create",
+    label: "@plugin/create",
+  },
+  {
+    link: "/plugin/all",
+    label: "@plugin/all",
+  },
+  {
+    link: "/list/create",
+    label: "@list/create",
+  },
+];
 
 const SiteLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useMantineTheme();
@@ -25,32 +45,8 @@ const SiteLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      navbar={<NavbarComponent theme={theme} opened={opened} close={close} />}
-      header={
-        <HeaderComponent
-          links={[
-            {
-              link: "/",
-              label: "Home",
-            },
-            {
-              link: "/plugin/create",
-              label: "@plugin/create",
-            },
-            {
-              link: "/plugin/all",
-              label: "@plugin/all",
-            },
-            {
-              link: "/list/create",
-              label: "@list/create",
-            },
-          ]}
-          theme={theme}
-          opened={opened}
-          toggle={toggle}
-        />
-      }
+      navbar={<NavbarComponent links={links} opened={opened} close={close} />}
+      header={<HeaderComponent links={links} opened={opened} toggle={toggle} />}
     >
       {children}
     </AppShell>
