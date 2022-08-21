@@ -132,7 +132,7 @@ const NavbarComponent: React.FC<
 
   useEffect(() => {
     if (width <= theme.breakpoints.sm && opened) close();
-  }, [width]);
+  }, [width, close, opened, theme.breakpoints.sm]);
 
   const { data: plugins } = trpc.useQuery(
     ["plugin.unprotected.byUser", { userId: session?.user!.id ?? "" }],
