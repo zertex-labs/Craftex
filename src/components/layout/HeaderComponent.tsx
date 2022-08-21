@@ -128,7 +128,7 @@ function HeaderComponent({
           <Divider orientation="vertical" />
 
           {status === "authenticated" && session.user ? (
-            <Menu shadow="md" width={200}>
+            <Menu shadow="md" width={200} withArrow>
               <Menu.Target>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <Button
@@ -176,7 +176,7 @@ function HeaderComponent({
                 </div>
               </Menu.Target>
 
-              <Menu.Dropdown>
+              <Menu.Dropdown >
                 <Group
                   p={2}
                   sx={{
