@@ -11,11 +11,9 @@ interface Inputs {
   pluginName: string;
 }
 
-const Schema: ZodType<Inputs> = object({
+const formSchema: ZodType<Inputs> = object({
   pluginName: string().min(2, "Plugin name must be at least 2 characters"),
 });
-
-// TODO
 
 export default function ListCreate() {
   const [pluginName, setPluginName] = useDebouncedState("", 500);
@@ -28,7 +26,7 @@ export default function ListCreate() {
       },
     ],
     {
-      enabled: Schema.safeParse({ pluginName }).success,
+      enabled: formSchema.safeParse({ pluginName }).success,
       onSuccess: (data) => {
         if (data.length < 1)
           setFieldError(
@@ -40,14 +38,14 @@ export default function ListCreate() {
   );
 
   const { onSubmit, getInputProps, setFieldError } = useForm<Inputs>({
-    validate: zodResolver(Schema),
+    validate: zodResolver(formSchema),
     validateInputOnChange: true,
     initialValues: { pluginName: "" },
   });
-  
+
   return (
     <React.Fragment>
-      <h1>List Create {Schema.safeParse({ pluginName }).success + ""}</h1>
+      <h1>List Create {formSchema.safeParse({ pluginName }).success + ""}</h1>
 
       <form onSubmit={onSubmit((values) => console.log(values))}>
         <TextInput
