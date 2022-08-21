@@ -1,33 +1,97 @@
-import Error from "@components/Error";
-import { trpc } from "@trpc";
-import axios from "axios";
-import cuid from "cuid";
 import {
-  Field,
-  FieldArray,
-  FieldProps,
-  Form,
-  Formik,
-  FormikProps,
-} from "formik";
+  Center,
+  Group,
+  useMantineTheme,
+  Text,
+  Card,
+  Image,
+  createStyles,
+  Badge,
+  Avatar,
+  ActionIcon,
+} from "@mantine/core";
+import { Dropzone } from "@mantine/dropzone";
+import {
+  IconBookmark,
+  IconHeart,
+  IconPhoto,
+  IconShare,
+  IconUpload,
+  IconX,
+} from "@tabler/icons";
+import { trpc } from "@trpc";
+import { SUPPORTED_FORMATS, MAX_FILE_SIZE } from "@utils/constants";
 import { signIn, useSession } from "next-auth/react";
-import Link from "next/link";
-import React, { useState } from "react";
-import { Inputs, validationSchema } from "./_validation";
+import React, { useEffect, useState } from "react";
+import NextImage from "next/image";
 
-const InputComponent: React.ComponentType<FieldProps["field"]> = (props) => {
-  return (
-    <input
-      className="w-full py-1 outline-none float-none text-sm bg-transparent"
-      {...props}
-    />
-  );
-};
+
+// TODO Seperate to preview and edit pages... this is abysmally bad
+
+const useStyles = createStyles((theme) => ({
+  card: {
+    [theme.fn.largerThan("md")]: {
+      width: 500,
+    },
+
+    position: "relative",
+    backgroundColor:
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+  },
+
+  rating: {
+    position: "absolute",
+    top: theme.spacing.xs,
+    right: theme.spacing.xs + 2,
+    pointerEvents: "none",
+  },
+
+  title: {
+    display: "block",
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.xs / 2,
+  },
+
+  action: {
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[6]
+        : theme.colors.gray[0],
+    ...theme.fn.hover({
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[5]
+          : theme.colors.gray[1],
+    }),
+  },
+
+  footer: {
+    marginTop: theme.spacing.md,
+  },
+}));
 
 export default function PluginCreate() {
   const { mutate: createPlugin, data: lastCreatedPlugin } =
     trpc.useMutation("plugin.create");
   const { data: session, status } = useSession();
+  const [cover, setCover] = useState<File | undefined>(undefined);
+  const { classes, cx, theme } = useStyles();
+
+  const coverPreview = (() => {
+    console.log("render");
+    if (!cover) return;
+
+    const imageUrl = URL.createObjectURL(cover);
+
+    return (
+      <NextImage
+        key={cover?.name}
+        src={imageUrl}
+        layout="fill"
+        onLoad={() => URL.revokeObjectURL(imageUrl)}
+      />
+    );
+  })();
 
   if (status !== "authenticated") {
     return (
@@ -39,133 +103,136 @@ export default function PluginCreate() {
   }
 
   return (
-    <div>
-      <div>
-        <Formik<Inputs>
-          initialValues={{
-            cover: undefined,
-            developers: [],
-            title: "",
-          }}
-          validationSchema={validationSchema}
-          onSubmit={async ({ cover, developers, title }, actions) => {
-            console.log("submit");
-            if (!cover || !session.user) return;
-            const id = cuid();
+    <Center style={{ display: "flex", flexDirection: "column" }}>
+      <h1>Plugin Create</h1>
 
-            const { data: uploadData } = await axios.post(
-              "/api/s3/uploadFile",
-              {
-                name: `plugins/${id}`,
-                type: cover.type,
-              }
-            );
+      <Card withBorder radius="md" className={classes.card}>
+        <Card.Section>
+          <Dropzone
+            maxFiles={1}
+            onDrop={(files) => setCover(files[0])}
+            onReject={(files) => console.log("rejected files", files)}
+            maxSize={MAX_FILE_SIZE}
+            accept={SUPPORTED_FORMATS}
+            sx={(theme) => ({
+              minHeight: 120,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: 0,
 
-            await axios.put(uploadData.url, cover, {
-              headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-type": cover.type,
-                "Cache-Control": "public,max-age=31536000,immutable",
-                "x-amz-acl": "public-read",
+              padding: 0,
+
+              backgroundColor:
+                theme.colorScheme === "dark"
+                  ? theme.colors.dark[6]
+                  : theme.colors.gray[0],
+
+              "&[data-accept]": {
+                color: theme.white,
+                backgroundColor: theme.colors.blue[6],
               },
-            });
 
-            createPlugin({
-              id,
-              title,
-              developers,
-              author: session.user,
-            });
+              "&[data-reject]": {
+                color: theme.white,
+                backgroundColor: theme.colors.red[6],
+              },
+            })}
+          >
+            <Group
+              position="center"
+              spacing="xl"
+              style={{ minHeight: 120, pointerEvents: "none" }}
+            >
+              {coverPreview ? (
+                <>
+                  {coverPreview}
+                </>
+              ) : (
+                <>
+                  <Dropzone.Accept>
+                    <IconUpload
+                      size={50}
+                      stroke={1.5}
+                      color={
+                        theme.colors.brand[theme.colorScheme === "dark" ? 4 : 6]
+                      }
+                    />
+                  </Dropzone.Accept>
+                  <Dropzone.Reject>
+                    <IconX
+                      size={50}
+                      stroke={1.5}
+                      color={
+                        theme.colors.red[theme.colorScheme === "dark" ? 4 : 6]
+                      }
+                    />
+                  </Dropzone.Reject>
+                  <Dropzone.Idle>
+                    <IconPhoto size={50} stroke={1.5} />
+                  </Dropzone.Idle>
 
-            actions.setSubmitting(false);
-            actions.setFieldValue("cover", null);
-            actions.resetForm();
-          }}
-          component={CreateForm}
-        />
-      </div>
-      {lastCreatedPlugin && (
-        <Link href={`/plugin/${lastCreatedPlugin.id}`}>
-          <a>Success! Go to plugin page</a>
-        </Link>
-      )}
-    </div>
+                  <div>
+                    <Text size="xl" inline>
+                      Drag image here or click to select
+                    </Text>
+                    <Text size="xs" color="dimmed" inline mt={7}>
+                      File must not exceed 5mb and must be of format .png or
+                      .jpeg
+                    </Text>
+                  </div>
+                </>
+              )}
+            </Group>
+          </Dropzone>
+        </Card.Section>
+
+        <Badge
+          className={classes.rating}
+          variant="gradient"
+          gradient={{ from: "yellow", to: "red" }}
+        >
+          3.4
+        </Badge>
+
+        <Text className={classes.title} weight={500} component="a">
+          Title
+        </Text>
+
+        <Text size="sm" color="dimmed" lineClamp={4}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa ipsum
+          unde ducimus earum dicta doloribus culpa repellat deserunt. Maxime hic
+          quasi inventore! Ipsa, quis nobis totam reiciendis ratione cupiditate
+          eos voluptatum saepe eaque neque commodi maiores molestias, cumque at
+          nisi.
+        </Text>
+
+        <Group position="apart" className={classes.footer}>
+          <Center>
+            <Avatar
+              src={"https://cdn.craftex.dev/brand/logo"}
+              size={24}
+              radius="xl"
+              mr="xs"
+            />
+            <Text size="sm" inline>
+              xrexy
+            </Text>
+          </Center>
+
+          <Group spacing={8} mr={0}>
+            <ActionIcon className={classes.action}>
+              <IconHeart size={16} color={theme.colors.red[6]} />
+            </ActionIcon>
+            <ActionIcon className={classes.action}>
+              <IconBookmark size={16} color={theme.colors.yellow[7]} />
+            </ActionIcon>
+            <ActionIcon className={classes.action}>
+              <IconShare size={16} />
+            </ActionIcon>
+          </Group>
+        </Group>
+      </Card>
+    </Center>
   );
 }
-
-const CreateForm: (props: FormikProps<Inputs>) => JSX.Element = ({
-  setFieldValue,
-  values,
-  handleBlur,
-  handleChange,
-  errors,
-}) => {
-  return (
-    <Form>
-      <Field
-        onBlur={handleBlur}
-        onChange={handleChange}
-        as={InputComponent}
-        name="title"
-        placeholder="First Name"
-      />
-      {errors.title && <Error error={errors.title} className="pl-1" />}
-
-      <input
-        name="cover"
-        type="file"
-        accept=".png,.jpg,.jpeg,.webp"
-        onChange={(e) => setFieldValue("cover", e.target.files?.[0])}
-        onBlur={handleBlur}
-      />
-      {errors.cover && <Error error={errors.cover} className="pl-1" />}
-
-      <FieldArray
-        name="developers"
-        render={({ remove, push }) => (
-          <div>
-            {values.developers.map((developer, index) => (
-              <div
-                key={index}
-                className={errors?.developers?.[index] ? "border-red-400" : ""}
-              >
-                <Field
-                  name={`developers[${index}].email`}
-                  placeholder={`[${index}] example@gmail.com`}
-                  className={`py-1 outline-none float-none text-sm bg-transparent`}
-                  value={developer.email}
-                />
-
-                <div
-                  className="bg-transparent rounded-full hover:bg-gray-100 active:bg-gray-200"
-                  title="Remove Developer"
-                  onClick={() => remove(index)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 p-1"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-              </div>
-            ))}
-            <button type="button" onClick={() => push({ email: "" })}>
-              Add Developer
-            </button>
-          </div>
-        )}
-      />
-
-      <button type="submit">Submit</button>
-    </Form>
-  );
-};

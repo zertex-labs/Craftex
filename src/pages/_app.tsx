@@ -2,34 +2,53 @@ import { env } from "@env/client";
 import { AppRouter } from "@server/router";
 import { withTRPC } from "@trpc/next";
 import { SessionProvider } from "next-auth/react";
-import type { AppType, NextWebVitalsMetric } from "next/dist/shared/lib/utils";
+import type { NextWebVitalsMetric } from "next/dist/shared/lib/utils";
 import { event, GoogleAnalytics, usePageViews } from "nextjs-google-analytics";
 import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
-import { SiteLayout } from "@components/SiteLayout";
+import SiteLayout from "@components/layout";
+import { ColorScheme } from "@mantine/core";
 import "@utils/tailwind.css";
+import { GetServerSidePropsContext } from "next";
+import { AppProps } from "next/app";
+import Head from "next/head";
 import React from "react";
+import MantineLayer from "./_mantine";
+import dynamic from "next/dynamic";
 
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+function App(props: AppProps) {
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
+
+  const {
+    Component,
+    pageProps: { session, ...pageProps },
+  } = props;
 
   return (
     <React.Fragment>
+      <Head>
+        <title>Craftex</title>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+        <link rel="craftex icon" href="/favicon.svg" />
+      </Head>
+
       <GoogleAnalytics gaMeasurementId={`${env.NEXT_PUBLIC_GA_ID}`} />
       <ReactQueryDevtools initialIsOpen={false} />
 
-      <SessionProvider session={session}>
-        <SiteLayout>
-          <Component {...pageProps} />
-        </SiteLayout>
-      </SessionProvider>
+      <MantineLayer>
+        <SessionProvider session={session}>
+          <SiteLayout>
+            <Component {...pageProps} />
+          </SiteLayout>
+        </SessionProvider>
+      </MantineLayer>
     </React.Fragment>
   );
-};
+}
 
 export function reportWebVitals({
   id,
@@ -68,4 +87,4 @@ export default withTRPC<AppRouter>({
     };
   },
   ssr: false,
-})(MyApp);
+})(App);
