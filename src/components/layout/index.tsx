@@ -25,36 +25,32 @@ const SiteLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      navbar={
-        <NavbarComponent
+      navbar={<NavbarComponent theme={theme} opened={opened} close={close} />}
+      header={
+        <HeaderComponent
           links={[
             {
               link: "/",
               label: "Home",
-              icon: IconHome,
             },
             {
               link: "/plugin/create",
               label: "@plugin/create",
-              icon: IconCodePlus,
             },
             {
               link: "/plugin/all",
               label: "@plugin/all",
-              icon: IconCode,
             },
             {
               link: "/list/create",
               label: "@list/create",
-              icon: IconClipboardList,
             },
           ]}
           theme={theme}
           opened={opened}
-          close={close}
+          toggle={toggle}
         />
       }
-      header={<HeaderComponent theme={theme} opened={opened} toggle={toggle} />}
     >
       {children}
     </AppShell>
