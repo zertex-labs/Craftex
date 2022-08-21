@@ -1,7 +1,6 @@
 import {
   ActionIcon,
   Badge,
-  clsx,
   Code,
   createStyles,
   Group,

@@ -27,9 +27,10 @@ import {
 } from "@tabler/icons";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
 import { useDirectionContext } from "./DirectionContext";
-import type { NavigationLink, LayoutComponentProps } from "./types";
+import type { LayoutComponentProps } from "./types";
 
 export const HEADER_HEIGHT = 56;
 
@@ -85,6 +86,13 @@ const useStyles = createStyles((theme) => ({
           : theme.colors.gray[0],
     },
   },
+
+  linkActive: {
+    "&, &:hover": {
+      color: theme.fn.variant({ variant: "subtle", color: theme.primaryColor })
+        .color,
+    },
+  },
 }));
 
 function HeaderComponent({
@@ -92,10 +100,11 @@ function HeaderComponent({
   toggle,
   links,
 }: LayoutComponentProps & { toggle: () => void }) {
+  const { pathname } = useRouter();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { dir, toggleDirection } = useDirectionContext();
   const { data: session, status } = useSession();
-  const { classes, theme } = useStyles();
+  const { classes, theme, cx } = useStyles();
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.header}>
@@ -118,7 +127,9 @@ function HeaderComponent({
                 key={link.link}
                 component={NextLink}
                 href={link.link}
-                className={classes.link}
+                className={cx(classes.link, {
+                  [classes.linkActive]: pathname === link.link,
+                })}
               >
                 {link.label}
               </Text>
