@@ -88,7 +88,6 @@ const NavbarComponent: React.FC<
 
   return (
     <Navbar
-      height={700}
       p="sm"
       hiddenBreakpoint="sm"
       hidden={!opened}
