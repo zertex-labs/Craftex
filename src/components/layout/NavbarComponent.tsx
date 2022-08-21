@@ -66,6 +66,7 @@ const useStyles = createStyles((theme) => ({
   pluginHolder: {
     display: "flex",
     justifyContent: "space-between",
+    alignItems: "center",
     padding: `8px ${theme.spacing.xs}px`,
     textDecoration: "none",
     borderRadius: theme.radius.sm,
@@ -226,7 +227,7 @@ const NavbarComponent: React.FC<
             plugins.map((plugin) => (
               <Link key={plugin.id} href={`/plugin/view/${plugin.id}`}>
                 <a className={classes.pluginHolder}>
-                  {plugin.title}{" "}
+                  {plugin.title}
                   <Badge
                     p={6}
                     leftSection={
