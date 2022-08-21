@@ -35,8 +35,7 @@ import React from "react";
 import { useDirectionContext } from "./DirectionContext";
 import type { HeaderLink, LayoutComponentProps } from "./types";
 
-const HEADER_HEIGHT = 56;
-const BURGER_HEIGHT = HEADER_HEIGHT / 2;
+export const HEADER_HEIGHT = 56;
 
 const useStyles = createStyles((theme) => ({
   header: {
