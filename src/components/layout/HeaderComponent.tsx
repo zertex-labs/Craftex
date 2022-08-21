@@ -3,40 +3,36 @@ import CraftexLogo from "@components/CraftexLogo";
 import {
   Burger,
   Button,
-  Center,
   ColorSwatch,
-  Container,
   createStyles,
   Divider,
   Group,
   Header,
-  MantineTheme,
   Menu,
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { NextLink } from "@mantine/next";
 import {
   IconArrowBarLeft,
   IconMessageCircle,
+  IconMoonStars,
   IconPhoto,
   IconQuestionMark,
   IconSearch,
   IconSettings,
   IconSun,
-  IconMoonStars,
   IconTextDirectionLtr,
   IconTextDirectionRtl,
 } from "@tabler/icons";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { useDirectionContext } from "./DirectionContext";
-import type { HeaderLink, LayoutComponentProps } from "./types";
+import type { LayoutComponentProps } from "./types";
 
-const HEADER_HEIGHT = 56;
-const BURGER_HEIGHT = HEADER_HEIGHT / 2;
+export const HEADER_HEIGHT = 56;
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -90,17 +86,25 @@ const useStyles = createStyles((theme) => ({
           : theme.colors.gray[0],
     },
   },
+
+  linkActive: {
+    "&, &:hover": {
+      color: theme.fn.variant({ variant: "subtle", color: theme.primaryColor })
+        .color,
+    },
+  },
 }));
 
 function HeaderComponent({
-  theme,
   opened,
   toggle,
+  links,
 }: LayoutComponentProps & { toggle: () => void }) {
+  const { pathname } = useRouter();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const { dir, toggleDirection } = useDirectionContext();
   const { data: session, status } = useSession();
-  const { classes } = useStyles();
+  const { classes, theme, cx } = useStyles();
 
   return (
     <Header height={HEADER_HEIGHT} className={classes.header}>
@@ -118,27 +122,41 @@ function HeaderComponent({
           />
 
           <Group spacing={8} className={classes.links}>
-            <ActionToggle
-              colors={[theme.colors.gray[1], theme.colors.gray[6]]}
-              icons={[IconSun, IconMoonStars]}
-              onClick={() => toggleColorScheme()}
-              shouldToggle={colorScheme === "dark"}
-            />
-            <ActionToggle
-              colors={[theme.colors.gray[1], theme.colors.gray[6]]}
-              icons={[IconTextDirectionRtl, IconTextDirectionLtr]}
-              onClick={() => toggleDirection()}
-              shouldToggle={dir === "ltr"}
-            />
+            {links.map((link) => (
+              <Text
+                key={link.link}
+                component={NextLink}
+                href={link.link}
+                className={cx(classes.link, {
+                  [classes.linkActive]: pathname === link.link,
+                })}
+              >
+                {link.label}
+              </Text>
+            ))}
           </Group>
 
           <Divider orientation="vertical" />
 
           {status === "authenticated" && session.user ? (
-            <Menu shadow="md" width={200}>
+            <Menu shadow="md" width={200} withArrow>
               <Menu.Target>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <Button px={8} variant="outline" compact>
+                  <Button
+                    style={{
+                      color:
+                        colorScheme === "light"
+                          ? theme.primaryColor
+                          : theme.colors.brand[6],
+                      borderColor:
+                        colorScheme === "light"
+                          ? theme.primaryColor
+                          : theme.colors.brand[6],
+                    }}
+                    px={8}
+                    variant="outline"
+                    compact
+                  >
                     {session.user.name}
                   </Button>
 
@@ -150,7 +168,11 @@ function HeaderComponent({
                       src={session.user.image}
                       width={32}
                       height={32}
-                      className="rounded-full select-none pointer-events-none"
+                      style={{
+                        borderRadius: "9999px",
+                        userSelect: "none",
+                        cursor: "pointer",
+                      }}
                     />
                   ) : (
                     <ColorSwatch
@@ -166,6 +188,32 @@ function HeaderComponent({
               </Menu.Target>
 
               <Menu.Dropdown>
+                <Group
+                  p={2}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
+                  }}
+                >
+                  <ActionToggle
+                    colors={[theme.colors.gray[1], theme.colors.gray[6]]}
+                    icons={[IconSun, IconMoonStars]}
+                    onClick={() => toggleColorScheme()}
+                    shouldToggle={colorScheme === "dark"}
+                  />
+
+                  <Divider orientation="vertical" />
+
+                  <ActionToggle
+                    colors={[theme.colors.gray[1], theme.colors.gray[6]]}
+                    icons={[IconTextDirectionRtl, IconTextDirectionLtr]}
+                    onClick={() => toggleDirection()}
+                    shouldToggle={dir === "ltr"}
+                  />
+                </Group>
+
+                <Menu.Divider />
+
                 <Menu.Label>Application</Menu.Label>
                 <Menu.Item icon={<IconSettings size={14} />}>
                   Settings
@@ -184,7 +232,9 @@ function HeaderComponent({
                 >
                   Search
                 </Menu.Item>
+
                 <Menu.Divider />
+
                 <Menu.Item
                   icon={<IconArrowBarLeft size={14} />}
                   onClick={() => signOut()}

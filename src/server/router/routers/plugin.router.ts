@@ -104,6 +104,23 @@ const unprotectedPluginRouter = createRouter()
         },
         select: defaultPluginSelect,
       }),
+  })
+  .query("byUser", {
+    input: object({
+      userId: string().cuid().length(25),
+    }),
+    resolve: ({ input: { userId }, ctx: { prisma: db } }) =>
+      db.plugin.findMany({
+        where: {
+          developers: {
+            some: {
+              id: { equals: userId },
+            },
+          },
+        },
+        orderBy: { stars: "desc" },
+        select: defaultPluginSelect,
+      }),
   });
 
 export const pluginRouter = createRouter()
