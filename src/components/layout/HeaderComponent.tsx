@@ -116,6 +116,7 @@ function HeaderComponent({
           <Group spacing={8} className={classes.links}>
             {links.map((link) => (
               <Text
+                key={link.link}
                 component={NextLink}
                 href={link.link}
                 className={classes.link}
@@ -176,7 +177,7 @@ function HeaderComponent({
                 </div>
               </Menu.Target>
 
-              <Menu.Dropdown >
+              <Menu.Dropdown>
                 <Group
                   p={2}
                   sx={{
