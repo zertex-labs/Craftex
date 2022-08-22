@@ -1,86 +1,43 @@
-import { List, Text, TextInput } from "@mantine/core";
+import { createStyles, Grid, ScrollArea, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useDebouncedState } from "@mantine/hooks";
-import { NextLink } from "@mantine/next";
+import { useDebouncedState, useListState } from "@mantine/hooks";
+import { IconSearch } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
+
+import {
+  ListCreateInputs,
+  ListCreateSchema,
+  PluginNameSchema,
+} from "./_schemas";
+import ListPluginSearch from "./_search";
+import ListShowcase from "./_showcase";
 import type { Plugin } from "@utils/types/craftex";
-import React from "react";
-import { object, string, ZodType } from "zod";
 
-interface Inputs {
-  pluginName: string;
-}
-
-const formSchema: ZodType<Inputs> = object({
-  pluginName: string().min(2, "Plugin name must be at least 2 characters"),
-});
+const useStyles = createStyles((theme) => ({
+  overlay: {},
+}));
 
 export default function ListCreate() {
-  const [pluginName, setPluginName] = useDebouncedState("", 500);
-
-  const { data } = trpc.useQuery(
-    [
-      "plugin.unprotected.filtered",
-      {
-        filter: pluginName,
-      },
-    ],
-    {
-      enabled: formSchema.safeParse({ pluginName }).success,
-      onSuccess: (data) => {
-        if (data.length < 1)
-          setFieldError(
-            "pluginName",
-            "We couldn't find a plugin with that name"
-          );
-      },
-    }
-  );
-
-  const { onSubmit, getInputProps, setFieldError } = useForm<Inputs>({
-    validate: zodResolver(formSchema),
+  const form = useForm<ListCreateInputs>({
+    validate: zodResolver(ListCreateSchema),
     validateInputOnChange: true,
-    initialValues: { pluginName: "" },
+    initialValues: { pluginName: "", selected: [] },
   });
 
+  const { classes, theme } = useStyles();
+  const [selected, handlers] = useListState<Plugin>([]);
+
   return (
-    <React.Fragment>
-      <h1>List Create {formSchema.safeParse({ pluginName }).success + ""}</h1>
-
-      <form onSubmit={onSubmit((values) => console.log(values))}>
-        <TextInput
-          withAsterisk
-          label="Plugin name"
-          onInput={({ currentTarget: { value } }) => setPluginName(value)}
-          {...getInputProps("pluginName")}
+    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+      <Grid className={classes.overlay}>
+        <ListShowcase selected={selected} form={form} span={8} />
+        <ListPluginSearch
+          selected={selected}
+          handlers={handlers}
+          form={form}
+          span={4}
         />
-      </form>
-
-      <ul>
-        {data && data.map((p) => <PluginShowcase key={p.id} plugin={p} />)}
-      </ul>
-    </React.Fragment>
+      </Grid>
+    </form>
   );
 }
-
-const PluginShowcase: React.FC<{ plugin: Plugin }> = ({ plugin }) => (
-  <li key={plugin.id}>
-    <Text
-      variant="gradient"
-      gradient={{ from: "indigo", to: "cyan", deg: 45 }}
-      size="xl"
-      weight={600}
-      component={NextLink}
-      href={`/plugin/view/${plugin.id}`}
-    >
-      {plugin.title}
-    </Text>
-    <List>
-      {plugin.developers.map((developer) => (
-        <List.Item key={developer.id}>
-          {developer.name} ({developer.email})
-        </List.Item>
-      ))}
-    </List>
-  </li>
-);
