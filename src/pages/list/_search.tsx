@@ -1,35 +1,40 @@
 import { HEADER_HEIGHT } from "@components/layout/HeaderComponent";
 import {
-  Button,
   createStyles,
   Grid,
-  List,
   MantineTheme,
   ScrollArea,
   Text,
   TextInput,
 } from "@mantine/core";
-import { SetFieldValue } from "@mantine/form/lib/types";
 import {
   useDebouncedState,
   useDisclosure,
   UseListStateHandlers,
 } from "@mantine/hooks";
-import { NextLink } from "@mantine/next";
-import { IconSearch } from "@tabler/icons";
+import { IconAmbulance, IconSearch } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
-import { create } from "domain";
-import { useEffect, useState } from "react";
-import {
-  ListCreateInputs,
-  ListSectionProps,
-  PluginNameSchema,
-} from "./_schemas";
+import { useEffect } from "react";
+import { ListSectionProps, PluginNameSchema } from "./_schemas";
 
 const useStyles = createStyles((theme) => ({
   root: {
     height: `calc(100vh - ${HEADER_HEIGHT}px - ${theme.spacing.md}px)`,
+  },
+
+  nothingFound: {
+    paddingTop: theme.spacing.xl * 1.5,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    fontWeight: 600,
+    fontSize: theme.fontSizes.sm,
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.gray[7]
+        : theme.colors.dark[0],
   },
 }));
 
@@ -42,7 +47,7 @@ const useShowcaseStyles = createStyles((theme) => ({
 const ListPluginSearch: React.FC<
   ListSectionProps & { handlers: UseListStateHandlers<Plugin> }
 > = ({
-  form: { getInputProps, setFieldError, setFieldValue },
+  form: { getInputProps, setFieldError, removeListItem, insertListItem },
   handlers,
   selected,
   span,
@@ -78,7 +83,7 @@ const ListPluginSearch: React.FC<
         {...getInputProps("pluginName")}
       />
       <ScrollArea.Autosize maxHeight={`calc(98% - ${theme.spacing.xl}px)`}>
-        {filteredPlugins &&
+        {filteredPlugins ? (
           filteredPlugins.map((p) => (
             <PluginShowcase
               selected={selected}
@@ -87,7 +92,13 @@ const ListPluginSearch: React.FC<
               plugin={p}
               handlers={handlers}
             />
-          ))}
+          ))
+        ) : (
+          <div className={classes.nothingFound}>
+            <IconAmbulance size={90} strokeWidth={1} />
+            <span>Uh oh... nothing found :/</span>
+          </div>
+        )}
       </ScrollArea.Autosize>
     </Grid.Col>
   );
