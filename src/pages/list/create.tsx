@@ -1,18 +1,11 @@
-import { createStyles, Grid, ScrollArea, TextInput } from "@mantine/core";
+import { createStyles, Grid } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { useDebouncedState, useListState } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons";
-import { trpc } from "@utils/trpc";
+import { useListState } from "@mantine/hooks";
 
-import {
-  ListCreateInputs,
-  ListCreateSchema,
-  PluginNameSchema,
-} from "./_schemas";
+import type { Plugin } from "@utils/types/craftex";
 import ListPluginSearch from "./_search";
 import ListShowcase from "./_showcase";
-import type { Plugin } from "@utils/types/craftex";
-import { Draggable } from "react-beautiful-dnd";
+import { ListCreateInputs, ListCreateSchema } from "./_schemas";
 
 const useStyles = createStyles((theme) => ({
   overlay: {},
@@ -25,7 +18,7 @@ export default function ListCreate() {
     initialValues: { pluginName: "", selected: [] },
   });
 
-  const { classes, theme } = useStyles();
+  const { classes } = useStyles();
   const [selected, handlers] = useListState<Plugin>([]);
 
   return (

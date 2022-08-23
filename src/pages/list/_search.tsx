@@ -10,7 +10,6 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useDebouncedState, UseListStateHandlers } from "@mantine/hooks";
-import { NextLink } from "@mantine/next";
 import { IconAmbulance, IconMinus, IconPlus, IconSearch } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
@@ -129,34 +128,22 @@ const ListPluginSearch: React.FC<
 // ----- Showcase start
 
 const useShowcaseStyles = createStyles((theme) => ({
-  root: {
-    cursor: "pointer",
-  },
-
   toggle: {
-    padding: 2.75,
+    padding: 2.5,
     borderRadius: 4,
     borderColor:
       theme.colorScheme === "dark"
-        ? theme.colors.gray[8]
+        ? theme.colors.dark[6]
         : theme.colors.gray[3],
-
-    background: theme.black,
-
-    "&:hover": {
-      borderColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.gray[9]
-          : theme.colors.gray[4],
-    },
   },
 
   pluginHolder: {
+    cursor: "pointer",
     display: "flex",
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
-    padding: `4px 8px`,
+    padding: `8px 6px`,
     textDecoration: "none",
     borderRadius: theme.radius.sm,
     fontSize: theme.fontSizes.xs,
@@ -174,6 +161,29 @@ const useShowcaseStyles = createStyles((theme) => ({
           : theme.colors.gray[0],
       color: theme.colorScheme === "dark" ? theme.white : theme.black,
     },
+  },
+
+  title: {
+    lineHeight: 0.95,
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.gray[4]
+        : theme.colors.gray[8],
+  },
+
+  titleActive: {
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.brand[3]
+        : theme.colors.brand[6],
+  },
+
+  leftSection: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    gap: 0,
   },
 }));
 
@@ -213,22 +223,24 @@ const PluginShowcase: React.FC<{
       className={classes.pluginHolder}
       onClick={togglePlugin}
     >
-      <Text
-        component={NextLink}
-        href={`/plugin/view/${plugin.id}`}
-        size="sm"
-        sx={(theme) => ({
-          color: isSelected
-            ? theme.colorScheme === "dark"
-              ? theme.colors.brand[3]
-              : theme.colors.brand[6]
-            : theme.colorScheme === "dark"
-            ? theme.colors.gray[4]
-            : theme.colors.gray[8],
-        })}
-      >
-        {plugin.title}
-      </Text>
+      <Group className={classes.leftSection}>
+        <Text
+          // component={NextLink}
+          // href={`/plugin/view/${plugin.id}`}
+          size="sm"
+          className={cx(classes.title, {
+            [classes.titleActive]: isSelected,
+          })}
+        >
+          {plugin.title}
+        </Text>
+        <Text size={11} color="dimmed" sx={{ userSelect: "none" }}>
+          by {plugin.developers.find((d) => !!d)?.name ?? "WH OMEGALUL"}{" "}
+          {plugin.developers.length > 1 && (
+            <span>(+{plugin.developers.length - 1})</span>
+          )}
+        </Text>
+      </Group>
       <ActionIcon
         size="xs"
         onClick={togglePlugin}
