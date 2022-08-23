@@ -1,3 +1,5 @@
+import { ClassNames } from "@emotion/react";
+import { createStyles, Divider } from "@mantine/core";
 import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -19,8 +21,63 @@ const ERROR_MESSAGES: string[] = [
   "We don't know the crafting recipe for this page",
 ];
 
+const useStyles = createStyles((theme) => ({
+  root: {
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "16px",
+  },
+
+  title: {
+    fontSize: theme.fontSizes.xl * 2.35,
+    fontWeight: 900,
+    px: theme.spacing.xl,
+  },
+
+  divider: {
+    height: theme.spacing.xl * 4,
+    width: "1px",
+
+    backgroundColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[6]
+        : theme.colors.gray[4],
+  },
+
+  rightSectionRoot: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    width: "50vh",
+
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
+  },
+
+  errorMessage: {
+    fontSize: theme.fontSizes.lg,
+    lineHeight: "24px",
+    paddingBottom: theme.spacing.xs * 0.6,
+  },
+
+  backMessage: {
+    fontSize: theme.fontSizes.xs,
+
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[2]
+        : theme.colors.gray[6],
+  },
+}));
+
 export default function Custom404() {
   const [errorMessage, setErrorMessage] = useState("");
+  const { classes, theme } = useStyles();
 
   useEffect(
     () =>
@@ -37,16 +94,14 @@ export default function Custom404() {
         <meta name="description" content="Craftex TOOD" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
-      <div className="md:flex-row md:gap-6 justify-center align-middle flex flex-col items-center w-full h-2/3 gap-4 text-text-dark">
-        <h1 className="text-4xl font-bold">404</h1>
-        <div className="md:border-r md:w-0 md:h-24 border-b w-48 bg-text-dark"></div>
-        <div className="flex flex-col items-center md:block">
-          <p className="md:w-96 md:text-left text-2xl w-full text-center">
-            {errorMessage}
-          </p>
+
+      <div className={classes.root}>
+        <h1 className={classes.title}>404</h1>
+        <div className={classes.divider}></div>
+        <div className={classes.rightSectionRoot}>
+          <p className={classes.errorMessage}>{errorMessage}</p>
           <Link href="/">
-            <a className="md:pt-0 text-xs pt-2">Go back?</a>
+            <a className={classes.backMessage}>Go back?</a>
           </Link>
         </div>
       </div>
