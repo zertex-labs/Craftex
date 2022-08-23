@@ -1,10 +1,10 @@
-import { Grid, Button, createStyles } from "@mantine/core";
+import { Button, createStyles, Grid } from "@mantine/core";
 import { ListSectionProps } from "./_schemas";
 
 const useStyles = createStyles((theme) => ({
   root: {
     borderRight: `1px solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0]
+      theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[2]
     }`,
   },
 }));
