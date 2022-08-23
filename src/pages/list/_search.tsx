@@ -222,7 +222,7 @@ const PluginShowcase: React.FC<{
               ? theme.colors.brand[3]
               : theme.colors.brand[6]
             : theme.colorScheme === "dark"
-            ? theme.colors.gray[3]
+            ? theme.colors.gray[4]
             : theme.colors.gray[8],
         })}
       >
