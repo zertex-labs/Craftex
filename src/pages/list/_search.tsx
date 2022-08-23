@@ -244,27 +244,6 @@ const PluginShowcase: React.FC<{
       >
         {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
       </ActionIcon>
-
-      {/* 
-      <Text
-        sx={
-          isSelected
-            ? {
-                color: theme.colors.brand[6],
-              }
-            : {}
-        }
-        size="xl"
-        weight={600}
-      >
-        {plugin.title}
-      </Text>
-      <Text size="xs">
-        By {plugin.developers.find((d) => !!d)?.name ?? "WH OMEGALUL"}{" "}
-        {plugin.developers.length > 1 && (
-          <span>(+{plugin.developers.length - 1})</span>
-        )}
-      </Text> */}
     </div>
   );
 };
