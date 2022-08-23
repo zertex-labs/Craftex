@@ -1,21 +1,20 @@
 import { HEADER_HEIGHT } from "@components/layout/HeaderComponent";
 import {
+  ActionIcon,
   createStyles,
   Grid,
-  MantineTheme,
+  Group,
+  Loader,
   ScrollArea,
   Text,
   TextInput,
 } from "@mantine/core";
-import {
-  useDebouncedState,
-  useDisclosure,
-  UseListStateHandlers,
-} from "@mantine/hooks";
-import { IconAmbulance, IconSearch } from "@tabler/icons";
+import { useDebouncedState, UseListStateHandlers } from "@mantine/hooks";
+import { NextLink } from "@mantine/next";
+import { IconAmbulance, IconMinus, IconPlus, IconSearch } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ListSectionProps, PluginNameSchema } from "./_schemas";
 
 const useStyles = createStyles((theme) => ({
@@ -34,13 +33,7 @@ const useStyles = createStyles((theme) => ({
     color:
       theme.colorScheme === "dark"
         ? theme.colors.gray[7]
-        : theme.colors.dark[0],
-  },
-}));
-
-const useShowcaseStyles = createStyles((theme) => ({
-  root: {
-    cursor: "pointer",
+        : theme.colors.gray[4],
   },
 }));
 
@@ -55,7 +48,11 @@ const ListPluginSearch: React.FC<
   const { classes, theme } = useStyles();
   const [pluginName, setPluginName] = useDebouncedState("", 500);
 
-  const { data: filteredPlugins } = trpc.useQuery(
+  const {
+    data: filteredPlugins,
+    isFetching,
+    isSuccess,
+  } = trpc.useQuery(
     [
       "plugin.unprotected.filtered",
       {
@@ -80,14 +77,39 @@ const ListPluginSearch: React.FC<
         pb="xs"
         icon={<IconSearch size={12} stroke={1.5} />}
         onInput={({ currentTarget: { value } }) => setPluginName(value)}
+        rightSection={
+          isFetching && <Loader size="xs" color={theme.colors.brand[7]} />
+        }
         {...getInputProps("pluginName")}
       />
+
+      {filteredPlugins && isSuccess && (
+        <Group
+          px={2}
+          pt="xs"
+          pb={5}
+          position="apart"
+          sx={{
+            borderTop: `1px solid ${
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[4]
+                : theme.colors.gray[3]
+            }`,
+          }}
+        >
+          <Text size="xs" weight={500} color="dimmed">
+            Plugins
+          </Text>
+          <Text size="xs" color="dimmed">
+            {filteredPlugins.length} results
+          </Text>
+        </Group>
+      )}
       <ScrollArea.Autosize maxHeight={`calc(98% - ${theme.spacing.xl}px)`}>
         {filteredPlugins ? (
           filteredPlugins.map((p) => (
             <PluginShowcase
               selected={selected}
-              theme={theme}
               key={p.id}
               plugin={p}
               handlers={handlers}
@@ -104,40 +126,126 @@ const ListPluginSearch: React.FC<
   );
 };
 
+// ----- Showcase start
+
+const useShowcaseStyles = createStyles((theme) => ({
+  root: {
+    cursor: "pointer",
+  },
+
+  toggle: {
+    padding: 2.75,
+    borderRadius: 4,
+    borderColor:
+      theme.colorScheme === "dark"
+        ? theme.colors.gray[8]
+        : theme.colors.gray[3],
+
+    background: theme.black,
+
+    "&:hover": {
+      borderColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.gray[9]
+          : theme.colors.gray[4],
+    },
+  },
+
+  pluginHolder: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+    padding: `4px 8px`,
+    textDecoration: "none",
+    borderRadius: theme.radius.sm,
+    fontSize: theme.fontSizes.xs,
+    color:
+      theme.colorScheme === "dark"
+        ? theme.colors.dark[0]
+        : theme.colors.gray[7],
+    lineHeight: 1,
+    fontWeight: 500,
+
+    "&:hover": {
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
+      color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    },
+  },
+}));
+
 const PluginShowcase: React.FC<{
   plugin: Plugin;
-  theme: MantineTheme;
   selected: Plugin[];
   handlers: UseListStateHandlers<Plugin>;
-}> = ({ plugin, theme, handlers, selected }) => {
-  const { classes } = useShowcaseStyles();
-  const [isSelected, { open: select, close: deselect }] = useDisclosure(false);
+}> = ({ plugin, handlers, selected }) => {
+  const { classes, cx, theme } = useShowcaseStyles();
+  const [isSelected, setIsSelected] = useState(false);
 
   // probably there's a better way, but my one brain cell isn't enough to figure it out at 1:30am
   useEffect(() => {
-    if (selected.some(({ id }) => id === plugin.id)) select();
+    if (selected.some(({ id }) => id === plugin.id)) setIsSelected(true);
   }, [selected]);
 
   const appendPlugin = (plugin: Plugin) => {
     if (isSelected) return;
 
     handlers.append(plugin);
-    select();
+    setIsSelected(true);
   };
 
   const removePlugin: (toRemove: Plugin) => void = ({ id: toRemoveId }) => {
     if (!isSelected) return;
 
     handlers.filter(({ id }) => id !== toRemoveId);
-    deselect();
+    setIsSelected(false);
   };
 
+  const togglePlugin = () =>
+    isSelected ? removePlugin(plugin) : appendPlugin(plugin);
+
   return (
-    <li
+    <div
       key={plugin.id}
-      className={classes.root}
-      onClick={() => (isSelected ? removePlugin(plugin) : appendPlugin(plugin))}
+      className={classes.pluginHolder}
+      onClick={togglePlugin}
     >
+      <Text
+        component={NextLink}
+        href={`/plugin/view/${plugin.id}`}
+        sx={(theme) => ({
+          color: isSelected
+            ? theme.colorScheme === "dark"
+              ? theme.colors.brand[3]
+              : theme.colors.brand[6]
+            : theme.colorScheme === "dark"
+            ? theme.colors.gray[3]
+            : theme.colors.gray[8],
+        })}
+      >
+        {plugin.title}
+      </Text>
+      <ActionIcon
+        size="xs"
+        onClick={togglePlugin}
+        className={classes.toggle}
+        sx={(theme) => ({
+          color: isSelected
+            ? theme.colorScheme === "dark"
+              ? theme.colors.lime[6]
+              : theme.colors.red[7]
+            : theme.colorScheme === "dark"
+            ? theme.colors.orange[6]
+            : theme.colors.lime[7],
+        })}
+      >
+        {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
+      </ActionIcon>
+
+      {/* 
       <Text
         sx={
           isSelected
@@ -156,8 +264,8 @@ const PluginShowcase: React.FC<{
         {plugin.developers.length > 1 && (
           <span>(+{plugin.developers.length - 1})</span>
         )}
-      </Text>
-    </li>
+      </Text> */}
+    </div>
   );
 };
 
