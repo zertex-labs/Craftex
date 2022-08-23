@@ -216,6 +216,7 @@ const PluginShowcase: React.FC<{
       <Text
         component={NextLink}
         href={`/plugin/view/${plugin.id}`}
+        size="sm"
         sx={(theme) => ({
           color: isSelected
             ? theme.colorScheme === "dark"
@@ -235,10 +236,10 @@ const PluginShowcase: React.FC<{
         sx={(theme) => ({
           color: isSelected
             ? theme.colorScheme === "dark"
-              ? theme.colors.lime[6]
+              ? theme.colors.orange[6]
               : theme.colors.red[7]
             : theme.colorScheme === "dark"
-            ? theme.colors.orange[6]
+            ? theme.colors.lime[6]
             : theme.colors.lime[7],
         })}
       >
