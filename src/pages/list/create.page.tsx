@@ -3,9 +3,9 @@ import { useForm, zodResolver } from "@mantine/form";
 import { useListState } from "@mantine/hooks";
 
 import type { Plugin } from "@utils/types/craftex";
-import ListPluginSearch from "./_search";
-import ListShowcase from "./_showcase";
-import { ListCreateInputs, ListCreateSchema } from "./_schemas";
+import ListPluginSearch from "./search.component";
+import ListShowcase from "./showcase.component";
+import { ListCreateInputs, ListCreateSchema } from "./schemas";
 
 const useStyles = createStyles((theme) => ({
   overlay: {},

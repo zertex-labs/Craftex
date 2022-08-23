@@ -14,7 +14,7 @@ import { IconAmbulance, IconMinus, IconPlus, IconSearch } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
 import { useEffect, useState } from "react";
-import { ListSectionProps, PluginNameSchema } from "./_schemas";
+import { ListSectionProps, PluginNameSchema } from "./schemas";
 
 const useStyles = createStyles((theme) => ({
   root: {

@@ -8,14 +8,11 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import superjson from "superjson";
 
 import SiteLayout from "@components/layout";
-import { ColorScheme } from "@mantine/core";
 import "@utils/tailwind.css";
-import { GetServerSidePropsContext } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
-import MantineLayer from "./_mantine";
-import dynamic from "next/dynamic";
+import MantineLayer from "./mantine.component";
 
 function App(props: AppProps) {
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });

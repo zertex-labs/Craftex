@@ -1,5 +1,5 @@
 import { Button, createStyles, Grid } from "@mantine/core";
-import { ListSectionProps } from "./_schemas";
+import { ListSectionProps } from "./schemas";
 
 const useStyles = createStyles((theme) => ({
   root: {

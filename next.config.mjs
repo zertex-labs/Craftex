@@ -26,4 +26,5 @@ export default defineNextConfig({
   compiler: {
     emotion: true,
   },
+  pageExtensions: ["page.ts", "page.tsx"],
 });
