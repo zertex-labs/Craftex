@@ -1,8 +1,7 @@
-import { HEADER_HEIGHT } from "@components/layout/HeaderComponent";
 import {
   ActionIcon,
   createStyles,
-  Grid,
+  Divider,
   Group,
   Loader,
   ScrollArea,
@@ -10,40 +9,49 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useDebouncedState, UseListStateHandlers } from "@mantine/hooks";
-import { IconAmbulance, IconMinus, IconPlus, IconSearch } from "@tabler/icons";
+import { IconCrownOff, IconMinus, IconPlus, IconSearch } from "@tabler/icons";
 import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
-import { useEffect, useState } from "react";
-import { ListSectionProps, PluginNameSchema } from "./schemas";
+import React, { useEffect, useState } from "react";
+import { string } from "zod";
+import { ListSectionProps } from "./schemas";
 
 const useStyles = createStyles((theme) => ({
   root: {
-    height: `calc(100vh - ${HEADER_HEIGHT}px - ${theme.spacing.md}px)`,
+    minWidth: "25%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    flexWrap: "nowrap",
+    overflow: "hidden",
+    gap: 0,
   },
 
   nothingFound: {
-    paddingTop: theme.spacing.xl * 1.5,
+    paddingTop: theme.spacing.xl * 8,
+    userSelect: "none",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "100%",
     fontWeight: 600,
     fontSize: theme.fontSizes.sm,
     color:
       theme.colorScheme === "dark"
-        ? theme.colors.gray[7]
+        ? theme.colors.dark[5]
         : theme.colors.gray[4],
+  },
+
+  pluginHeader: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "space-between",
   },
 }));
 
 const ListPluginSearch: React.FC<
   ListSectionProps & { handlers: UseListStateHandlers<Plugin> }
-> = ({
-  form: { getInputProps, setFieldError, removeListItem, insertListItem },
-  handlers,
-  selected,
-  span,
-}) => {
+> = ({ form: { errors }, handlers, selected }) => {
   const { classes, theme } = useStyles();
   const [pluginName, setPluginName] = useDebouncedState("", 500);
 
@@ -59,69 +67,54 @@ const ListPluginSearch: React.FC<
       },
     ],
     {
-      enabled: PluginNameSchema.safeParse(pluginName).success,
-      onSuccess: (data) => {
-        if (data.length < 1)
-          setFieldError(
-            "pluginName",
-            "We couldn't find a plugin with that name"
-          );
-      },
+      enabled: string()
+        .min(2, "Plugin name must be at least 2 characters long")
+        .safeParse(pluginName).success,
     }
   );
+
   return (
-    <Grid.Col className={classes.root} span={span}>
+    <Group className={classes.root}>
       <TextInput
+        sx={{ width: "100%" }}
+        pb={theme.spacing.sm * (errors && errors.listName ? 2.5 : 1)}
         placeholder="Search"
-        pb="xs"
         icon={<IconSearch size={12} stroke={1.5} />}
         onInput={({ currentTarget: { value } }) => setPluginName(value)}
         rightSection={
           isFetching && <Loader size="xs" color={theme.colors.brand[7]} />
         }
-        {...getInputProps("pluginName")}
       />
 
-      {filteredPlugins && isSuccess && (
-        <Group
-          px={2}
-          pt="xs"
-          pb={5}
-          position="apart"
-          sx={{
-            borderTop: `1px solid ${
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[4]
-                : theme.colors.gray[3]
-            }`,
-          }}
-        >
+      <Group pb={4} sx={{ width: "100%" }}>
+        <Divider sx={{ width: "100%" }} />
+        <Group className={classes.pluginHeader}>
           <Text size="xs" weight={500} color="dimmed">
             Plugins
           </Text>
           <Text size="xs" color="dimmed">
-            {filteredPlugins.length} results
+            {filteredPlugins?.length ?? "No"} results
           </Text>
         </Group>
-      )}
-      <ScrollArea.Autosize maxHeight={`calc(98% - ${theme.spacing.xl}px)`}>
-        {filteredPlugins ? (
-          filteredPlugins.map((p) => (
+      </Group>
+      {filteredPlugins ? (
+        <ScrollArea sx={{ width: "100%" }}>
+          {filteredPlugins.map((p) => (
             <PluginShowcase
-              selected={selected}
-              key={p.id}
-              plugin={p}
               handlers={handlers}
+              selected={selected}
+              plugin={p}
+              key={p.id}
             />
-          ))
-        ) : (
-          <div className={classes.nothingFound}>
-            <IconAmbulance size={90} strokeWidth={1} />
-            <span>Uh oh... nothing found :/</span>
-          </div>
-        )}
-      </ScrollArea.Autosize>
-    </Grid.Col>
+          ))}
+        </ScrollArea>
+      ) : (
+        <div className={classes.nothingFound}>
+          <IconCrownOff size={theme.fontSizes.xl * 6.5} strokeWidth={1} />
+          <Text size="md">Uh oh... nothing found :/</Text>
+        </div>
+      )}
+    </Group>
   );
 };
 

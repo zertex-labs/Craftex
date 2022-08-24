@@ -3,14 +3,13 @@ import type { Plugin } from "@utils/types/craftex";
 import { date, number, object, string, ZodType } from "zod";
 
 export type ListCreateInputs = {
-  pluginName: string;
+  listName: string;
   selected: Plugin[];
 };
 
 export type ListSectionProps = {
   form: UseFormReturnType<ListCreateInputs>;
   selected: Plugin[];
-  span: number;
 };
 
 export const PluginSchema = object({
@@ -26,12 +25,12 @@ export const PluginSchema = object({
   }).array(),
 });
 
-export const PluginNameSchema = string().min(
-  2,
-  "Plugin name must be at least 2 characters"
+export const ListNameSchema = string().min(
+  8,
+  "List name must be at least 8 characters"
 );
 
 export const ListCreateSchema: ZodType<ListCreateInputs> = object({
-  pluginName: PluginNameSchema,
+  listName: ListNameSchema,
   selected: PluginSchema.array(),
 });
