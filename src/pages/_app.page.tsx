@@ -13,7 +13,6 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import React from "react";
 import MantineLayer from "./mantine.component";
-import { DndContext } from "@dnd-kit/core";
 
 function App(props: AppProps) {
   usePageViews({ gaMeasurementId: env.NEXT_PUBLIC_GA_ID });
@@ -40,9 +39,7 @@ function App(props: AppProps) {
       <MantineLayer>
         <SessionProvider session={session}>
           <SiteLayout>
-            <DndContext>
-              <Component {...pageProps} />
-            </DndContext>
+            <Component {...pageProps} />
           </SiteLayout>
         </SessionProvider>
       </MantineLayer>
