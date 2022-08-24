@@ -218,15 +218,9 @@ const PluginShowcase: React.FC<{
     isSelected ? removePlugin(plugin) : appendPlugin(plugin);
 
   return (
-    <div
-      key={plugin.id}
-      className={classes.pluginHolder}
-      onClick={togglePlugin}
-    >
+    <div className={classes.pluginHolder} onClick={togglePlugin}>
       <Group className={classes.leftSection}>
         <Text
-          // component={NextLink}
-          // href={`/plugin/view/${plugin.id}`}
           size="sm"
           className={cx(classes.title, {
             [classes.titleActive]: isSelected,

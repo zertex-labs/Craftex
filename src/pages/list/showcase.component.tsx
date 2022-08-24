@@ -17,7 +17,7 @@ const ListShowcase: React.FC<ListSectionProps> = ({ form, span, selected }) => {
       <h1>List Create</h1>
       {selected &&
         selected.map((plugin) => (
-          <h1>
+          <h1 key={plugin.id}>
             {plugin.title} - {plugin.id}
           </h1>
         ))}
