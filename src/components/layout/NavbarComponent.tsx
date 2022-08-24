@@ -131,7 +131,7 @@ const NavbarComponent: React.FC<
   const { width } = useViewportSize();
 
   useEffect(() => {
-    if (width >= theme.breakpoints.sm && opened) close();
+    if (width > theme.breakpoints.sm && opened) close();
   }, [width, close, opened, theme.breakpoints.sm]);
 
   const { data: plugins } = trpc.useQuery(
