@@ -1,3 +1,4 @@
+import StarsShowcase from "@components/StarsShowcase";
 import {
   ActionIcon,
   Badge,
@@ -49,18 +50,6 @@ const useStyles = createStyles((theme) => ({
     paddingLeft: theme.spacing.md - 6,
     paddingRight: theme.spacing.md - 6,
     paddingBottom: theme.spacing.md,
-  },
-
-  pluginStars: {
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.colors.dark[6]
-        : theme.colors.gray[1],
-    color:
-      theme.colorScheme === "dark"
-        ? theme.colors.yellow[6]
-        : theme.colors.orange[5],
-    gap: 0,
   },
 
   pluginHolder: {
@@ -228,22 +217,7 @@ const NavbarComponent: React.FC<
               <Link key={plugin.id} href={`/plugin/view/${plugin.id}`}>
                 <a className={classes.pluginHolder}>
                   {plugin.title}
-                  <Badge
-                    p={6}
-                    leftSection={
-                      <IconStar
-                        size={10}
-                        fill={
-                          theme.colorScheme === "dark"
-                            ? theme.colors.yellow[6]
-                            : theme.colors.orange[5]
-                        }
-                      />
-                    }
-                    className={classes.pluginStars}
-                  >
-                    {plugin.stars}
-                  </Badge>
+                  <StarsShowcase stars={plugin.stars} />
                 </a>
               </Link>
             ))}
