@@ -14,8 +14,8 @@ import { trpc } from "@utils/trpc";
 import type { Plugin } from "@utils/types/craftex";
 import React, { useState } from "react";
 import { string } from "zod";
-import { ListSectionProps } from "../schemas";
 import { SearchContext } from "../context";
+import { ListSectionProps } from "../schemas";
 import PluginShowcase from "./plugin_showcase.component";
 
 export const SEARCH_COMPONENT_WIDTH = 300;
