@@ -20,7 +20,7 @@ export const PluginSchema = object({
     id: string().cuid(),
     name: string(),
     email: string(),
-    emailVerified: date(),
+    emailVerified: date().nullable(),
     image: string(),
   }).array(),
 });
