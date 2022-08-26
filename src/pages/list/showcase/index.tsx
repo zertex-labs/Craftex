@@ -24,8 +24,6 @@ const ListShowcase: React.FC<ListSectionProps> = ({
     theme,
   } = useStyles();
 
-  useEffect(() => console.log(errors), [errors]);
-
   return (
     <Group className={root}>
       <Group px={theme.spacing.xl} pb={theme.spacing.sm} className={header}>

@@ -1,18 +1,9 @@
 import { createRouter } from "@context";
 import { Prisma } from "@prisma/client";
-import type { SessionUser } from "next-auth";
-import { string, object, ZodType, lazy, number } from "zod";
+import { number, object, string } from "zod";
+import { Author } from "../global.schema";
 import { createProtectedRouter } from "../protected-router";
 import { UserDto } from "./user.router";
-
-const Author: ZodType<SessionUser> = lazy(() =>
-  object({
-    id: string().cuid(),
-    name: string(),
-    email: string().email(),
-    image: string(),
-  })
-);
 
 export const PluginCreateDto = object({
   title: string(),

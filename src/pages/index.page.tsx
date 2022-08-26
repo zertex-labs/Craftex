@@ -1,8 +1,6 @@
-import { s3 } from "@utils/s3";
 import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Image from "next/image";
 import React from "react";
 
 const Home: NextPage = () => {
