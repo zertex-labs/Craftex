@@ -10,7 +10,7 @@ import {
   UnstyledButton,
 } from "@mantine/core";
 import { IconPencil } from "@tabler/icons";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { ListSectionProps } from "../schemas";
 import { SEARCH_COMPONENT_WIDTH } from "../search";
 import PluginItem from "./plugin_item.component";
@@ -23,6 +23,8 @@ const ListShowcase: React.FC<ListSectionProps> = ({
     classes: { header, pluginItems, root, submitButton },
     theme,
   } = useStyles();
+
+  useEffect(() => console.log(errors), [errors]);
 
   return (
     <Group className={root}>
