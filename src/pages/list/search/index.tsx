@@ -58,11 +58,9 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const ListPluginSearch: React.FC<ListSectionProps> = ({
-  form: { errors },
   selected,
 }) => {
   const { classes, theme } = useStyles();
-  const [a, setA] = useState();
   const [pluginName, setPluginName] = useDebouncedState("", 500);
 
   const {
@@ -87,7 +85,7 @@ const ListPluginSearch: React.FC<ListSectionProps> = ({
     <Group className={classes.root}>
       <TextInput
         sx={{ width: "100%" }}
-        pb={theme.spacing.sm * (errors && errors.listName ? 2.5 : 1)}
+        pb={theme.spacing.sm}
         placeholder="Search"
         icon={<IconSearch size={12} stroke={1.5} />}
         onInput={({ currentTarget: { value } }) => setPluginName(value)}

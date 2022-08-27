@@ -9,16 +9,17 @@ import {
   TextInput,
   UnstyledButton,
 } from "@mantine/core";
+import { UseFormReturnType } from "@mantine/form";
 import { IconPencil } from "@tabler/icons";
 import React, { ReactNode, useEffect } from "react";
+import { ListCreateFormProps } from "../create.page";
 import { ListSectionProps } from "../schemas";
 import { SEARCH_COMPONENT_WIDTH } from "../search";
 import PluginItem from "./plugin_item.component";
 
-const ListShowcase: React.FC<ListSectionProps> = ({
-  selected,
-  form: { getInputProps, values, errors },
-}) => {
+const ListShowcase: React.FC<
+  ListSectionProps & { form: UseFormReturnType<ListCreateFormProps> }
+> = ({ selected, form: { getInputProps, values, errors } }) => {
   const {
     classes: { header, pluginItems, root, submitButton },
     theme,

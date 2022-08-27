@@ -22,7 +22,10 @@ export default function ListCreate() {
     validate: zodResolver(
       object({
         listName: string().min(8, "List name must be at least 8 characters"),
-        selected: PluginSchema.array().length(2, "List must containt at least 2 plugins"),
+        selected: PluginSchema.array().length(
+          2,
+          "List must containt at least 2 plugins"
+        ),
       })
     ),
     validateInputOnChange: true,
@@ -62,7 +65,7 @@ export default function ListCreate() {
           }}
         >
           <ListShowcase selected={selected} form={form} />
-          <ListPluginSearch selected={selected} form={form} />
+          <ListPluginSearch selected={selected} />
         </SearchContext.Provider>
       </Group>
     </form>

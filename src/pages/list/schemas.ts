@@ -8,6 +8,5 @@ export type ListCreateInputs = {
 };
 
 export type ListSectionProps = {
-  form: UseFormReturnType<ListCreateFormProps>;
   selected: Plugin[];
 };
