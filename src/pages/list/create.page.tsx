@@ -21,8 +21,8 @@ export default function ListCreate() {
   const form = useForm<ListCreateFormProps>({
     validate: zodResolver(
       object({
-        listName: string(),
-        selected: PluginSchema.array(),
+        listName: string().min(8, "List name must be at least 8 characters"),
+        selected: PluginSchema.array().length(2, "List must containt at least 2 plugins"),
       })
     ),
     validateInputOnChange: true,
