@@ -17,7 +17,7 @@
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.2.0",
     "@mantine/dropzone": "^5.2.0",
-    "@mantine/form": "^5.2.0",
+    "@mantine/form": "^5.2.4",
     "@mantine/hooks": "^5.2.0",
     "@mantine/next": "^5.2.0",
     "@mantine/notifications": "^5.2.0",
@@ -45,7 +45,7 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
-    "@types/node": "18.7.6",
+    "@types/node": "18.7.14",
     "@types/react": "18.0.17",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "18.0.6",
