@@ -28,7 +28,7 @@
     "@trpc/next": "^9.27.0",
     "@trpc/react": "^9.27.0",
     "@trpc/server": "^9.27.0",
-    "aws-sdk": "^2.1200.0",
+    "aws-sdk": "^2.1213.0",
     "axios": "^0.27.2",
     "cookies-next": "^2.1.1",
     "cuid": "^2.1.8",
@@ -45,7 +45,7 @@
     "zod": "^3.18.0"
   },
   "devDependencies": {
-    "@types/node": "18.7.6",
+    "@types/node": "18.7.15",
     "@types/react": "18.0.17",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "18.0.6",
