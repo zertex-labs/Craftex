@@ -13,7 +13,7 @@
     "styled-components": "^5"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.0",
+    "@emotion/react": "^11.10.4",
     "@emotion/server": "^11.10.0",
     "@mantine/core": "^5.3.0",
     "@mantine/dropzone": "^5.3.0",
