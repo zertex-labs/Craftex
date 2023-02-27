@@ -664,10 +664,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tabler/icons@^1.95.1":
-  version "1.95.1"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.95.1.tgz#d2bdaea4c5f4cfddc8347a89b0ce8c749ccda415"
-  integrity sha512-b3fwRzYwQPKqMT9Vw1AMv2I/uEAwrPgicMeGg9Qvg1mckFvy60iTC4MQkdVlgUeLxdPKDO+yGystfVrQp2OPyA==
+"@tabler/icons@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.6.0.tgz#015275a0e13988ff8ad9c4a81cac0c754b8c0bd4"
+  integrity sha512-rflJyQSsu2iV6QgrA7ZdGaikSTdIVpXlem0jBIcx18OKg0ZJmLojmrhNo7DpOW7bCT4Hr2r6jcpq8uSYrinqZw==
 
 "@trpc/client@^9.27.0":
   version "9.27.0"
