@@ -1,6 +1,6 @@
-import { Application, Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
 import "https://deno.land/std@0.183.0/dotenv/load.ts";
-
+import { Application, Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
+import {logger} from "./logger.ts";
 const router = new Router();
 const app = new Application();
 
@@ -8,7 +8,7 @@ const app = new Application();
 app.use(async (ctx, next) => {
   await next();
   const rt = ctx.response.headers.get("X-Response-Time");
-  console.log(`${ctx.request.method} ${ctx.request.url} - ${rt}`);
+  logger.info(`${ctx.request.method} ${ctx.request.url} - ${rt}`);
 });
 
 // Timing
@@ -31,4 +31,4 @@ import "./db/mongo.ts";
 const PORT = Deno.env.get("PORT");
 app.listen({ port: Number(PORT) || 8080 });
 
-console.log(`Server running on port ${PORT}`);
+logger.info(`Server running on port ${PORT}`);

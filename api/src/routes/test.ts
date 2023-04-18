@@ -6,6 +6,7 @@ const handler: RouteHandler = (router) => {
   });
 };
 
+// Optional, used for logging
 const meta: RouteMeta[] = [
   {
     endpoint: "/test",

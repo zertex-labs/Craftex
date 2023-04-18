@@ -1,4 +1,5 @@
 import { Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
+import { logger } from "../logger.ts";
 
 const BLACKLISTED_FILES = ["setup.ts"];
 
@@ -21,20 +22,24 @@ export const setupRoutes = async (router: Router) => {
       continue;
     }
 
-    const { handler, meta } = (await import(`./${name}`)).default;
-    if (!handler) {
+    const __default = (await import(`./${name}`)).default;
+    if (!__default) {
       // Skip if no default export
-      console.error(`No default export found in ${name}`);
+      logger.warn(`No default export found in ${name}`);
       continue;
     }
 
+    const { handler, meta } = __default;
+
     if(meta && Array.isArray(meta)) {
       meta.forEach((m) => {
-        console.log(`Loaded route ${m.method} ${m.endpoint} from ${name}`);
+        logger.info(`Loaded route ${m.method} ${m.endpoint} from ${name}`);
       });
+    } else {
+      logger.warn(`No meta found in ${name}`);
     }
 
     handler(router);
-    console.log(`Loaded all handlers from ${name}`);
+    logger.info(`Loaded all handlers from ${name}`);
   }
 };

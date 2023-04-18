@@ -1,4 +1,5 @@
 import { MongoClient } from "https://deno.land/x/mongo@v0.31.2/mod.ts";
+import { logger } from "../logger.ts";
 
 const MONGO_URI = Deno.env.get("MONGO_URI");
 const MONGO_DB = Deno.env.get("MONGO_DB");
@@ -11,6 +12,6 @@ await client.connect(MONGO_URI);
 
 const db = client.database(MONGO_DB);
 
-console.log("Connected to database - " + db.name);
+logger.info("Connected to database - " + db.name);
 
 export default { db, client };
