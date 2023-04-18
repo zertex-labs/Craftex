@@ -22,8 +22,8 @@ app.use(router.routes());
 app.use(router.allowedMethods());
 
 // Import test routes
-import setupTestRoute from "./routes/test.ts";
-setupTestRoute(router);
+import { setupRoutes } from "./routes/setup.ts";
+await setupRoutes(router);
 
 // Start database
 import "./db/mongo.ts";

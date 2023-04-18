@@ -1,7 +1,16 @@
-import { Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
+import { RouteHandler, RouteMeta } from "./setup.ts";
 
-export default (router: Router) => {
+const handler: RouteHandler = (router) => {
   router.get("/test", (ctx) => {
     ctx.response.body = "Hello World!";
   });
 };
+
+const meta: RouteMeta[] = [
+  {
+    endpoint: "/test",
+    method: "GET",
+  },
+];
+
+export default { handler, meta };
