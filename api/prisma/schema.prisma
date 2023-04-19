@@ -8,13 +8,12 @@ generator client {
 }
 
 datasource db {
-  provider  = "mongodb"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
 }
 
 model Test {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  id    String @id @default(cuid())
   name  String
   email String
 }
