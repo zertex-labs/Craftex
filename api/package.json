@@ -1,0 +1,10 @@
+{
+  "name": "craftex_api",
+  "private": true,
+  "devDependencies": {
+    "prisma": "^4.13.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.13.0"
+  }
+}
