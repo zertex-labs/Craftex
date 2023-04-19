@@ -13,14 +13,31 @@ export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>
 
 
 /**
- * Model Test
+ * Model Log
  * 
  */
-export type Test = {
-  id: string
-  name: string
-  email: string
+export type Log = {
+  id: number
+  level: Level
+  message: string
+  meta: Prisma.JsonValue
 }
+
+
+/**
+ * Enums
+ */
+
+// Based on
+// https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
+
+export const Level: {
+  Info: 'Info',
+  Warn: 'Warn',
+  Error: 'Error'
+};
+
+export type Level = (typeof Level)[keyof typeof Level]
 
 
 /**
@@ -30,8 +47,8 @@ export type Test = {
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Tests
- * const tests = await prisma.test.findMany()
+ * // Fetch zero or more Logs
+ * const logs = await prisma.log.findMany()
  * ```
  *
  * 
@@ -51,8 +68,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Tests
-   * const tests = await prisma.test.findMany()
+   * // Fetch zero or more Logs
+   * const logs = await prisma.log.findMany()
    * ```
    *
    * 
@@ -141,14 +158,14 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<this, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use">) => Promise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): Promise<R>
 
       /**
-   * `prisma.test`: Exposes CRUD operations for the **Test** model.
+   * `prisma.log`: Exposes CRUD operations for the **Log** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Tests
-    * const tests = await prisma.test.findMany()
+    * // Fetch zero or more Logs
+    * const logs = await prisma.log.findMany()
     * ```
     */
-  get test(): Prisma.TestDelegate<GlobalReject>;
+  get log(): Prisma.LogDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -618,7 +635,7 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Test: 'Test'
+    Log: 'Log'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -785,319 +802,357 @@ export namespace Prisma {
    */
 
   /**
-   * Model Test
+   * Model Log
    */
 
 
-  export type AggregateTest = {
-    _count: TestCountAggregateOutputType | null
-    _min: TestMinAggregateOutputType | null
-    _max: TestMaxAggregateOutputType | null
+  export type AggregateLog = {
+    _count: LogCountAggregateOutputType | null
+    _avg: LogAvgAggregateOutputType | null
+    _sum: LogSumAggregateOutputType | null
+    _min: LogMinAggregateOutputType | null
+    _max: LogMaxAggregateOutputType | null
   }
 
-  export type TestMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
+  export type LogAvgAggregateOutputType = {
+    id: number | null
   }
 
-  export type TestMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    email: string | null
+  export type LogSumAggregateOutputType = {
+    id: number | null
   }
 
-  export type TestCountAggregateOutputType = {
+  export type LogMinAggregateOutputType = {
+    id: number | null
+    level: Level | null
+    message: string | null
+  }
+
+  export type LogMaxAggregateOutputType = {
+    id: number | null
+    level: Level | null
+    message: string | null
+  }
+
+  export type LogCountAggregateOutputType = {
     id: number
-    name: number
-    email: number
+    level: number
+    message: number
+    meta: number
     _all: number
   }
 
 
-  export type TestMinAggregateInputType = {
+  export type LogAvgAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
   }
 
-  export type TestMaxAggregateInputType = {
+  export type LogSumAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
   }
 
-  export type TestCountAggregateInputType = {
+  export type LogMinAggregateInputType = {
     id?: true
-    name?: true
-    email?: true
+    level?: true
+    message?: true
+  }
+
+  export type LogMaxAggregateInputType = {
+    id?: true
+    level?: true
+    message?: true
+  }
+
+  export type LogCountAggregateInputType = {
+    id?: true
+    level?: true
+    message?: true
+    meta?: true
     _all?: true
   }
 
-  export type TestAggregateArgs = {
+  export type LogAggregateArgs = {
     /**
-     * Filter which Test to aggregate.
+     * Filter which Log to aggregate.
      */
-    where?: TestWhereInput
+    where?: LogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Tests to fetch.
+     * Determine the order of Logs to fetch.
      */
-    orderBy?: Enumerable<TestOrderByWithRelationInput>
+    orderBy?: Enumerable<LogOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: TestWhereUniqueInput
+    cursor?: LogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Tests from the position of the cursor.
+     * Take `±n` Logs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Tests.
+     * Skip the first `n` Logs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Tests
+     * Count returned Logs
     **/
-    _count?: true | TestCountAggregateInputType
+    _count?: true | LogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LogSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: TestMinAggregateInputType
+    _min?: LogMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: TestMaxAggregateInputType
+    _max?: LogMaxAggregateInputType
   }
 
-  export type GetTestAggregateType<T extends TestAggregateArgs> = {
-        [P in keyof T & keyof AggregateTest]: P extends '_count' | 'count'
+  export type GetLogAggregateType<T extends LogAggregateArgs> = {
+        [P in keyof T & keyof AggregateLog]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateTest[P]>
-      : GetScalarType<T[P], AggregateTest[P]>
+        : GetScalarType<T[P], AggregateLog[P]>
+      : GetScalarType<T[P], AggregateLog[P]>
   }
 
 
 
 
-  export type TestGroupByArgs = {
-    where?: TestWhereInput
-    orderBy?: Enumerable<TestOrderByWithAggregationInput>
-    by: TestScalarFieldEnum[]
-    having?: TestScalarWhereWithAggregatesInput
+  export type LogGroupByArgs = {
+    where?: LogWhereInput
+    orderBy?: Enumerable<LogOrderByWithAggregationInput>
+    by: LogScalarFieldEnum[]
+    having?: LogScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: TestCountAggregateInputType | true
-    _min?: TestMinAggregateInputType
-    _max?: TestMaxAggregateInputType
+    _count?: LogCountAggregateInputType | true
+    _avg?: LogAvgAggregateInputType
+    _sum?: LogSumAggregateInputType
+    _min?: LogMinAggregateInputType
+    _max?: LogMaxAggregateInputType
   }
 
 
-  export type TestGroupByOutputType = {
-    id: string
-    name: string
-    email: string
-    _count: TestCountAggregateOutputType | null
-    _min: TestMinAggregateOutputType | null
-    _max: TestMaxAggregateOutputType | null
+  export type LogGroupByOutputType = {
+    id: number
+    level: Level
+    message: string
+    meta: JsonValue
+    _count: LogCountAggregateOutputType | null
+    _avg: LogAvgAggregateOutputType | null
+    _sum: LogSumAggregateOutputType | null
+    _min: LogMinAggregateOutputType | null
+    _max: LogMaxAggregateOutputType | null
   }
 
-  type GetTestGroupByPayload<T extends TestGroupByArgs> = Prisma.PrismaPromise<
+  type GetLogGroupByPayload<T extends LogGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<TestGroupByOutputType, T['by']> &
+      PickArray<LogGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof TestGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof LogGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], TestGroupByOutputType[P]>
-            : GetScalarType<T[P], TestGroupByOutputType[P]>
+              : GetScalarType<T[P], LogGroupByOutputType[P]>
+            : GetScalarType<T[P], LogGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type TestSelect = {
+  export type LogSelect = {
     id?: boolean
-    name?: boolean
-    email?: boolean
+    level?: boolean
+    message?: boolean
+    meta?: boolean
   }
 
 
-  export type TestGetPayload<S extends boolean | null | undefined | TestArgs> =
+  export type LogGetPayload<S extends boolean | null | undefined | LogArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Test :
+    S extends true ? Log :
     S extends undefined ? never :
-    S extends { include: any } & (TestArgs | TestFindManyArgs)
-    ? Test 
-    : S extends { select: any } & (TestArgs | TestFindManyArgs)
+    S extends { include: any } & (LogArgs | LogFindManyArgs)
+    ? Log 
+    : S extends { select: any } & (LogArgs | LogFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof Test ? Test[P] : never
+    P extends keyof Log ? Log[P] : never
   } 
-      : Test
+      : Log
 
 
-  type TestCountArgs = 
-    Omit<TestFindManyArgs, 'select' | 'include'> & {
-      select?: TestCountAggregateInputType | true
+  type LogCountArgs = 
+    Omit<LogFindManyArgs, 'select' | 'include'> & {
+      select?: LogCountAggregateInputType | true
     }
 
-  export interface TestDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface LogDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
 
     /**
-     * Find zero or one Test that matches the filter.
-     * @param {TestFindUniqueArgs} args - Arguments to find a Test
+     * Find zero or one Log that matches the filter.
+     * @param {LogFindUniqueArgs} args - Arguments to find a Log
      * @example
-     * // Get one Test
-     * const test = await prisma.test.findUnique({
+     * // Get one Log
+     * const log = await prisma.log.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends TestFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, TestFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Test'> extends True ? Prisma__TestClient<TestGetPayload<T>> : Prisma__TestClient<TestGetPayload<T> | null, null>
+    findUnique<T extends LogFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, LogFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Log'> extends True ? Prisma__LogClient<LogGetPayload<T>> : Prisma__LogClient<LogGetPayload<T> | null, null>
 
     /**
-     * Find one Test that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one Log that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {TestFindUniqueOrThrowArgs} args - Arguments to find a Test
+     * @param {LogFindUniqueOrThrowArgs} args - Arguments to find a Log
      * @example
-     * // Get one Test
-     * const test = await prisma.test.findUniqueOrThrow({
+     * // Get one Log
+     * const log = await prisma.log.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends TestFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, TestFindUniqueOrThrowArgs>
-    ): Prisma__TestClient<TestGetPayload<T>>
+    findUniqueOrThrow<T extends LogFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, LogFindUniqueOrThrowArgs>
+    ): Prisma__LogClient<LogGetPayload<T>>
 
     /**
-     * Find the first Test that matches the filter.
+     * Find the first Log that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestFindFirstArgs} args - Arguments to find a Test
+     * @param {LogFindFirstArgs} args - Arguments to find a Log
      * @example
-     * // Get one Test
-     * const test = await prisma.test.findFirst({
+     * // Get one Log
+     * const log = await prisma.log.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends TestFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, TestFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Test'> extends True ? Prisma__TestClient<TestGetPayload<T>> : Prisma__TestClient<TestGetPayload<T> | null, null>
+    findFirst<T extends LogFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, LogFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Log'> extends True ? Prisma__LogClient<LogGetPayload<T>> : Prisma__LogClient<LogGetPayload<T> | null, null>
 
     /**
-     * Find the first Test that matches the filter or
+     * Find the first Log that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestFindFirstOrThrowArgs} args - Arguments to find a Test
+     * @param {LogFindFirstOrThrowArgs} args - Arguments to find a Log
      * @example
-     * // Get one Test
-     * const test = await prisma.test.findFirstOrThrow({
+     * // Get one Log
+     * const log = await prisma.log.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends TestFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, TestFindFirstOrThrowArgs>
-    ): Prisma__TestClient<TestGetPayload<T>>
+    findFirstOrThrow<T extends LogFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, LogFindFirstOrThrowArgs>
+    ): Prisma__LogClient<LogGetPayload<T>>
 
     /**
-     * Find zero or more Tests that matches the filter.
+     * Find zero or more Logs that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {LogFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Tests
-     * const tests = await prisma.test.findMany()
+     * // Get all Logs
+     * const logs = await prisma.log.findMany()
      * 
-     * // Get first 10 Tests
-     * const tests = await prisma.test.findMany({ take: 10 })
+     * // Get first 10 Logs
+     * const logs = await prisma.log.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const testWithIdOnly = await prisma.test.findMany({ select: { id: true } })
+     * const logWithIdOnly = await prisma.log.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends TestFindManyArgs>(
-      args?: SelectSubset<T, TestFindManyArgs>
-    ): Prisma.PrismaPromise<Array<TestGetPayload<T>>>
+    findMany<T extends LogFindManyArgs>(
+      args?: SelectSubset<T, LogFindManyArgs>
+    ): Prisma.PrismaPromise<Array<LogGetPayload<T>>>
 
     /**
-     * Create a Test.
-     * @param {TestCreateArgs} args - Arguments to create a Test.
+     * Create a Log.
+     * @param {LogCreateArgs} args - Arguments to create a Log.
      * @example
-     * // Create one Test
-     * const Test = await prisma.test.create({
+     * // Create one Log
+     * const Log = await prisma.log.create({
      *   data: {
-     *     // ... data to create a Test
+     *     // ... data to create a Log
      *   }
      * })
      * 
     **/
-    create<T extends TestCreateArgs>(
-      args: SelectSubset<T, TestCreateArgs>
-    ): Prisma__TestClient<TestGetPayload<T>>
+    create<T extends LogCreateArgs>(
+      args: SelectSubset<T, LogCreateArgs>
+    ): Prisma__LogClient<LogGetPayload<T>>
 
     /**
-     * Create many Tests.
-     *     @param {TestCreateManyArgs} args - Arguments to create many Tests.
+     * Create many Logs.
+     *     @param {LogCreateManyArgs} args - Arguments to create many Logs.
      *     @example
-     *     // Create many Tests
-     *     const test = await prisma.test.createMany({
+     *     // Create many Logs
+     *     const log = await prisma.log.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends TestCreateManyArgs>(
-      args?: SelectSubset<T, TestCreateManyArgs>
+    createMany<T extends LogCreateManyArgs>(
+      args?: SelectSubset<T, LogCreateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Test.
-     * @param {TestDeleteArgs} args - Arguments to delete one Test.
+     * Delete a Log.
+     * @param {LogDeleteArgs} args - Arguments to delete one Log.
      * @example
-     * // Delete one Test
-     * const Test = await prisma.test.delete({
+     * // Delete one Log
+     * const Log = await prisma.log.delete({
      *   where: {
-     *     // ... filter to delete one Test
+     *     // ... filter to delete one Log
      *   }
      * })
      * 
     **/
-    delete<T extends TestDeleteArgs>(
-      args: SelectSubset<T, TestDeleteArgs>
-    ): Prisma__TestClient<TestGetPayload<T>>
+    delete<T extends LogDeleteArgs>(
+      args: SelectSubset<T, LogDeleteArgs>
+    ): Prisma__LogClient<LogGetPayload<T>>
 
     /**
-     * Update one Test.
-     * @param {TestUpdateArgs} args - Arguments to update one Test.
+     * Update one Log.
+     * @param {LogUpdateArgs} args - Arguments to update one Log.
      * @example
-     * // Update one Test
-     * const test = await prisma.test.update({
+     * // Update one Log
+     * const log = await prisma.log.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1107,34 +1162,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends TestUpdateArgs>(
-      args: SelectSubset<T, TestUpdateArgs>
-    ): Prisma__TestClient<TestGetPayload<T>>
+    update<T extends LogUpdateArgs>(
+      args: SelectSubset<T, LogUpdateArgs>
+    ): Prisma__LogClient<LogGetPayload<T>>
 
     /**
-     * Delete zero or more Tests.
-     * @param {TestDeleteManyArgs} args - Arguments to filter Tests to delete.
+     * Delete zero or more Logs.
+     * @param {LogDeleteManyArgs} args - Arguments to filter Logs to delete.
      * @example
-     * // Delete a few Tests
-     * const { count } = await prisma.test.deleteMany({
+     * // Delete a few Logs
+     * const { count } = await prisma.log.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends TestDeleteManyArgs>(
-      args?: SelectSubset<T, TestDeleteManyArgs>
+    deleteMany<T extends LogDeleteManyArgs>(
+      args?: SelectSubset<T, LogDeleteManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Tests.
+     * Update zero or more Logs.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {LogUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Tests
-     * const test = await prisma.test.updateMany({
+     * // Update many Logs
+     * const log = await prisma.log.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1144,59 +1199,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends TestUpdateManyArgs>(
-      args: SelectSubset<T, TestUpdateManyArgs>
+    updateMany<T extends LogUpdateManyArgs>(
+      args: SelectSubset<T, LogUpdateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Test.
-     * @param {TestUpsertArgs} args - Arguments to update or create a Test.
+     * Create or update one Log.
+     * @param {LogUpsertArgs} args - Arguments to update or create a Log.
      * @example
-     * // Update or create a Test
-     * const test = await prisma.test.upsert({
+     * // Update or create a Log
+     * const log = await prisma.log.upsert({
      *   create: {
-     *     // ... data to create a Test
+     *     // ... data to create a Log
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Test we want to update
+     *     // ... the filter for the Log we want to update
      *   }
      * })
     **/
-    upsert<T extends TestUpsertArgs>(
-      args: SelectSubset<T, TestUpsertArgs>
-    ): Prisma__TestClient<TestGetPayload<T>>
+    upsert<T extends LogUpsertArgs>(
+      args: SelectSubset<T, LogUpsertArgs>
+    ): Prisma__LogClient<LogGetPayload<T>>
 
     /**
-     * Count the number of Tests.
+     * Count the number of Logs.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestCountArgs} args - Arguments to filter Tests to count.
+     * @param {LogCountArgs} args - Arguments to filter Logs to count.
      * @example
-     * // Count the number of Tests
-     * const count = await prisma.test.count({
+     * // Count the number of Logs
+     * const count = await prisma.log.count({
      *   where: {
-     *     // ... the filter for the Tests we want to count
+     *     // ... the filter for the Logs we want to count
      *   }
      * })
     **/
-    count<T extends TestCountArgs>(
-      args?: Subset<T, TestCountArgs>,
+    count<T extends LogCountArgs>(
+      args?: Subset<T, LogCountArgs>,
     ): Prisma.PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], TestCountAggregateOutputType>
+          : GetScalarType<T['select'], LogCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Test.
+     * Allows you to perform aggregations operations on a Log.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {LogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -1216,13 +1271,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends TestAggregateArgs>(args: Subset<T, TestAggregateArgs>): Prisma.PrismaPromise<GetTestAggregateType<T>>
+    aggregate<T extends LogAggregateArgs>(args: Subset<T, LogAggregateArgs>): Prisma.PrismaPromise<GetLogAggregateType<T>>
 
     /**
-     * Group by Test.
+     * Group by Log.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TestGroupByArgs} args - Group by arguments.
+     * @param {LogGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -1237,14 +1292,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends TestGroupByArgs,
+      T extends LogGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TestGroupByArgs['orderBy'] }
-        : { orderBy?: TestGroupByArgs['orderBy'] },
+        ? { orderBy: LogGroupByArgs['orderBy'] }
+        : { orderBy?: LogGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -1293,17 +1348,17 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, TestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, LogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Test.
+   * The delegate class that acts as a "Promise-like" for Log.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__TestClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+  export class Prisma__LogClient<T, Null = never> implements Prisma.PrismaPromise<T> {
     private readonly _dmmf;
     private readonly _queryType;
     private readonly _rootField;
@@ -1347,23 +1402,23 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * Test base type for findUnique actions
+   * Log base type for findUnique actions
    */
-  export type TestFindUniqueArgsBase = {
+  export type LogFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * Filter, which Test to fetch.
+     * Filter, which Log to fetch.
      */
-    where: TestWhereUniqueInput
+    where: LogWhereUniqueInput
   }
 
   /**
-   * Test findUnique
+   * Log findUnique
    */
-  export interface TestFindUniqueArgs extends TestFindUniqueArgsBase {
+  export interface LogFindUniqueArgs extends LogFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -1373,68 +1428,68 @@ export namespace Prisma {
       
 
   /**
-   * Test findUniqueOrThrow
+   * Log findUniqueOrThrow
    */
-  export type TestFindUniqueOrThrowArgs = {
+  export type LogFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * Filter, which Test to fetch.
+     * Filter, which Log to fetch.
      */
-    where: TestWhereUniqueInput
+    where: LogWhereUniqueInput
   }
 
 
   /**
-   * Test base type for findFirst actions
+   * Log base type for findFirst actions
    */
-  export type TestFindFirstArgsBase = {
+  export type LogFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * Filter, which Test to fetch.
+     * Filter, which Log to fetch.
      */
-    where?: TestWhereInput
+    where?: LogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Tests to fetch.
+     * Determine the order of Logs to fetch.
      */
-    orderBy?: Enumerable<TestOrderByWithRelationInput>
+    orderBy?: Enumerable<LogOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Tests.
+     * Sets the position for searching for Logs.
      */
-    cursor?: TestWhereUniqueInput
+    cursor?: LogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Tests from the position of the cursor.
+     * Take `±n` Logs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Tests.
+     * Skip the first `n` Logs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Tests.
+     * Filter by unique combinations of Logs.
      */
-    distinct?: Enumerable<TestScalarFieldEnum>
+    distinct?: Enumerable<LogScalarFieldEnum>
   }
 
   /**
-   * Test findFirst
+   * Log findFirst
    */
-  export interface TestFindFirstArgs extends TestFindFirstArgsBase {
+  export interface LogFindFirstArgs extends LogFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -1444,208 +1499,208 @@ export namespace Prisma {
       
 
   /**
-   * Test findFirstOrThrow
+   * Log findFirstOrThrow
    */
-  export type TestFindFirstOrThrowArgs = {
+  export type LogFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * Filter, which Test to fetch.
+     * Filter, which Log to fetch.
      */
-    where?: TestWhereInput
+    where?: LogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Tests to fetch.
+     * Determine the order of Logs to fetch.
      */
-    orderBy?: Enumerable<TestOrderByWithRelationInput>
+    orderBy?: Enumerable<LogOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Tests.
+     * Sets the position for searching for Logs.
      */
-    cursor?: TestWhereUniqueInput
+    cursor?: LogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Tests from the position of the cursor.
+     * Take `±n` Logs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Tests.
+     * Skip the first `n` Logs.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Tests.
+     * Filter by unique combinations of Logs.
      */
-    distinct?: Enumerable<TestScalarFieldEnum>
+    distinct?: Enumerable<LogScalarFieldEnum>
   }
 
 
   /**
-   * Test findMany
+   * Log findMany
    */
-  export type TestFindManyArgs = {
+  export type LogFindManyArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * Filter, which Tests to fetch.
+     * Filter, which Logs to fetch.
      */
-    where?: TestWhereInput
+    where?: LogWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Tests to fetch.
+     * Determine the order of Logs to fetch.
      */
-    orderBy?: Enumerable<TestOrderByWithRelationInput>
+    orderBy?: Enumerable<LogOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Tests.
+     * Sets the position for listing Logs.
      */
-    cursor?: TestWhereUniqueInput
+    cursor?: LogWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Tests from the position of the cursor.
+     * Take `±n` Logs from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Tests.
+     * Skip the first `n` Logs.
      */
     skip?: number
-    distinct?: Enumerable<TestScalarFieldEnum>
+    distinct?: Enumerable<LogScalarFieldEnum>
   }
 
 
   /**
-   * Test create
+   * Log create
    */
-  export type TestCreateArgs = {
+  export type LogCreateArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * The data needed to create a Test.
+     * The data needed to create a Log.
      */
-    data: XOR<TestCreateInput, TestUncheckedCreateInput>
+    data: XOR<LogCreateInput, LogUncheckedCreateInput>
   }
 
 
   /**
-   * Test createMany
+   * Log createMany
    */
-  export type TestCreateManyArgs = {
+  export type LogCreateManyArgs = {
     /**
-     * The data used to create many Tests.
+     * The data used to create many Logs.
      */
-    data: Enumerable<TestCreateManyInput>
+    data: Enumerable<LogCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Test update
+   * Log update
    */
-  export type TestUpdateArgs = {
+  export type LogUpdateArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * The data needed to update a Test.
+     * The data needed to update a Log.
      */
-    data: XOR<TestUpdateInput, TestUncheckedUpdateInput>
+    data: XOR<LogUpdateInput, LogUncheckedUpdateInput>
     /**
-     * Choose, which Test to update.
+     * Choose, which Log to update.
      */
-    where: TestWhereUniqueInput
+    where: LogWhereUniqueInput
   }
 
 
   /**
-   * Test updateMany
+   * Log updateMany
    */
-  export type TestUpdateManyArgs = {
+  export type LogUpdateManyArgs = {
     /**
-     * The data used to update Tests.
+     * The data used to update Logs.
      */
-    data: XOR<TestUpdateManyMutationInput, TestUncheckedUpdateManyInput>
+    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyInput>
     /**
-     * Filter which Tests to update
+     * Filter which Logs to update
      */
-    where?: TestWhereInput
+    where?: LogWhereInput
   }
 
 
   /**
-   * Test upsert
+   * Log upsert
    */
-  export type TestUpsertArgs = {
+  export type LogUpsertArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * The filter to search for the Test to update in case it exists.
+     * The filter to search for the Log to update in case it exists.
      */
-    where: TestWhereUniqueInput
+    where: LogWhereUniqueInput
     /**
-     * In case the Test found by the `where` argument doesn't exist, create a new Test with this data.
+     * In case the Log found by the `where` argument doesn't exist, create a new Log with this data.
      */
-    create: XOR<TestCreateInput, TestUncheckedCreateInput>
+    create: XOR<LogCreateInput, LogUncheckedCreateInput>
     /**
-     * In case the Test was found with the provided `where` argument, update it with this data.
+     * In case the Log was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<TestUpdateInput, TestUncheckedUpdateInput>
+    update: XOR<LogUpdateInput, LogUncheckedUpdateInput>
   }
 
 
   /**
-   * Test delete
+   * Log delete
    */
-  export type TestDeleteArgs = {
+  export type LogDeleteArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
     /**
-     * Filter which Test to delete.
+     * Filter which Log to delete.
      */
-    where: TestWhereUniqueInput
+    where: LogWhereUniqueInput
   }
 
 
   /**
-   * Test deleteMany
+   * Log deleteMany
    */
-  export type TestDeleteManyArgs = {
+  export type LogDeleteManyArgs = {
     /**
-     * Filter which Tests to delete
+     * Filter which Logs to delete
      */
-    where?: TestWhereInput
+    where?: LogWhereInput
   }
 
 
   /**
-   * Test without action
+   * Log without action
    */
-  export type TestArgs = {
+  export type LogArgs = {
     /**
-     * Select specific fields to fetch from the Test
+     * Select specific fields to fetch from the Log
      */
-    select?: TestSelect | null
+    select?: LogSelect | null
   }
 
 
@@ -1656,6 +1711,32 @@ export namespace Prisma {
 
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+  export const LogScalarFieldEnum: {
+    id: 'id',
+    level: 'level',
+    message: 'message',
+    meta: 'meta'
+  };
+
+  export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
+
 
   export const QueryMode: {
     default: 'default',
@@ -1673,15 +1754,6 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const TestScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    email: 'email'
-  };
-
-  export type TestScalarFieldEnum = (typeof TestScalarFieldEnum)[keyof typeof TestScalarFieldEnum]
-
-
   export const TransactionIsolationLevel: {
     ReadUncommitted: 'ReadUncommitted',
     ReadCommitted: 'ReadCommitted',
@@ -1697,83 +1769,111 @@ export namespace Prisma {
    */
 
 
-  export type TestWhereInput = {
-    AND?: Enumerable<TestWhereInput>
-    OR?: Enumerable<TestWhereInput>
-    NOT?: Enumerable<TestWhereInput>
-    id?: StringFilter | string
-    name?: StringFilter | string
-    email?: StringFilter | string
+  export type LogWhereInput = {
+    AND?: Enumerable<LogWhereInput>
+    OR?: Enumerable<LogWhereInput>
+    NOT?: Enumerable<LogWhereInput>
+    id?: IntFilter | number
+    level?: EnumLevelFilter | Level
+    message?: StringFilter | string
+    meta?: JsonFilter
   }
 
-  export type TestOrderByWithRelationInput = {
+  export type LogOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    level?: SortOrder
+    message?: SortOrder
+    meta?: SortOrder
   }
 
-  export type TestWhereUniqueInput = {
-    id?: string
+  export type LogWhereUniqueInput = {
+    id?: number
   }
 
-  export type TestOrderByWithAggregationInput = {
+  export type LogOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
-    _count?: TestCountOrderByAggregateInput
-    _max?: TestMaxOrderByAggregateInput
-    _min?: TestMinOrderByAggregateInput
+    level?: SortOrder
+    message?: SortOrder
+    meta?: SortOrder
+    _count?: LogCountOrderByAggregateInput
+    _avg?: LogAvgOrderByAggregateInput
+    _max?: LogMaxOrderByAggregateInput
+    _min?: LogMinOrderByAggregateInput
+    _sum?: LogSumOrderByAggregateInput
   }
 
-  export type TestScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<TestScalarWhereWithAggregatesInput>
-    OR?: Enumerable<TestScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<TestScalarWhereWithAggregatesInput>
-    id?: StringWithAggregatesFilter | string
-    name?: StringWithAggregatesFilter | string
-    email?: StringWithAggregatesFilter | string
+  export type LogScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<LogScalarWhereWithAggregatesInput>
+    OR?: Enumerable<LogScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<LogScalarWhereWithAggregatesInput>
+    id?: IntWithAggregatesFilter | number
+    level?: EnumLevelWithAggregatesFilter | Level
+    message?: StringWithAggregatesFilter | string
+    meta?: JsonWithAggregatesFilter
   }
 
-  export type TestCreateInput = {
-    id?: string
-    name: string
-    email: string
+  export type LogCreateInput = {
+    level: Level
+    message: string
+    meta: JsonNullValueInput | InputJsonValue
   }
 
-  export type TestUncheckedCreateInput = {
-    id?: string
-    name: string
-    email: string
+  export type LogUncheckedCreateInput = {
+    id?: number
+    level: Level
+    message: string
+    meta: JsonNullValueInput | InputJsonValue
   }
 
-  export type TestUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+  export type LogUpdateInput = {
+    level?: EnumLevelFieldUpdateOperationsInput | Level
+    message?: StringFieldUpdateOperationsInput | string
+    meta?: JsonNullValueInput | InputJsonValue
   }
 
-  export type TestUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+  export type LogUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    level?: EnumLevelFieldUpdateOperationsInput | Level
+    message?: StringFieldUpdateOperationsInput | string
+    meta?: JsonNullValueInput | InputJsonValue
   }
 
-  export type TestCreateManyInput = {
-    id?: string
-    name: string
-    email: string
+  export type LogCreateManyInput = {
+    id?: number
+    level: Level
+    message: string
+    meta: JsonNullValueInput | InputJsonValue
   }
 
-  export type TestUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+  export type LogUpdateManyMutationInput = {
+    level?: EnumLevelFieldUpdateOperationsInput | Level
+    message?: StringFieldUpdateOperationsInput | string
+    meta?: JsonNullValueInput | InputJsonValue
   }
 
-  export type TestUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
+  export type LogUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    level?: EnumLevelFieldUpdateOperationsInput | Level
+    message?: StringFieldUpdateOperationsInput | string
+    meta?: JsonNullValueInput | InputJsonValue
+  }
+
+  export type IntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
+  }
+
+  export type EnumLevelFilter = {
+    equals?: Level
+    in?: Enumerable<Level>
+    notIn?: Enumerable<Level>
+    not?: NestedEnumLevelFilter | Level
   }
 
   export type StringFilter = {
@@ -1790,23 +1890,80 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedStringFilter | string
   }
+  export type JsonFilter = 
+    | PatchUndefined<
+        Either<Required<JsonFilterBase>, Exclude<keyof Required<JsonFilterBase>, 'path'>>,
+        Required<JsonFilterBase>
+      >
+    | OptionalFlat<Omit<Required<JsonFilterBase>, 'path'>>
 
-  export type TestCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+  export type JsonFilterBase = {
+    equals?: InputJsonValue | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string
+    string_starts_with?: string
+    string_ends_with?: string
+    array_contains?: InputJsonValue | null
+    array_starts_with?: InputJsonValue | null
+    array_ends_with?: InputJsonValue | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonNullValueFilter
   }
 
-  export type TestMaxOrderByAggregateInput = {
+  export type LogCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+    level?: SortOrder
+    message?: SortOrder
+    meta?: SortOrder
   }
 
-  export type TestMinOrderByAggregateInput = {
+  export type LogAvgOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
-    email?: SortOrder
+  }
+
+  export type LogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    level?: SortOrder
+    message?: SortOrder
+  }
+
+  export type LogMinOrderByAggregateInput = {
+    id?: SortOrder
+    level?: SortOrder
+    message?: SortOrder
+  }
+
+  export type LogSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
+  }
+
+  export type EnumLevelWithAggregatesFilter = {
+    equals?: Level
+    in?: Enumerable<Level>
+    notIn?: Enumerable<Level>
+    not?: NestedEnumLevelWithAggregatesFilter | Level
+    _count?: NestedIntFilter
+    _min?: NestedEnumLevelFilter
+    _max?: NestedEnumLevelFilter
   }
 
   export type StringWithAggregatesFilter = {
@@ -1826,9 +1983,64 @@ export namespace Prisma {
     _min?: NestedStringFilter
     _max?: NestedStringFilter
   }
+  export type JsonWithAggregatesFilter = 
+    | PatchUndefined<
+        Either<Required<JsonWithAggregatesFilterBase>, Exclude<keyof Required<JsonWithAggregatesFilterBase>, 'path'>>,
+        Required<JsonWithAggregatesFilterBase>
+      >
+    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase>, 'path'>>
+
+  export type JsonWithAggregatesFilterBase = {
+    equals?: InputJsonValue | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string
+    string_starts_with?: string
+    string_ends_with?: string
+    array_contains?: InputJsonValue | null
+    array_starts_with?: InputJsonValue | null
+    array_ends_with?: InputJsonValue | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonNullValueFilter
+    _count?: NestedIntFilter
+    _min?: NestedJsonFilter
+    _max?: NestedJsonFilter
+  }
+
+  export type EnumLevelFieldUpdateOperationsInput = {
+    set?: Level
+  }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NestedIntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
+  }
+
+  export type NestedEnumLevelFilter = {
+    equals?: Level
+    in?: Enumerable<Level>
+    notIn?: Enumerable<Level>
+    not?: NestedEnumLevelFilter | Level
   }
 
   export type NestedStringFilter = {
@@ -1843,6 +2055,43 @@ export namespace Prisma {
     startsWith?: string
     endsWith?: string
     not?: NestedStringFilter | string
+  }
+
+  export type NestedIntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
+  }
+
+  export type NestedFloatFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedFloatFilter | number
+  }
+
+  export type NestedEnumLevelWithAggregatesFilter = {
+    equals?: Level
+    in?: Enumerable<Level>
+    notIn?: Enumerable<Level>
+    not?: NestedEnumLevelWithAggregatesFilter | Level
+    _count?: NestedIntFilter
+    _min?: NestedEnumLevelFilter
+    _max?: NestedEnumLevelFilter
   }
 
   export type NestedStringWithAggregatesFilter = {
@@ -1861,16 +2110,27 @@ export namespace Prisma {
     _min?: NestedStringFilter
     _max?: NestedStringFilter
   }
+  export type NestedJsonFilter = 
+    | PatchUndefined<
+        Either<Required<NestedJsonFilterBase>, Exclude<keyof Required<NestedJsonFilterBase>, 'path'>>,
+        Required<NestedJsonFilterBase>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonFilterBase>, 'path'>>
 
-  export type NestedIntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
+  export type NestedJsonFilterBase = {
+    equals?: InputJsonValue | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string
+    string_starts_with?: string
+    string_ends_with?: string
+    array_contains?: InputJsonValue | null
+    array_starts_with?: InputJsonValue | null
+    array_ends_with?: InputJsonValue | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonNullValueFilter
   }
 
 
