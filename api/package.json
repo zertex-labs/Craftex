@@ -1,1 +1,13 @@
-{"name":"my-prisma-project","version":"1.0.0","description":"","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"keywords":[],"author":"","license":"ISC","devDependencies":{"prisma":"^4.13.0"},"dependencies":{"@prisma/client":"^4.13.0"}}
+{
+  "name": "craftex_api",
+  "private": true,
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "prisma": "^4.13.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.13.0",
+    "arktype": "^1.0.14-alpha"
+  }
+}
