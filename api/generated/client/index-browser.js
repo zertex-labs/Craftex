@@ -86,21 +86,15 @@ Prisma.NullTypes = {
  * Enums
  */
 
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
-
-exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull
-};
-
-exports.Prisma.LogScalarFieldEnum = {
+exports.Prisma.PluginScalarFieldEnum = {
   id: 'id',
-  level: 'level',
-  message: 'message',
-  meta: 'meta'
+  name: 'name',
+  description: 'description',
+  contrubutorIds: 'contrubutorIds',
+  version: 'version',
+  authorId: 'authorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.QueryMode = {
@@ -119,14 +113,10 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
-exports.Level = {
-  Info: 'Info',
-  Warn: 'Warn',
-  Error: 'Error'
-};
+
 
 exports.Prisma.ModelName = {
-  Log: 'Log'
+  Plugin: 'Plugin'
 };
 
 /**

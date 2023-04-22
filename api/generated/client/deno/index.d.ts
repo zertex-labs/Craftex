@@ -13,31 +13,19 @@ export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>
 
 
 /**
- * Model Log
+ * Model Plugin
  * 
  */
-export type Log = {
-  id: number
-  level: Level
-  message: string
-  meta: Prisma.JsonValue
+export type Plugin = {
+  id: string
+  name: string
+  description: string
+  contrubutorIds: string[]
+  version: string
+  authorId: string
+  createdAt: Date
+  updatedAt: Date
 }
-
-
-/**
- * Enums
- */
-
-// Based on
-// https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
-
-export const Level: {
-  Info: 'Info',
-  Warn: 'Warn',
-  Error: 'Error'
-};
-
-export type Level = (typeof Level)[keyof typeof Level]
 
 
 /**
@@ -47,8 +35,8 @@ export type Level = (typeof Level)[keyof typeof Level]
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Logs
- * const logs = await prisma.log.findMany()
+ * // Fetch zero or more Plugins
+ * const plugins = await prisma.plugin.findMany()
  * ```
  *
  * 
@@ -68,8 +56,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Logs
-   * const logs = await prisma.log.findMany()
+   * // Fetch zero or more Plugins
+   * const plugins = await prisma.plugin.findMany()
    * ```
    *
    * 
@@ -158,14 +146,14 @@ export class PrismaClient<
   $transaction<R>(fn: (prisma: Omit<this, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use">) => Promise<R>, options?: { maxWait?: number, timeout?: number, isolationLevel?: Prisma.TransactionIsolationLevel }): Promise<R>
 
       /**
-   * `prisma.log`: Exposes CRUD operations for the **Log** model.
+   * `prisma.plugin`: Exposes CRUD operations for the **Plugin** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Logs
-    * const logs = await prisma.log.findMany()
+    * // Fetch zero or more Plugins
+    * const plugins = await prisma.plugin.findMany()
     * ```
     */
-  get log(): Prisma.LogDelegate<GlobalReject>;
+  get plugin(): Prisma.PluginDelegate<GlobalReject>;
 }
 
 export namespace Prisma {
@@ -635,7 +623,7 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Log: 'Log'
+    Plugin: 'Plugin'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -802,357 +790,355 @@ export namespace Prisma {
    */
 
   /**
-   * Model Log
+   * Model Plugin
    */
 
 
-  export type AggregateLog = {
-    _count: LogCountAggregateOutputType | null
-    _avg: LogAvgAggregateOutputType | null
-    _sum: LogSumAggregateOutputType | null
-    _min: LogMinAggregateOutputType | null
-    _max: LogMaxAggregateOutputType | null
+  export type AggregatePlugin = {
+    _count: PluginCountAggregateOutputType | null
+    _min: PluginMinAggregateOutputType | null
+    _max: PluginMaxAggregateOutputType | null
   }
 
-  export type LogAvgAggregateOutputType = {
-    id: number | null
+  export type PluginMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    version: string | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type LogSumAggregateOutputType = {
-    id: number | null
+  export type PluginMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    version: string | null
+    authorId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
-  export type LogMinAggregateOutputType = {
-    id: number | null
-    level: Level | null
-    message: string | null
-  }
-
-  export type LogMaxAggregateOutputType = {
-    id: number | null
-    level: Level | null
-    message: string | null
-  }
-
-  export type LogCountAggregateOutputType = {
+  export type PluginCountAggregateOutputType = {
     id: number
-    level: number
-    message: number
-    meta: number
+    name: number
+    description: number
+    contrubutorIds: number
+    version: number
+    authorId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
 
-  export type LogAvgAggregateInputType = {
+  export type PluginMinAggregateInputType = {
     id?: true
+    name?: true
+    description?: true
+    version?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
-  export type LogSumAggregateInputType = {
+  export type PluginMaxAggregateInputType = {
     id?: true
+    name?: true
+    description?: true
+    version?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
-  export type LogMinAggregateInputType = {
+  export type PluginCountAggregateInputType = {
     id?: true
-    level?: true
-    message?: true
-  }
-
-  export type LogMaxAggregateInputType = {
-    id?: true
-    level?: true
-    message?: true
-  }
-
-  export type LogCountAggregateInputType = {
-    id?: true
-    level?: true
-    message?: true
-    meta?: true
+    name?: true
+    description?: true
+    contrubutorIds?: true
+    version?: true
+    authorId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
-  export type LogAggregateArgs = {
+  export type PluginAggregateArgs = {
     /**
-     * Filter which Log to aggregate.
+     * Filter which Plugin to aggregate.
      */
-    where?: LogWhereInput
+    where?: PluginWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Logs to fetch.
+     * Determine the order of Plugins to fetch.
      */
-    orderBy?: Enumerable<LogOrderByWithRelationInput>
+    orderBy?: Enumerable<PluginOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: LogWhereUniqueInput
+    cursor?: PluginWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Logs from the position of the cursor.
+     * Take `±n` Plugins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Logs.
+     * Skip the first `n` Plugins.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Logs
+     * Count returned Plugins
     **/
-    _count?: true | LogCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: LogAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: LogSumAggregateInputType
+    _count?: true | PluginCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: LogMinAggregateInputType
+    _min?: PluginMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: LogMaxAggregateInputType
+    _max?: PluginMaxAggregateInputType
   }
 
-  export type GetLogAggregateType<T extends LogAggregateArgs> = {
-        [P in keyof T & keyof AggregateLog]: P extends '_count' | 'count'
+  export type GetPluginAggregateType<T extends PluginAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlugin]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateLog[P]>
-      : GetScalarType<T[P], AggregateLog[P]>
+        : GetScalarType<T[P], AggregatePlugin[P]>
+      : GetScalarType<T[P], AggregatePlugin[P]>
   }
 
 
 
 
-  export type LogGroupByArgs = {
-    where?: LogWhereInput
-    orderBy?: Enumerable<LogOrderByWithAggregationInput>
-    by: LogScalarFieldEnum[]
-    having?: LogScalarWhereWithAggregatesInput
+  export type PluginGroupByArgs = {
+    where?: PluginWhereInput
+    orderBy?: Enumerable<PluginOrderByWithAggregationInput>
+    by: PluginScalarFieldEnum[]
+    having?: PluginScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: LogCountAggregateInputType | true
-    _avg?: LogAvgAggregateInputType
-    _sum?: LogSumAggregateInputType
-    _min?: LogMinAggregateInputType
-    _max?: LogMaxAggregateInputType
+    _count?: PluginCountAggregateInputType | true
+    _min?: PluginMinAggregateInputType
+    _max?: PluginMaxAggregateInputType
   }
 
 
-  export type LogGroupByOutputType = {
-    id: number
-    level: Level
-    message: string
-    meta: JsonValue
-    _count: LogCountAggregateOutputType | null
-    _avg: LogAvgAggregateOutputType | null
-    _sum: LogSumAggregateOutputType | null
-    _min: LogMinAggregateOutputType | null
-    _max: LogMaxAggregateOutputType | null
+  export type PluginGroupByOutputType = {
+    id: string
+    name: string
+    description: string
+    contrubutorIds: string[]
+    version: string
+    authorId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PluginCountAggregateOutputType | null
+    _min: PluginMinAggregateOutputType | null
+    _max: PluginMaxAggregateOutputType | null
   }
 
-  type GetLogGroupByPayload<T extends LogGroupByArgs> = Prisma.PrismaPromise<
+  type GetPluginGroupByPayload<T extends PluginGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickArray<LogGroupByOutputType, T['by']> &
+      PickArray<PluginGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof LogGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PluginGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], LogGroupByOutputType[P]>
-            : GetScalarType<T[P], LogGroupByOutputType[P]>
+              : GetScalarType<T[P], PluginGroupByOutputType[P]>
+            : GetScalarType<T[P], PluginGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type LogSelect = {
+  export type PluginSelect = {
     id?: boolean
-    level?: boolean
-    message?: boolean
-    meta?: boolean
+    name?: boolean
+    description?: boolean
+    contrubutorIds?: boolean
+    version?: boolean
+    authorId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
 
-  export type LogGetPayload<S extends boolean | null | undefined | LogArgs> =
+  export type PluginGetPayload<S extends boolean | null | undefined | PluginArgs> =
     S extends { select: any, include: any } ? 'Please either choose `select` or `include`' :
-    S extends true ? Log :
+    S extends true ? Plugin :
     S extends undefined ? never :
-    S extends { include: any } & (LogArgs | LogFindManyArgs)
-    ? Log 
-    : S extends { select: any } & (LogArgs | LogFindManyArgs)
+    S extends { include: any } & (PluginArgs | PluginFindManyArgs)
+    ? Plugin 
+    : S extends { select: any } & (PluginArgs | PluginFindManyArgs)
       ? {
     [P in TruthyKeys<S['select']>]:
-    P extends keyof Log ? Log[P] : never
+    P extends keyof Plugin ? Plugin[P] : never
   } 
-      : Log
+      : Plugin
 
 
-  type LogCountArgs = 
-    Omit<LogFindManyArgs, 'select' | 'include'> & {
-      select?: LogCountAggregateInputType | true
+  type PluginCountArgs = 
+    Omit<PluginFindManyArgs, 'select' | 'include'> & {
+      select?: PluginCountAggregateInputType | true
     }
 
-  export interface LogDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
+  export interface PluginDelegate<GlobalRejectSettings extends Prisma.RejectOnNotFound | Prisma.RejectPerOperation | false | undefined> {
 
     /**
-     * Find zero or one Log that matches the filter.
-     * @param {LogFindUniqueArgs} args - Arguments to find a Log
+     * Find zero or one Plugin that matches the filter.
+     * @param {PluginFindUniqueArgs} args - Arguments to find a Plugin
      * @example
-     * // Get one Log
-     * const log = await prisma.log.findUnique({
+     * // Get one Plugin
+     * const plugin = await prisma.plugin.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUnique<T extends LogFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args: SelectSubset<T, LogFindUniqueArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Log'> extends True ? Prisma__LogClient<LogGetPayload<T>> : Prisma__LogClient<LogGetPayload<T> | null, null>
+    findUnique<T extends PluginFindUniqueArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args: SelectSubset<T, PluginFindUniqueArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findUnique', 'Plugin'> extends True ? Prisma__PluginClient<PluginGetPayload<T>> : Prisma__PluginClient<PluginGetPayload<T> | null, null>
 
     /**
-     * Find one Log that matches the filter or throw an error  with `error.code='P2025'` 
+     * Find one Plugin that matches the filter or throw an error  with `error.code='P2025'` 
      *     if no matches were found.
-     * @param {LogFindUniqueOrThrowArgs} args - Arguments to find a Log
+     * @param {PluginFindUniqueOrThrowArgs} args - Arguments to find a Plugin
      * @example
-     * // Get one Log
-     * const log = await prisma.log.findUniqueOrThrow({
+     * // Get one Plugin
+     * const plugin = await prisma.plugin.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findUniqueOrThrow<T extends LogFindUniqueOrThrowArgs>(
-      args?: SelectSubset<T, LogFindUniqueOrThrowArgs>
-    ): Prisma__LogClient<LogGetPayload<T>>
+    findUniqueOrThrow<T extends PluginFindUniqueOrThrowArgs>(
+      args?: SelectSubset<T, PluginFindUniqueOrThrowArgs>
+    ): Prisma__PluginClient<PluginGetPayload<T>>
 
     /**
-     * Find the first Log that matches the filter.
+     * Find the first Plugin that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogFindFirstArgs} args - Arguments to find a Log
+     * @param {PluginFindFirstArgs} args - Arguments to find a Plugin
      * @example
-     * // Get one Log
-     * const log = await prisma.log.findFirst({
+     * // Get one Plugin
+     * const plugin = await prisma.plugin.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirst<T extends LogFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
-      args?: SelectSubset<T, LogFindFirstArgs>
-    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Log'> extends True ? Prisma__LogClient<LogGetPayload<T>> : Prisma__LogClient<LogGetPayload<T> | null, null>
+    findFirst<T extends PluginFindFirstArgs,  LocalRejectSettings = T["rejectOnNotFound"] extends RejectOnNotFound ? T['rejectOnNotFound'] : undefined>(
+      args?: SelectSubset<T, PluginFindFirstArgs>
+    ): HasReject<GlobalRejectSettings, LocalRejectSettings, 'findFirst', 'Plugin'> extends True ? Prisma__PluginClient<PluginGetPayload<T>> : Prisma__PluginClient<PluginGetPayload<T> | null, null>
 
     /**
-     * Find the first Log that matches the filter or
+     * Find the first Plugin that matches the filter or
      * throw `NotFoundError` if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogFindFirstOrThrowArgs} args - Arguments to find a Log
+     * @param {PluginFindFirstOrThrowArgs} args - Arguments to find a Plugin
      * @example
-     * // Get one Log
-     * const log = await prisma.log.findFirstOrThrow({
+     * // Get one Plugin
+     * const plugin = await prisma.plugin.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
     **/
-    findFirstOrThrow<T extends LogFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, LogFindFirstOrThrowArgs>
-    ): Prisma__LogClient<LogGetPayload<T>>
+    findFirstOrThrow<T extends PluginFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, PluginFindFirstOrThrowArgs>
+    ): Prisma__PluginClient<PluginGetPayload<T>>
 
     /**
-     * Find zero or more Logs that matches the filter.
+     * Find zero or more Plugins that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @param {PluginFindManyArgs=} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Logs
-     * const logs = await prisma.log.findMany()
+     * // Get all Plugins
+     * const plugins = await prisma.plugin.findMany()
      * 
-     * // Get first 10 Logs
-     * const logs = await prisma.log.findMany({ take: 10 })
+     * // Get first 10 Plugins
+     * const plugins = await prisma.plugin.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const logWithIdOnly = await prisma.log.findMany({ select: { id: true } })
+     * const pluginWithIdOnly = await prisma.plugin.findMany({ select: { id: true } })
      * 
     **/
-    findMany<T extends LogFindManyArgs>(
-      args?: SelectSubset<T, LogFindManyArgs>
-    ): Prisma.PrismaPromise<Array<LogGetPayload<T>>>
+    findMany<T extends PluginFindManyArgs>(
+      args?: SelectSubset<T, PluginFindManyArgs>
+    ): Prisma.PrismaPromise<Array<PluginGetPayload<T>>>
 
     /**
-     * Create a Log.
-     * @param {LogCreateArgs} args - Arguments to create a Log.
+     * Create a Plugin.
+     * @param {PluginCreateArgs} args - Arguments to create a Plugin.
      * @example
-     * // Create one Log
-     * const Log = await prisma.log.create({
+     * // Create one Plugin
+     * const Plugin = await prisma.plugin.create({
      *   data: {
-     *     // ... data to create a Log
+     *     // ... data to create a Plugin
      *   }
      * })
      * 
     **/
-    create<T extends LogCreateArgs>(
-      args: SelectSubset<T, LogCreateArgs>
-    ): Prisma__LogClient<LogGetPayload<T>>
+    create<T extends PluginCreateArgs>(
+      args: SelectSubset<T, PluginCreateArgs>
+    ): Prisma__PluginClient<PluginGetPayload<T>>
 
     /**
-     * Create many Logs.
-     *     @param {LogCreateManyArgs} args - Arguments to create many Logs.
+     * Create many Plugins.
+     *     @param {PluginCreateManyArgs} args - Arguments to create many Plugins.
      *     @example
-     *     // Create many Logs
-     *     const log = await prisma.log.createMany({
+     *     // Create many Plugins
+     *     const plugin = await prisma.plugin.createMany({
      *       data: {
      *         // ... provide data here
      *       }
      *     })
      *     
     **/
-    createMany<T extends LogCreateManyArgs>(
-      args?: SelectSubset<T, LogCreateManyArgs>
+    createMany<T extends PluginCreateManyArgs>(
+      args?: SelectSubset<T, PluginCreateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Log.
-     * @param {LogDeleteArgs} args - Arguments to delete one Log.
+     * Delete a Plugin.
+     * @param {PluginDeleteArgs} args - Arguments to delete one Plugin.
      * @example
-     * // Delete one Log
-     * const Log = await prisma.log.delete({
+     * // Delete one Plugin
+     * const Plugin = await prisma.plugin.delete({
      *   where: {
-     *     // ... filter to delete one Log
+     *     // ... filter to delete one Plugin
      *   }
      * })
      * 
     **/
-    delete<T extends LogDeleteArgs>(
-      args: SelectSubset<T, LogDeleteArgs>
-    ): Prisma__LogClient<LogGetPayload<T>>
+    delete<T extends PluginDeleteArgs>(
+      args: SelectSubset<T, PluginDeleteArgs>
+    ): Prisma__PluginClient<PluginGetPayload<T>>
 
     /**
-     * Update one Log.
-     * @param {LogUpdateArgs} args - Arguments to update one Log.
+     * Update one Plugin.
+     * @param {PluginUpdateArgs} args - Arguments to update one Plugin.
      * @example
-     * // Update one Log
-     * const log = await prisma.log.update({
+     * // Update one Plugin
+     * const plugin = await prisma.plugin.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1162,34 +1148,34 @@ export namespace Prisma {
      * })
      * 
     **/
-    update<T extends LogUpdateArgs>(
-      args: SelectSubset<T, LogUpdateArgs>
-    ): Prisma__LogClient<LogGetPayload<T>>
+    update<T extends PluginUpdateArgs>(
+      args: SelectSubset<T, PluginUpdateArgs>
+    ): Prisma__PluginClient<PluginGetPayload<T>>
 
     /**
-     * Delete zero or more Logs.
-     * @param {LogDeleteManyArgs} args - Arguments to filter Logs to delete.
+     * Delete zero or more Plugins.
+     * @param {PluginDeleteManyArgs} args - Arguments to filter Plugins to delete.
      * @example
-     * // Delete a few Logs
-     * const { count } = await prisma.log.deleteMany({
+     * // Delete a few Plugins
+     * const { count } = await prisma.plugin.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
     **/
-    deleteMany<T extends LogDeleteManyArgs>(
-      args?: SelectSubset<T, LogDeleteManyArgs>
+    deleteMany<T extends PluginDeleteManyArgs>(
+      args?: SelectSubset<T, PluginDeleteManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Logs.
+     * Update zero or more Plugins.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PluginUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Logs
-     * const log = await prisma.log.updateMany({
+     * // Update many Plugins
+     * const plugin = await prisma.plugin.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -1199,59 +1185,59 @@ export namespace Prisma {
      * })
      * 
     **/
-    updateMany<T extends LogUpdateManyArgs>(
-      args: SelectSubset<T, LogUpdateManyArgs>
+    updateMany<T extends PluginUpdateManyArgs>(
+      args: SelectSubset<T, PluginUpdateManyArgs>
     ): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Log.
-     * @param {LogUpsertArgs} args - Arguments to update or create a Log.
+     * Create or update one Plugin.
+     * @param {PluginUpsertArgs} args - Arguments to update or create a Plugin.
      * @example
-     * // Update or create a Log
-     * const log = await prisma.log.upsert({
+     * // Update or create a Plugin
+     * const plugin = await prisma.plugin.upsert({
      *   create: {
-     *     // ... data to create a Log
+     *     // ... data to create a Plugin
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Log we want to update
+     *     // ... the filter for the Plugin we want to update
      *   }
      * })
     **/
-    upsert<T extends LogUpsertArgs>(
-      args: SelectSubset<T, LogUpsertArgs>
-    ): Prisma__LogClient<LogGetPayload<T>>
+    upsert<T extends PluginUpsertArgs>(
+      args: SelectSubset<T, PluginUpsertArgs>
+    ): Prisma__PluginClient<PluginGetPayload<T>>
 
     /**
-     * Count the number of Logs.
+     * Count the number of Plugins.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogCountArgs} args - Arguments to filter Logs to count.
+     * @param {PluginCountArgs} args - Arguments to filter Plugins to count.
      * @example
-     * // Count the number of Logs
-     * const count = await prisma.log.count({
+     * // Count the number of Plugins
+     * const count = await prisma.plugin.count({
      *   where: {
-     *     // ... the filter for the Logs we want to count
+     *     // ... the filter for the Plugins we want to count
      *   }
      * })
     **/
-    count<T extends LogCountArgs>(
-      args?: Subset<T, LogCountArgs>,
+    count<T extends PluginCountArgs>(
+      args?: Subset<T, PluginCountArgs>,
     ): Prisma.PrismaPromise<
       T extends _Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], LogCountAggregateOutputType>
+          : GetScalarType<T['select'], PluginCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Log.
+     * Allows you to perform aggregations operations on a Plugin.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PluginAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -1271,13 +1257,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends LogAggregateArgs>(args: Subset<T, LogAggregateArgs>): Prisma.PrismaPromise<GetLogAggregateType<T>>
+    aggregate<T extends PluginAggregateArgs>(args: Subset<T, PluginAggregateArgs>): Prisma.PrismaPromise<GetPluginAggregateType<T>>
 
     /**
-     * Group by Log.
+     * Group by Plugin.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {LogGroupByArgs} args - Group by arguments.
+     * @param {PluginGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -1292,14 +1278,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends LogGroupByArgs,
+      T extends PluginGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: LogGroupByArgs['orderBy'] }
-        : { orderBy?: LogGroupByArgs['orderBy'] },
+        ? { orderBy: PluginGroupByArgs['orderBy'] }
+        : { orderBy?: PluginGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends TupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -1348,17 +1334,17 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, LogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PluginGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPluginGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Log.
+   * The delegate class that acts as a "Promise-like" for Plugin.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export class Prisma__LogClient<T, Null = never> implements Prisma.PrismaPromise<T> {
+  export class Prisma__PluginClient<T, Null = never> implements Prisma.PrismaPromise<T> {
     private readonly _dmmf;
     private readonly _queryType;
     private readonly _rootField;
@@ -1402,23 +1388,23 @@ export namespace Prisma {
   // Custom InputTypes
 
   /**
-   * Log base type for findUnique actions
+   * Plugin base type for findUnique actions
    */
-  export type LogFindUniqueArgsBase = {
+  export type PluginFindUniqueArgsBase = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * Filter, which Log to fetch.
+     * Filter, which Plugin to fetch.
      */
-    where: LogWhereUniqueInput
+    where: PluginWhereUniqueInput
   }
 
   /**
-   * Log findUnique
+   * Plugin findUnique
    */
-  export interface LogFindUniqueArgs extends LogFindUniqueArgsBase {
+  export interface PluginFindUniqueArgs extends PluginFindUniqueArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -1428,68 +1414,68 @@ export namespace Prisma {
       
 
   /**
-   * Log findUniqueOrThrow
+   * Plugin findUniqueOrThrow
    */
-  export type LogFindUniqueOrThrowArgs = {
+  export type PluginFindUniqueOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * Filter, which Log to fetch.
+     * Filter, which Plugin to fetch.
      */
-    where: LogWhereUniqueInput
+    where: PluginWhereUniqueInput
   }
 
 
   /**
-   * Log base type for findFirst actions
+   * Plugin base type for findFirst actions
    */
-  export type LogFindFirstArgsBase = {
+  export type PluginFindFirstArgsBase = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * Filter, which Log to fetch.
+     * Filter, which Plugin to fetch.
      */
-    where?: LogWhereInput
+    where?: PluginWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Logs to fetch.
+     * Determine the order of Plugins to fetch.
      */
-    orderBy?: Enumerable<LogOrderByWithRelationInput>
+    orderBy?: Enumerable<PluginOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Logs.
+     * Sets the position for searching for Plugins.
      */
-    cursor?: LogWhereUniqueInput
+    cursor?: PluginWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Logs from the position of the cursor.
+     * Take `±n` Plugins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Logs.
+     * Skip the first `n` Plugins.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Logs.
+     * Filter by unique combinations of Plugins.
      */
-    distinct?: Enumerable<LogScalarFieldEnum>
+    distinct?: Enumerable<PluginScalarFieldEnum>
   }
 
   /**
-   * Log findFirst
+   * Plugin findFirst
    */
-  export interface LogFindFirstArgs extends LogFindFirstArgsBase {
+  export interface PluginFindFirstArgs extends PluginFindFirstArgsBase {
    /**
     * Throw an Error if query returns no results
     * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -1499,208 +1485,208 @@ export namespace Prisma {
       
 
   /**
-   * Log findFirstOrThrow
+   * Plugin findFirstOrThrow
    */
-  export type LogFindFirstOrThrowArgs = {
+  export type PluginFindFirstOrThrowArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * Filter, which Log to fetch.
+     * Filter, which Plugin to fetch.
      */
-    where?: LogWhereInput
+    where?: PluginWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Logs to fetch.
+     * Determine the order of Plugins to fetch.
      */
-    orderBy?: Enumerable<LogOrderByWithRelationInput>
+    orderBy?: Enumerable<PluginOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Logs.
+     * Sets the position for searching for Plugins.
      */
-    cursor?: LogWhereUniqueInput
+    cursor?: PluginWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Logs from the position of the cursor.
+     * Take `±n` Plugins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Logs.
+     * Skip the first `n` Plugins.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Logs.
+     * Filter by unique combinations of Plugins.
      */
-    distinct?: Enumerable<LogScalarFieldEnum>
+    distinct?: Enumerable<PluginScalarFieldEnum>
   }
 
 
   /**
-   * Log findMany
+   * Plugin findMany
    */
-  export type LogFindManyArgs = {
+  export type PluginFindManyArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * Filter, which Logs to fetch.
+     * Filter, which Plugins to fetch.
      */
-    where?: LogWhereInput
+    where?: PluginWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Logs to fetch.
+     * Determine the order of Plugins to fetch.
      */
-    orderBy?: Enumerable<LogOrderByWithRelationInput>
+    orderBy?: Enumerable<PluginOrderByWithRelationInput>
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Logs.
+     * Sets the position for listing Plugins.
      */
-    cursor?: LogWhereUniqueInput
+    cursor?: PluginWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Logs from the position of the cursor.
+     * Take `±n` Plugins from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Logs.
+     * Skip the first `n` Plugins.
      */
     skip?: number
-    distinct?: Enumerable<LogScalarFieldEnum>
+    distinct?: Enumerable<PluginScalarFieldEnum>
   }
 
 
   /**
-   * Log create
+   * Plugin create
    */
-  export type LogCreateArgs = {
+  export type PluginCreateArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * The data needed to create a Log.
+     * The data needed to create a Plugin.
      */
-    data: XOR<LogCreateInput, LogUncheckedCreateInput>
+    data: XOR<PluginCreateInput, PluginUncheckedCreateInput>
   }
 
 
   /**
-   * Log createMany
+   * Plugin createMany
    */
-  export type LogCreateManyArgs = {
+  export type PluginCreateManyArgs = {
     /**
-     * The data used to create many Logs.
+     * The data used to create many Plugins.
      */
-    data: Enumerable<LogCreateManyInput>
+    data: Enumerable<PluginCreateManyInput>
     skipDuplicates?: boolean
   }
 
 
   /**
-   * Log update
+   * Plugin update
    */
-  export type LogUpdateArgs = {
+  export type PluginUpdateArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * The data needed to update a Log.
+     * The data needed to update a Plugin.
      */
-    data: XOR<LogUpdateInput, LogUncheckedUpdateInput>
+    data: XOR<PluginUpdateInput, PluginUncheckedUpdateInput>
     /**
-     * Choose, which Log to update.
+     * Choose, which Plugin to update.
      */
-    where: LogWhereUniqueInput
+    where: PluginWhereUniqueInput
   }
 
 
   /**
-   * Log updateMany
+   * Plugin updateMany
    */
-  export type LogUpdateManyArgs = {
+  export type PluginUpdateManyArgs = {
     /**
-     * The data used to update Logs.
+     * The data used to update Plugins.
      */
-    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyInput>
+    data: XOR<PluginUpdateManyMutationInput, PluginUncheckedUpdateManyInput>
     /**
-     * Filter which Logs to update
+     * Filter which Plugins to update
      */
-    where?: LogWhereInput
+    where?: PluginWhereInput
   }
 
 
   /**
-   * Log upsert
+   * Plugin upsert
    */
-  export type LogUpsertArgs = {
+  export type PluginUpsertArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * The filter to search for the Log to update in case it exists.
+     * The filter to search for the Plugin to update in case it exists.
      */
-    where: LogWhereUniqueInput
+    where: PluginWhereUniqueInput
     /**
-     * In case the Log found by the `where` argument doesn't exist, create a new Log with this data.
+     * In case the Plugin found by the `where` argument doesn't exist, create a new Plugin with this data.
      */
-    create: XOR<LogCreateInput, LogUncheckedCreateInput>
+    create: XOR<PluginCreateInput, PluginUncheckedCreateInput>
     /**
-     * In case the Log was found with the provided `where` argument, update it with this data.
+     * In case the Plugin was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<LogUpdateInput, LogUncheckedUpdateInput>
+    update: XOR<PluginUpdateInput, PluginUncheckedUpdateInput>
   }
 
 
   /**
-   * Log delete
+   * Plugin delete
    */
-  export type LogDeleteArgs = {
+  export type PluginDeleteArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
     /**
-     * Filter which Log to delete.
+     * Filter which Plugin to delete.
      */
-    where: LogWhereUniqueInput
+    where: PluginWhereUniqueInput
   }
 
 
   /**
-   * Log deleteMany
+   * Plugin deleteMany
    */
-  export type LogDeleteManyArgs = {
+  export type PluginDeleteManyArgs = {
     /**
-     * Filter which Logs to delete
+     * Filter which Plugins to delete
      */
-    where?: LogWhereInput
+    where?: PluginWhereInput
   }
 
 
   /**
-   * Log without action
+   * Plugin without action
    */
-  export type LogArgs = {
+  export type PluginArgs = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the Plugin
      */
-    select?: LogSelect | null
+    select?: PluginSelect | null
   }
 
 
@@ -1712,30 +1698,18 @@ export namespace Prisma {
   // Based on
   // https://github.com/microsoft/TypeScript/issues/3192#issuecomment-261720275
 
-  export const JsonNullValueFilter: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull,
-    AnyNull: typeof AnyNull
-  };
-
-  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
-  export const LogScalarFieldEnum: {
+  export const PluginScalarFieldEnum: {
     id: 'id',
-    level: 'level',
-    message: 'message',
-    meta: 'meta'
+    name: 'name',
+    description: 'description',
+    contrubutorIds: 'contrubutorIds',
+    version: 'version',
+    authorId: 'authorId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
-  export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
+  export type PluginScalarFieldEnum = (typeof PluginScalarFieldEnum)[keyof typeof PluginScalarFieldEnum]
 
 
   export const QueryMode: {
@@ -1769,111 +1743,139 @@ export namespace Prisma {
    */
 
 
-  export type LogWhereInput = {
-    AND?: Enumerable<LogWhereInput>
-    OR?: Enumerable<LogWhereInput>
-    NOT?: Enumerable<LogWhereInput>
-    id?: IntFilter | number
-    level?: EnumLevelFilter | Level
-    message?: StringFilter | string
-    meta?: JsonFilter
+  export type PluginWhereInput = {
+    AND?: Enumerable<PluginWhereInput>
+    OR?: Enumerable<PluginWhereInput>
+    NOT?: Enumerable<PluginWhereInput>
+    id?: StringFilter | string
+    name?: StringFilter | string
+    description?: StringFilter | string
+    contrubutorIds?: StringNullableListFilter
+    version?: StringFilter | string
+    authorId?: StringFilter | string
+    createdAt?: DateTimeFilter | Date | string
+    updatedAt?: DateTimeFilter | Date | string
   }
 
-  export type LogOrderByWithRelationInput = {
+  export type PluginOrderByWithRelationInput = {
     id?: SortOrder
-    level?: SortOrder
-    message?: SortOrder
-    meta?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    contrubutorIds?: SortOrder
+    version?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type LogWhereUniqueInput = {
-    id?: number
+  export type PluginWhereUniqueInput = {
+    id?: string
+    name?: string
   }
 
-  export type LogOrderByWithAggregationInput = {
+  export type PluginOrderByWithAggregationInput = {
     id?: SortOrder
-    level?: SortOrder
-    message?: SortOrder
-    meta?: SortOrder
-    _count?: LogCountOrderByAggregateInput
-    _avg?: LogAvgOrderByAggregateInput
-    _max?: LogMaxOrderByAggregateInput
-    _min?: LogMinOrderByAggregateInput
-    _sum?: LogSumOrderByAggregateInput
+    name?: SortOrder
+    description?: SortOrder
+    contrubutorIds?: SortOrder
+    version?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PluginCountOrderByAggregateInput
+    _max?: PluginMaxOrderByAggregateInput
+    _min?: PluginMinOrderByAggregateInput
   }
 
-  export type LogScalarWhereWithAggregatesInput = {
-    AND?: Enumerable<LogScalarWhereWithAggregatesInput>
-    OR?: Enumerable<LogScalarWhereWithAggregatesInput>
-    NOT?: Enumerable<LogScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
-    level?: EnumLevelWithAggregatesFilter | Level
-    message?: StringWithAggregatesFilter | string
-    meta?: JsonWithAggregatesFilter
+  export type PluginScalarWhereWithAggregatesInput = {
+    AND?: Enumerable<PluginScalarWhereWithAggregatesInput>
+    OR?: Enumerable<PluginScalarWhereWithAggregatesInput>
+    NOT?: Enumerable<PluginScalarWhereWithAggregatesInput>
+    id?: StringWithAggregatesFilter | string
+    name?: StringWithAggregatesFilter | string
+    description?: StringWithAggregatesFilter | string
+    contrubutorIds?: StringNullableListFilter
+    version?: StringWithAggregatesFilter | string
+    authorId?: StringWithAggregatesFilter | string
+    createdAt?: DateTimeWithAggregatesFilter | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter | Date | string
   }
 
-  export type LogCreateInput = {
-    level: Level
-    message: string
-    meta: JsonNullValueInput | InputJsonValue
+  export type PluginCreateInput = {
+    id?: string
+    name: string
+    description: string
+    contrubutorIds?: PluginCreatecontrubutorIdsInput | Enumerable<string>
+    version: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type LogUncheckedCreateInput = {
-    id?: number
-    level: Level
-    message: string
-    meta: JsonNullValueInput | InputJsonValue
+  export type PluginUncheckedCreateInput = {
+    id?: string
+    name: string
+    description: string
+    contrubutorIds?: PluginCreatecontrubutorIdsInput | Enumerable<string>
+    version: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type LogUpdateInput = {
-    level?: EnumLevelFieldUpdateOperationsInput | Level
-    message?: StringFieldUpdateOperationsInput | string
-    meta?: JsonNullValueInput | InputJsonValue
+  export type PluginUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    contrubutorIds?: PluginUpdatecontrubutorIdsInput | Enumerable<string>
+    version?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LogUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    level?: EnumLevelFieldUpdateOperationsInput | Level
-    message?: StringFieldUpdateOperationsInput | string
-    meta?: JsonNullValueInput | InputJsonValue
+  export type PluginUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    contrubutorIds?: PluginUpdatecontrubutorIdsInput | Enumerable<string>
+    version?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LogCreateManyInput = {
-    id?: number
-    level: Level
-    message: string
-    meta: JsonNullValueInput | InputJsonValue
+  export type PluginCreateManyInput = {
+    id?: string
+    name: string
+    description: string
+    contrubutorIds?: PluginCreatecontrubutorIdsInput | Enumerable<string>
+    version: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type LogUpdateManyMutationInput = {
-    level?: EnumLevelFieldUpdateOperationsInput | Level
-    message?: StringFieldUpdateOperationsInput | string
-    meta?: JsonNullValueInput | InputJsonValue
+  export type PluginUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    contrubutorIds?: PluginUpdatecontrubutorIdsInput | Enumerable<string>
+    version?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type LogUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    level?: EnumLevelFieldUpdateOperationsInput | Level
-    message?: StringFieldUpdateOperationsInput | string
-    meta?: JsonNullValueInput | InputJsonValue
-  }
-
-  export type IntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
-  }
-
-  export type EnumLevelFilter = {
-    equals?: Level
-    in?: Enumerable<Level>
-    notIn?: Enumerable<Level>
-    not?: NestedEnumLevelFilter | Level
+  export type PluginUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    contrubutorIds?: PluginUpdatecontrubutorIdsInput | Enumerable<string>
+    version?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter = {
@@ -1890,80 +1892,55 @@ export namespace Prisma {
     mode?: QueryMode
     not?: NestedStringFilter | string
   }
-  export type JsonFilter = 
-    | PatchUndefined<
-        Either<Required<JsonFilterBase>, Exclude<keyof Required<JsonFilterBase>, 'path'>>,
-        Required<JsonFilterBase>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase>, 'path'>>
 
-  export type JsonFilterBase = {
-    equals?: InputJsonValue | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string
-    string_starts_with?: string
-    string_ends_with?: string
-    array_contains?: InputJsonValue | null
-    array_starts_with?: InputJsonValue | null
-    array_ends_with?: InputJsonValue | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonNullValueFilter
+  export type StringNullableListFilter = {
+    equals?: Enumerable<string> | null
+    has?: string | null
+    hasEvery?: Enumerable<string>
+    hasSome?: Enumerable<string>
+    isEmpty?: boolean
   }
 
-  export type LogCountOrderByAggregateInput = {
+  export type DateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
+  }
+
+  export type PluginCountOrderByAggregateInput = {
     id?: SortOrder
-    level?: SortOrder
-    message?: SortOrder
-    meta?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    contrubutorIds?: SortOrder
+    version?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type LogAvgOrderByAggregateInput = {
+  export type PluginMaxOrderByAggregateInput = {
     id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    version?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
-  export type LogMaxOrderByAggregateInput = {
+  export type PluginMinOrderByAggregateInput = {
     id?: SortOrder
-    level?: SortOrder
-    message?: SortOrder
-  }
-
-  export type LogMinOrderByAggregateInput = {
-    id?: SortOrder
-    level?: SortOrder
-    message?: SortOrder
-  }
-
-  export type LogSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntWithAggregatesFilter | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedIntFilter
-    _min?: NestedIntFilter
-    _max?: NestedIntFilter
-  }
-
-  export type EnumLevelWithAggregatesFilter = {
-    equals?: Level
-    in?: Enumerable<Level>
-    notIn?: Enumerable<Level>
-    not?: NestedEnumLevelWithAggregatesFilter | Level
-    _count?: NestedIntFilter
-    _min?: NestedEnumLevelFilter
-    _max?: NestedEnumLevelFilter
+    name?: SortOrder
+    description?: SortOrder
+    version?: SortOrder
+    authorId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type StringWithAggregatesFilter = {
@@ -1983,64 +1960,36 @@ export namespace Prisma {
     _min?: NestedStringFilter
     _max?: NestedStringFilter
   }
-  export type JsonWithAggregatesFilter = 
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase>, Exclude<keyof Required<JsonWithAggregatesFilterBase>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase>, 'path'>>
 
-  export type JsonWithAggregatesFilterBase = {
-    equals?: InputJsonValue | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string
-    string_starts_with?: string
-    string_ends_with?: string
-    array_contains?: InputJsonValue | null
-    array_starts_with?: InputJsonValue | null
-    array_ends_with?: InputJsonValue | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonNullValueFilter
+  export type DateTimeWithAggregatesFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeWithAggregatesFilter | Date | string
     _count?: NestedIntFilter
-    _min?: NestedJsonFilter
-    _max?: NestedJsonFilter
+    _min?: NestedDateTimeFilter
+    _max?: NestedDateTimeFilter
   }
 
-  export type EnumLevelFieldUpdateOperationsInput = {
-    set?: Level
+  export type PluginCreatecontrubutorIdsInput = {
+    set: Enumerable<string>
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type PluginUpdatecontrubutorIdsInput = {
+    set?: Enumerable<string>
+    push?: string | Enumerable<string>
   }
 
-  export type NestedIntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
-  }
-
-  export type NestedEnumLevelFilter = {
-    equals?: Level
-    in?: Enumerable<Level>
-    notIn?: Enumerable<Level>
-    not?: NestedEnumLevelFilter | Level
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type NestedStringFilter = {
@@ -2057,41 +2006,15 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
-  export type NestedIntWithAggregatesFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntWithAggregatesFilter | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedIntFilter
-    _min?: NestedIntFilter
-    _max?: NestedIntFilter
-  }
-
-  export type NestedFloatFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedFloatFilter | number
-  }
-
-  export type NestedEnumLevelWithAggregatesFilter = {
-    equals?: Level
-    in?: Enumerable<Level>
-    notIn?: Enumerable<Level>
-    not?: NestedEnumLevelWithAggregatesFilter | Level
-    _count?: NestedIntFilter
-    _min?: NestedEnumLevelFilter
-    _max?: NestedEnumLevelFilter
+  export type NestedDateTimeFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeFilter | Date | string
   }
 
   export type NestedStringWithAggregatesFilter = {
@@ -2110,27 +2033,30 @@ export namespace Prisma {
     _min?: NestedStringFilter
     _max?: NestedStringFilter
   }
-  export type NestedJsonFilter = 
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase>, Exclude<keyof Required<NestedJsonFilterBase>, 'path'>>,
-        Required<NestedJsonFilterBase>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase>, 'path'>>
 
-  export type NestedJsonFilterBase = {
-    equals?: InputJsonValue | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string
-    string_starts_with?: string
-    string_ends_with?: string
-    array_contains?: InputJsonValue | null
-    array_starts_with?: InputJsonValue | null
-    array_ends_with?: InputJsonValue | null
-    lt?: InputJsonValue
-    lte?: InputJsonValue
-    gt?: InputJsonValue
-    gte?: InputJsonValue
-    not?: InputJsonValue | JsonNullValueFilter
+  export type NestedIntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
+  }
+
+  export type NestedDateTimeWithAggregatesFilter = {
+    equals?: Date | string
+    in?: Enumerable<Date> | Enumerable<string>
+    notIn?: Enumerable<Date> | Enumerable<string>
+    lt?: Date | string
+    lte?: Date | string
+    gt?: Date | string
+    gte?: Date | string
+    not?: NestedDateTimeWithAggregatesFilter | Date | string
+    _count?: NestedIntFilter
+    _min?: NestedDateTimeFilter
+    _max?: NestedDateTimeFilter
   }
 
 

@@ -1,12 +1,8 @@
 import "https://deno.land/std@0.183.0/dotenv/load.ts";
 import { Application, Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
 import { logger } from "./logger.ts";
-import { setupRoutes } from "./routes/setup.ts";
-import {} from "npm:arktype@^1.0.14-alpha/src/main.ts"
+import appRouter from "./routes/app.ts";
 
-const router = new Router({
-  prefix: "/api",
-});
 const app = new Application();
 
 // Logger
@@ -23,10 +19,13 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set("X-Response-Time", `${Date.now() - start}ms`);
 });
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+// Router
+app.use(appRouter.routes());
+app.use(appRouter.allowedMethods());
 
-await setupRoutes(router);
+for (const r of appRouter) {
+  console.log(r);
+}
 
 const PORT = Deno.env.get("PORT");
 app.listen({ port: Number(PORT) || 8080 });

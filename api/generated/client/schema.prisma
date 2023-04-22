@@ -12,15 +12,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Log {
-  id      Int    @id @default(autoincrement())
-  level   Level
-  message String
-  meta    Json
-}
+model Plugin {
+  id             String   @id @default(cuid())
+  name           String   @unique
+  description    String
+  contrubutorIds String[]
+  version        String
 
-enum Level {
-  Info
-  Warn
-  Error
+  authorId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id, name])
 }

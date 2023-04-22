@@ -12,19 +12,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String   @id @default(cuid())
-  email    String   @unique
-  password String
-  name     String
-  plugins  Plugin[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([id, email])
-}
-
 model Plugin {
   id             String   @id @default(cuid())
   name           String   @unique
@@ -33,7 +20,6 @@ model Plugin {
   version        String
 
   authorId String
-  author   User   @relation(fields: [authorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

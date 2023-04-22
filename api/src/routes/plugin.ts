@@ -1,20 +1,9 @@
-import { RouteHandler, RouteMeta } from "./setup.ts";
+import { Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
 
-const handler: RouteHandler = (router) => {
-  router.post("/plugin/create", (ctx) => {
-    ctx.response.body = "Hello World!";
-    ctx.assert(ctx.request.hasBody, 400, "No body provided");
-  });
-};
+const pluginRouter = new Router({});
 
-const meta: RouteMeta[] = [
-  {
-    endpoint: "/plugin/create",
-    method: "POST",
-  },
-];
+pluginRouter.get("/", (ctx) => {
+  ctx.response.body = "Hello from plugin";
+});
 
-export default {
-  handler,
-  meta,
-};
+export default pluginRouter;
