@@ -1,5 +1,5 @@
 import "https://deno.land/std@0.183.0/dotenv/load.ts";
-import { Application, Router } from "https://deno.land/x/oak@v12.2.0/mod.ts";
+import { Application } from "https://deno.land/x/oak@v12.2.0/mod.ts";
 import { logger } from "./logger.ts";
 import appRouter from "./routes/app.ts";
 
@@ -23,8 +23,12 @@ app.use(async (ctx, next) => {
 app.use(appRouter.routes());
 app.use(appRouter.allowedMethods());
 
-for (const r of appRouter) {
-  console.log(r);
+logger.info("Routes:");
+for (const { path, methods, paramNames } of appRouter) {
+  logger.info(path, methods);
+  if (paramNames.length > 0) {
+    logger.info("  > Params: " + paramNames.join(", "));
+  }
 }
 
 const PORT = Deno.env.get("PORT");
