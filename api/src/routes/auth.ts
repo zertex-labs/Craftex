@@ -1,5 +1,5 @@
-import { Router } from "https://deno.land/x/oak@v12.2.0/router.ts";
-import { logger } from "../logger.ts";
+import { Router } from "oak/router.ts";
+import { logger } from "$logger";
 import { AUTH_CLIENTS, SUPPORTED_CLIENTS } from "../auth/strategies/index.ts";
 
 function getClientCode(key: keyof typeof AUTH_CLIENTS){

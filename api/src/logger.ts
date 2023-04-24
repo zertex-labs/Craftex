@@ -1,3 +1,3 @@
-import Logger from "https://deno.land/x/logger/logger.ts";
+import Logger from "https://deno.land/x/logger@v1.0.2/logger.ts";
 
 export const logger = new Logger();

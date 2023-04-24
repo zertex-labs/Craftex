@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak@v12.2.0/router.ts";
+import { Router } from "oak/router.ts";
 import pluginRouter from "./plugin.ts";
 import authRouter from "./auth.ts";
 

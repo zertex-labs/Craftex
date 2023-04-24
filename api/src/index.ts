@@ -1,6 +1,6 @@
 import "https://deno.land/std@0.183.0/dotenv/load.ts";
-import { Application } from "https://deno.land/x/oak@v12.2.0/mod.ts";
-import { logger } from "./logger.ts";
+import { Application } from "oak/mod.ts";
+import { logger } from "$logger";
 import appRouter from "./routes/app.ts";
 
 const app = new Application();

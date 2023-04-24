@@ -26,3 +26,24 @@ model Plugin {
 
   @@index([id, name])
 }
+
+model User {
+  id             String   @id @default(cuid())
+  name           String   @unique
+  email          String   @unique
+  password       String
+  pluginIds      String[]
+  contrubutorIds String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id, name])
+}
+
+enum Strategy {
+  DISCORD
+  GITHUB
+}
+
+
