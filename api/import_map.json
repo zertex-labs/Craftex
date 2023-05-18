@@ -2,6 +2,7 @@
   "imports": {
     "supabase": "https://esm.sh/@supabase/supabase-js@2.21.0",
     "oak/": "https://deno.land/x/oak@v12.2.0/",
+    "std/": "https://deno.land/std@0.184.0/",
     "@client/": "./src/client/",
     "$logger": "./src/logger.ts"
   }

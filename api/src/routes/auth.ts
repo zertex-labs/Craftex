@@ -1,8 +1,10 @@
+// deno-lint-ignore-file no-explicit-any
 import { Router } from "oak/router.ts";
 import { logger } from "$logger";
 import { AUTH_CLIENTS, SUPPORTED_CLIENTS } from "../auth/strategies/index.ts";
+import { setCookie } from "std/http/cookie.ts";
 
-function getClientCode(key: keyof typeof AUTH_CLIENTS){
+function getClientCode(key: keyof typeof AUTH_CLIENTS) {
   return AUTH_CLIENTS[key].code;
 }
 
@@ -17,11 +19,14 @@ router.get("/callback/:type", async (ctx) => {
     return;
   }
 
-  const authResponse = await getClientCode(type as any).processAuth(
-    ctx.request.url
-  );
 
-  logger.info(authResponse, "auth response");
+  const client = getClientCode(type as any);
+
+  const authResponse: any = await client.processAuth(ctx.request.url);
+
+  if (authResponse) {
+    client.handleUserResponse(authResponse);
+  }
 });
 
 router.get("/login/:type", (ctx) => {
