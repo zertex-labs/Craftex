@@ -2,8 +2,7 @@
 import { Router } from "oak/router.ts";
 import { logger } from "$logger";
 import { AUTH_CLIENTS, SUPPORTED_CLIENTS } from "../auth/strategies/index.ts";
-import { setCookie } from "std/http/cookie.ts";
-
+ 
 function getClientCode(key: keyof typeof AUTH_CLIENTS) {
   return AUTH_CLIENTS[key].code;
 }

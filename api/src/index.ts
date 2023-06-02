@@ -2,6 +2,7 @@ import "https://deno.land/std@0.183.0/dotenv/load.ts";
 import { Application } from "oak/mod.ts";
 import { logger } from "$logger";
 import appRouter from "./routes/app.ts";
+import "./db/index.ts";
 
 const app = new Application();
 

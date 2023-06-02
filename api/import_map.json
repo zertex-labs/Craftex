@@ -6,4 +6,4 @@
     "@client/": "./src/client/",
     "$logger": "./src/logger.ts"
   }
-}   
+}
