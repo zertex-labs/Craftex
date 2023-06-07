@@ -1,6 +1,10 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
-const inter = Inter({ subsets: ["latin"] });
+import { Oxygen_Mono } from "next/font/google";
+
+import { ToasterProvider, SupabaseProvider, UserProvider } from "@/providers";
+import ModalProvider from "@/providers/ModalProvider";
+
+const font = Oxygen_Mono({ subsets: ["latin"], weight: "400" });
 
 export const metadata = {
   title: "Craftex",
@@ -14,7 +18,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={font.className}>
+        <ToasterProvider />
+        <SupabaseProvider>
+          <UserProvider>
+            <ModalProvider />
+            {children}</UserProvider>
+        </SupabaseProvider>
+      </body>
     </html>
   );
 }
