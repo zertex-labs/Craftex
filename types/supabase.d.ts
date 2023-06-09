@@ -167,21 +167,21 @@ export interface Database {
         Row: {
           avatar_url: string | null
           billing_address: Json | null
-          full_name: string | null
+          username: string | null
           id: string
           payment_method: Json | null
         }
         Insert: {
           avatar_url?: string | null
           billing_address?: Json | null
-          full_name?: string | null
+          username?: string | null
           id: string
           payment_method?: Json | null
         }
         Update: {
           avatar_url?: string | null
           billing_address?: Json | null
-          full_name?: string | null
+          username?: string | null
           id?: string
           payment_method?: Json | null
         }
