@@ -22,6 +22,14 @@ export interface Database {
           id?: string
           stripe_customer_id?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "customers_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       plugin: {
         Row: {
@@ -42,6 +50,7 @@ export interface Database {
           id?: number
           title?: string
         }
+        Relationships: []
       }
       prices: {
         Row: {
@@ -83,6 +92,14 @@ export interface Database {
           type?: Database["public"]["Enums"]["pricing_type"] | null
           unit_amount?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "prices_product_id_fkey"
+            columns: ["product_id"]
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       products: {
         Row: {
@@ -109,6 +126,44 @@ export interface Database {
           metadata?: Json | null
           name?: string | null
         }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          id: string
+          updated_at?: string | null
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       subscriptions: {
         Row: {
@@ -162,29 +217,48 @@ export interface Database {
           trial_start?: string | null
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_price_id_fkey"
+            columns: ["price_id"]
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       users: {
         Row: {
-          avatar_url: string | null
           billing_address: Json | null
-          username: string | null
           id: string
           payment_method: Json | null
+          profile: string | null
         }
         Insert: {
-          avatar_url?: string | null
           billing_address?: Json | null
-          username?: string | null
           id: string
           payment_method?: Json | null
+          profile?: string | null
         }
         Update: {
-          avatar_url?: string | null
           billing_address?: Json | null
-          username?: string | null
           id?: string
           payment_method?: Json | null
+          profile?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
