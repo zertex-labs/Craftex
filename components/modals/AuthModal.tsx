@@ -4,35 +4,70 @@ import {
   useSessionContext,
   useSupabaseClient,
 } from "@supabase/auth-helpers-react";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa, ViewType } from "@supabase/auth-ui-shared";
+import { ViewType } from "@supabase/auth-ui-shared";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useAuthModal } from "@/hooks/modals";
 import { Modal } from ".";
 
-const title: Record<ViewType, string> = {
-  sign_in: "Welcome back",
-  sign_up: "Create an account",
-  forgotten_password: "Reset your password",
-  update_password: "Update your password",
-  verify_otp: "Verify your email",
-  magic_link: "Sign in with magic link",
+import { CommonAuthModalProps } from "./auth";
+import AuthModalSignIn from "./auth/AuthModalSignIn";
+import AuthModalSignUp from "./auth/AuthModalSignUp";
+import AuthModalOAuthProviders from "./auth/AuthModalOAuthProviders";
+
+interface ViewMeta {
+  title: string;
+  description: string;
+  component: React.FC<CommonAuthModalProps> | null;
+  includeProviders?: boolean;
+}
+
+const views: ViewType[] = [
+  "sign_in",
+  "sign_up",
+  "forgotten_password",
+  "update_password",
+  "verify_otp",
+  "magic_link",
+];
+
+const meta: Record<ViewType, ViewMeta> = {
+  sign_in: {
+    title: "Welcome back",
+    description: "Login to your account.",
+    component: AuthModalSignIn,
+    includeProviders: true,
+  },
+  sign_up: {
+    title: "Create an account",
+    description: "Welcome to Craftex!",
+    component: AuthModalSignUp,
+  },
+  forgotten_password: {
+    title: "Reset your password",
+    description: "Enter your email to reset your password.",
+    component: null,
+  },
+  update_password: {
+    title: "Update your password",
+    description: "Enter your new password.",
+    component: null,
+  },
+  verify_otp: {
+    title: "Verify your email",
+    description: "Enter the OTP sent to your email.",
+    component: null,
+  },
+  magic_link: {
+    title: "Sign in with magic link",
+    description: "Login to your account.",
+    component: null,
+  },
 };
 
-const description: Record<ViewType, string> = {
-  sign_in: "Login to your account.",
-  sign_up: "Welcome to Craftex!",
-  forgotten_password: "Enter your email to reset your password.",
-  update_password: "Enter your new password.",
-  verify_otp: "Enter the OTP sent to your email.",
-  magic_link: "Login to your account.",
-};
-
-const email_input_placeholder = "example@craftex.dev";
-
-const viewsWithProviders: ViewType[] = ["sign_in", "sign_up"];
+export type AuthModalProvider = "github" | "discord" | "google"
+const providers: AuthModalProvider[] = ["github", "google", 'discord'];
 
 export const AuthModal = () => {
   const { session } = useSessionContext();
@@ -41,7 +76,7 @@ export const AuthModal = () => {
 
   const supabaseClient = useSupabaseClient();
 
-  const [view, setView] = useState<ViewType>("sign_in");
+  const [view, setView] = useState<ViewType>("magic_link");
 
   useEffect(() => {
     if (session) {
@@ -56,91 +91,41 @@ export const AuthModal = () => {
     }
   };
 
+  const Component = meta[view].component;
+
   return (
     <Modal
-      title={title[view]}
-      description={description[view]}
+      title={meta[view].title ?? "What? How did you get here?"}
+      description={meta[view].description ?? "Hmm... This shouldn't happen."}
       isOpen={isOpen}
       onChange={onChange}
     >
-      <Auth
-        supabaseClient={supabaseClient}
-        providers={
-          viewsWithProviders.includes(view) ? ["github", "discord", "google"] : []
-        }
-        magicLink={true}
-        appearance={{
-          theme: ThemeSupa,
-          variables: {
-            default: {
-              colors: {
-                brand: "#0284c7",
-                brandAccent: "#0369a1",
-              },
-            },
-          },
-        }}
-        theme="dark"
-        socialLayout="horizontal"
-        showLinks={false}
-        view={view}
-        localization={{
-          variables: {
-            sign_in: {
-              button_label: "Sign in",
-              email_input_placeholder,
-            },
-            sign_up: {
-              button_label: "Sign up",
-              email_input_placeholder,
-            },
-            forgotten_password: {
-              button_label: "Reset password",
-              email_input_placeholder,
-            },
-            magic_link: {
-              button_label: "Send magic link",
-              email_input_placeholder,
-            },
-            update_password: {
-              button_label: "Update password",
-            },
-            verify_otp: {
-              button_label: "Verify OTP",
-              email_input_placeholder,
-            },
-          },
-        }}
-      />
-      <div className="flex flex-col items-start text-sm text-gray-300 gap-y-1">
-        {view == "sign_up" ? (
-          <button
-            className=" text-sky-400 hover:text-sky-500"
-            onClick={() => setView("sign_in")}
-          >
-            Already have an account?
-          </button>
-        ) : (
-          <button onClick={() => setView("sign_up")}>
-            Need an account?
-            <span className="ml-1 text-sky-400 hover:text-sky-500">
-              Register
-            </span>
-          </button>
+      <div className="">
+        {meta[view].includeProviders && (
+          <AuthModalOAuthProviders client={supabaseClient} providers={providers} />
         )}
-        <button
-          className="mt-1 hover:text-sky-400"
-          onClick={() => setView("magic_link")}
-        >
-          Sign in with magic link
-        </button>
-        <button
-          className="hover:text-sky-400"
-          onClick={() => setView("forgotten_password")}
-        >
-          Forgot your password?
-        </button>
+
+        {Component ? (
+          <Component client={supabaseClient} />
+        ) : (
+          <p className="text-center text-gray-200 text-sm py-4">
+            <span className="font-semibold">{view}</span> view is invalid
+            somehow. Please contact us at{" "}
+            <span className="text-sky-400 font-semibold">idk yet</span>
+          </p>
+        )}
       </div>
+      {views.map((v) => (
+        <button
+          key={v}
+          className={`${
+            view === v ? "bg-sky-400" : "bg-gray-700"
+          } text-gray-200 text-sm px-3 py-1 rounded-md mr-2`}
+          onClick={() => setView(v)}
+        >
+          {v}
+        </button>
+      ))}
     </Modal>
   );
 };
