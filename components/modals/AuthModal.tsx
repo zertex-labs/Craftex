@@ -43,6 +43,7 @@ const meta: Record<ViewType, ViewMeta> = {
     title: "Create an account",
     description: "Welcome to Craftex!",
     component: AuthModalSignUp,
+    includeProviders: true,
   },
   forgotten_password: {
     title: "Reset your password",
@@ -76,7 +77,7 @@ export const AuthModal = () => {
 
   const supabaseClient = useSupabaseClient();
 
-  const [view, setView] = useState<ViewType>("magic_link");
+  const [view, setView] = useState<ViewType>("sign_in");
 
   useEffect(() => {
     if (session) {

@@ -34,7 +34,7 @@ export const UserContextProvider = (props: Props) => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
-  const getUserDetails = () => supabase.from("users").select("*").single();
+  const getUserDetails = () => supabase.from("users").select("*, profiles(*)").single();
   const getSubscription = () =>
     supabase
       .from("subscriptions")
@@ -43,12 +43,16 @@ export const UserContextProvider = (props: Props) => {
       .single();
 
   useEffect(() => {
+    console.log("yo?", user, isLoadingUser, userDetails, subscription)
+    if(!user) return;
     if (user && !isLoadingData && !userDetails && !subscription) {
       setIsloadingData(true);
       Promise.allSettled([getUserDetails(), getSubscription()]).then(
         (results) => {
-          const subscription = results[1];
-          const userDetails = results[0];
+          const userDetails = results[1];
+          const subscription = results[0];
+
+          console.log(results, 'wtf is going on');
 
           if (userDetails.status === "fulfilled") {
             setUserDetails(userDetails.value.data as UserDetails);
@@ -81,7 +85,7 @@ export const UserContextProvider = (props: Props) => {
 export const useUser = () => {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error(`useUser must be used within a MyUserContextProvider.`);
+    throw new Error(`useUser must be used within a UserContext.`);
   }
   return context;
 };

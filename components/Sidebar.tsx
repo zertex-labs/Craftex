@@ -26,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children: childen }) => {
   "use client";
 
   const pathname = usePathname();
-  const user = useUser();
+  const userCtx = useUser();
 
   const routes = useMemo<SidebarRoute[]>(
     () => [
@@ -49,8 +49,8 @@ const Sidebar: React.FC<SidebarProps> = ({ children: childen }) => {
   return (
     <div className="flex h-full text-gray-200">
       <div className="flex flex-col gap-y-2 h-full w-[325px] p-2">
-        <SidebarSectionTop userContext={user} routes={routes} />
-        <SidebarSectionBottom userContext={user} />
+        <SidebarSectionTop userContext={userCtx} routes={routes} />
+        <SidebarSectionBottom userContext={userCtx} />
       </div>
       <main className="flex-1 h-full py-2 overflow-y-auto">{childen}</main>
     </div>
