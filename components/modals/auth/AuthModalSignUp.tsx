@@ -1,10 +1,9 @@
 "use client";
 
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import { CommonAuthModalProps } from ".";
-import { p } from "drizzle-orm/query-promise.d-d7b61248";
 import { twMerge } from "tailwind-merge";
+import { CommonAuthModalProps } from ".";
 
 export interface AuthModalSignUpForm {
   username: string;
