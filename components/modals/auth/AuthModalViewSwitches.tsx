@@ -66,7 +66,7 @@ const switches: Record<ViewType, React.FC<ModalViewProps>> = {
       view="update_password"
       text={{
         title: "Forgot your password?",
-        button: "Reset Password",
+        button: "Change Password",
       }}
     />
   ),
@@ -82,8 +82,7 @@ const switches: Record<ViewType, React.FC<ModalViewProps>> = {
     <GenericSwitch
       view="verify_otp"
       text={{
-        title: "Verify your email",
-        button: "Verify",
+        button: "Verify your email",
       }}
     />
   ),
@@ -95,13 +94,7 @@ const AuthModalView: React.FC<AuthModalViewProps> = ({ views }) => {
     <div className="text-sm text-gray-400">
       {views.map((view) => {
         const Component = switches[view];
-        return Component ? (
-          <Component key={view} />
-        ) : (
-          <p>
-            Go to <button onClick={() => setView(view)}>{view}</button>
-          </p>
-        );
+        return <Component key={view} />;
       })}
     </div>
   );
