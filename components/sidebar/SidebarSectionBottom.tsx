@@ -1,9 +1,8 @@
 import { AiOutlinePlus } from "react-icons/ai";
 
+import { useAuthModal } from "@/hooks/modals";
 import { UserContextType } from "@/hooks/useUser";
 import Container from "../Container";
-import { useAuthModal } from "@/hooks/modals";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export interface SidebarSectionBottomProps {
   userContext: UserContextType;
