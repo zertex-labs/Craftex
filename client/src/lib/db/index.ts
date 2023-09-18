@@ -9,10 +9,10 @@ export const LuciaProviderIds: Record<
 > = {
   username: "username",
   github: "github",
-} as const
+} as const;
 
 export const connection = connect({
-  url: import.meta.env.DATABASE_URL,
+  url: import.meta.env.DB_URL,
 });
 export const db = drizzle(connection);
 
