@@ -1,12 +1,8 @@
-export const LuciaTableNames = {
-  user: "auth_user",
-  session: "user_session",
-  key: "user_key",
-} as const;
-
 import { mysqlTable, bigint, varchar } from "drizzle-orm/mysql-core";
 
-export const user = mysqlTable(LuciaTableNames.user, {
+import TableNames from "./table_names";
+
+export const user = mysqlTable(TableNames.user, {
   id: varchar("id", {
     length: 15,
   }).primaryKey(),
@@ -16,7 +12,7 @@ export const user = mysqlTable(LuciaTableNames.user, {
   }).notNull(),
 });
 
-export const key = mysqlTable(LuciaTableNames.key, {
+export const key = mysqlTable(TableNames.key, {
   id: varchar("id", {
     length: 255,
   }).primaryKey(),
@@ -28,7 +24,7 @@ export const key = mysqlTable(LuciaTableNames.key, {
   }),
 });
 
-export const session = mysqlTable(LuciaTableNames.session, {
+export const session = mysqlTable(TableNames.session, {
   id: varchar("id", {
     length: 128,
   }).primaryKey(),
