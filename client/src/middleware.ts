@@ -6,4 +6,3 @@ export const onRequest: MiddlewareResponseHandler = async (context, next) => {
   context.locals.auth = auth.handleRequest(context);
   return next();
 };
-
