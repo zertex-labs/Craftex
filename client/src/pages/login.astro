@@ -1,4 +1,5 @@
 ---
+import { LuciaError } from "lucia";
 import Layout from "../layouts/Layout.astro";
 import { LuciaProviderIds } from "../lib/db";
 import { auth } from "../lib/lucia";
@@ -44,24 +45,37 @@ if (Astro.request.method === "POST") {
         password
       );
 
-      console.log('Found key', key);
+      console.log("Found key", key);
 
       const session = await auth.createSession({
         userId: key.userId,
         attributes: {},
       });
 
-      console.log('Created session', session);
+      console.log("Created session", session);
 
       Astro.locals.auth.setSession(session);
 
       return Astro.redirect("/", 302);
     } catch (e) {
-      console.error(e);
-      errorMessage = "Invalid username or password";
+      if (e instanceof LuciaError) {
+        console.log("LuciaError", e.message);
+        console.table(e);
+        // (["AUTH_INVALID_KEY_ID"] as LuciaErrorMessage[]).includes(e.message)
+        if (e.message == "AUTH_INVALID_KEY_ID") {
+          errorMessage = "Invalid username or password";
+        }
+      } else {
+        console.error(e);
+
+        errorMessage = "An unknown error occurred";
+      }
     }
   } else {
-    errorMessage = "Invalid username or password";
+    errorMessage = "Invalid inputs; please try again";
+    if (usernameIsValid) {
+      usernameInput = username;
+    }
   }
 }
 ---
