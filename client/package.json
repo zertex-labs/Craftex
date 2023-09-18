@@ -7,11 +7,29 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "db:generate": "drizzle-kit generate:mysql",
+    "db:up": "drizzle-kit up:mysql",
+    "db:push": "drizzle-kit push:mysql",
+    "db:check": "drizzle-kit check:mysql",
+    "studio": "drizzle-kit studio --port 5000 --verbose"
   },
   "dependencies": {
+    "@astrojs/node": "^6.0.0",
     "@astrojs/tailwind": "^5.0.0",
+    "@lucia-auth/adapter-mysql": "^2.0.0",
+    "@planetscale/database": "^1.11.0",
     "astro": "^3.0.13",
+    "drizzle-kit": "^0.19.13",
+    "drizzle-orm": "^0.28.6",
+    "lucia": "^2.5.0",
+    "nanostores": "^0.9.3",
     "tailwindcss": "^3.0.24"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.0",
+    "@types/pg": "^8.10.2",
+    "dotenv": "^16.3.1",
+    "mysql2": "^3.6.1"
   }
 }
