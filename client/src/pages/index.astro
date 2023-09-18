@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 
 const session = await Astro.locals.auth.validate();
 if (!session) return Astro.redirect("/login", 302);
+
+
 ---
 
 <Layout title="Welcome to Craftex.">
