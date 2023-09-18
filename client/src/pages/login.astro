@@ -1,0 +1,49 @@
+---
+import { LuciaProviderIds } from "../lib/db";
+import { auth } from "../lib/lucia";
+
+let errorMessage: string | null = null;
+let usernameInput = "";
+
+// alot of duplicate logic, testing atm will cleanup later
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const username = formData.get("username");
+  const password = formData.get("password");
+
+  if (typeof username === "string") usernameInput = username;
+
+  const usernameIsValid =
+    username &&
+    typeof username === "string" &&
+    username.length >= 4 &&
+    username.length <= 64;
+
+  const passwordIsValid =
+    password &&
+    typeof password === "string" &&
+    password.length >= 8 &&
+    password.length <= 255;
+
+  if (usernameIsValid && passwordIsValid) {
+    try {
+      const key = await auth.useKey(
+        LuciaProviderIds["username"],
+        username.toLowerCase(),
+        password
+      );
+
+      const session = await auth.createSession({
+        userId: key.userId,
+        attributes: {},
+      });
+
+      Astro.locals.auth.setSession(session);
+
+      return Astro.redirect("/", 302);
+    } catch (e) {}
+  } else {
+    errorMessage = "Invalid username or password";
+  }
+}
+---

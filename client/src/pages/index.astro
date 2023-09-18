@@ -1,9 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
+console.log(Astro.locals.auth)
+
 const session = await Astro.locals.auth.validate();
+if (!session) return Astro.redirect("/login", 302);
 ---
 
 <Layout title="Welcome to Astro.">
-  <main></main>
+  <main>
+    <h1>User Id {session.user.userId}</h1>
+    <h1>Username {session.user.username}</h1>
+
+    <form method="post" action="/logout">
+      
+    </form>
+  </main>
 </Layout>
