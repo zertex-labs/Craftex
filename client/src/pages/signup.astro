@@ -33,13 +33,16 @@ if (Astro.request.method === "POST") {
     password.length >= 8 &&
     password.length <= 255;
 
-  console.log("usernameIsValid", usernameIsValid);
-  console.log("passwordIsValid", passwordIsValid);
+  console.table({
+    username,
+    password,
+    usernameIsValid,
+    passwordIsValid,
+  })
 
   if (usernameIsValid && passwordIsValid) {
     try {
 
-      console.log('create')
       // we create the user, session creation happens when only when a user logs in
       const user = await auth.createUser({
         key: {
@@ -55,7 +58,8 @@ if (Astro.request.method === "POST") {
 
       console.log("created user", user);
 
-      return Astro.redirect("/login", 302);
+      return Astro.redirect(`/login?username=${username}`, 302);
+
     } catch (e) {
       console.log("error creating user", e);
       if ((e as any)?.message === "Duplicate entry") {

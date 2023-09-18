@@ -12,8 +12,8 @@ if (!session) return Astro.redirect("/login", 302);
     <h1>User Id {session.user.userId}</h1>
     <h1>Username {session.user.username}</h1>
 
-    <form method="post" action="/logout">
-      
+    <form method="POST" action="/logout">
+      <button type="submit">Logout</button>
     </form>
   </main>
 </Layout>
