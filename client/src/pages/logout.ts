@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { auth } from "../lib/lucia";
 
-export const post: APIRoute = async ({ locals, redirect }) => {
+export const POST: APIRoute = async ({ locals, redirect }) => {
   const session = await locals.auth.validate();
   if (!session) {
     return new Response(
