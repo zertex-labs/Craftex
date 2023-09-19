@@ -2,9 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 
 const session = await Astro.locals.auth.validate();
-if (!session) return Astro.redirect("/login", 302);
-
-
+if (!session) return Astro.redirect("/auth/login", 302);
 ---
 
 <Layout title="Welcome to Craftex.">
@@ -12,8 +10,25 @@ if (!session) return Astro.redirect("/login", 302);
     <h1>User Id {session.user.userId}</h1>
     <h1>Username {session.user.username}</h1>
 
-    <form method="POST" action="/logout">
+    <form
+      method="post"
+      action="/api/auth/logout"
+    >
       <button type="submit">Logout</button>
+    </form>
+
+    <form
+      method="post"
+      action="/upload"
+      enctype="multipart/form-data"
+    >
+      <input
+        type="file"
+        name="file"
+        accept=".jar"
+      />
+
+      <button type="submit">Upload</button>
     </form>
   </main>
 </Layout>

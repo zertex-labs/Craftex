@@ -18,3 +18,4 @@ export const db = drizzle(connection);
 
 export default db;
 
+export * as tables from "./schema";

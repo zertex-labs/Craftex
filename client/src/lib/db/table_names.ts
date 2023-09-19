@@ -3,4 +3,5 @@ export default {
   key: "user_key",
   session: "user_session",
   plugin: "plugin",
+  pluginVersions: "plugin_versions",
 } as const;

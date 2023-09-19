@@ -4,7 +4,7 @@ import { planetscale } from "@lucia-auth/adapter-mysql";
 
 import TableNames from "./db/table_names";
 import { connection } from "./db";
-import { omit, pick } from "./internal/helpers/object";
+import { omit, pick } from "./helpers/object";
 
 export const auth = lucia({
   adapter: planetscale(connection, pick(TableNames, "key", "session", "user")),
@@ -18,3 +18,5 @@ export const auth = lucia({
 });
 
 export type Auth = typeof auth;
+
+export default auth;
