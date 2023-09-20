@@ -2,8 +2,8 @@ import { lucia } from "lucia";
 import { astro } from "lucia/middleware";
 import { planetscale } from "@lucia-auth/adapter-mysql";
 
-import TableNames from "./db/table_names";
-import { connection } from "./db";
+import TableNames from "$server/db/table_names";
+import { connection } from "$server/db";
 import { omit, pick } from "./helpers/object";
 
 export const auth = lucia({

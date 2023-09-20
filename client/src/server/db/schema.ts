@@ -6,8 +6,9 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 
-import { CUID2_LENGTH, createId } from "../helpers/cuid2";
 import TableNames from "./table_names";
+import { CUID2_LENGTH } from "$lib/constants";
+import type { PluginVersionEntry } from "$lib/types";
 
 export const user = mysqlTable(TableNames.user, {
   id: varchar("id", {
@@ -46,44 +47,26 @@ export const session = mysqlTable(TableNames.session, {
   }).notNull(),
 });
 
-export type PluginVersion = {
-  pluginId: string; // used to find the plugin in spaces
-  version: string;
-};
 export const pluginVersions = mysqlTable(TableNames.pluginVersions, {
+  // use '$lib/helpers/cuid2.ts' to create
   id: varchar("id", {
     length: CUID2_LENGTH,
-  })
-    .$defaultFn(() => createId())
-    .primaryKey(),
+  }).primaryKey(),
 
   pluginId: varchar("plugin_id", {
     length: CUID2_LENGTH,
   }).notNull(),
 
-  versions: json("versions").$type<PluginVersion[]>().notNull(),
+  versions: json("versions").$type<PluginVersionEntry[]>().notNull(),
 });
 
 export const plugin = mysqlTable(TableNames.plugin, {
+  // use '$lib/helpers/cuid2.ts' to create
   id: varchar("id", {
     length: CUID2_LENGTH,
-  })
-    .$defaultFn(() => createId())
-    .primaryKey(),
-
-  uploaderId: varchar("uploader_id", {
-    length: 15,
-  }).notNull(),
-
-  dataId: varchar("data_id", {
-    length: CUID2_LENGTH,
-  }).notNull(),
+  }).primaryKey(),
 
   title: varchar("title", {
-    length: 255,
-  }).notNull(),
-  // TODO short description sounds dumb think of a better name
-  shortDescription: varchar("short_description", {
     length: 255,
   }).notNull(),
   description: varchar("description", {
@@ -93,6 +76,9 @@ export const plugin = mysqlTable(TableNames.plugin, {
     length: 32,
   }).notNull(),
 
+  publisherId: varchar("publisher_id", {
+    length: 15,
+  }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

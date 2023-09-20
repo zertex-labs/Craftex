@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "$layouts/Layout.astro";
 
 const session = await Astro.locals.auth.validate();
 if (!session) return Astro.redirect("/auth/login", 302);
@@ -17,18 +17,6 @@ if (!session) return Astro.redirect("/auth/login", 302);
       <button type="submit">Logout</button>
     </form>
 
-    <form
-      method="post"
-      action="/upload"
-      enctype="multipart/form-data"
-    >
-      <input
-        type="file"
-        name="file"
-        accept=".jar"
-      />
-
-      <button type="submit">Upload</button>
-    </form>
+    <a href="/plugins/upload">Upload Plugin</a>
   </main>
 </Layout>

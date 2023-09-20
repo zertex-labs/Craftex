@@ -1,16 +1,28 @@
+import { CUID2_LENGTH } from "$lib/constants";
 import { init } from "@paralleldrive/cuid2";
 
-if (!import.meta.env.CUID2_FINGERPRINT) {
-  console.error(
-    "Please set CUID2_FINGERPRINT in your .env file. This fingerprint will be used to generate CUID2s. All old CUID2s will be invalidated."
+const fingerprint = import.meta.env.CUID2_FINGERPRINT;
+
+if (!fingerprint) {
+  throw new Error(
+    "CUID2_FINGERPRINT is not set in .env. Might be caused by this running client-side."
   );
-  process.exit(1);
 }
 
-export const CUID2_LENGTH = 64;
+export const createId = (time?: boolean): string => {
 
-export const createId = init({
-  length: CUID2_LENGTH,
-  fingerprint: import.meta.env.CUID2_FINGERPRINT,
-});
+  const _createId = init({
+    length: CUID2_LENGTH,
+    fingerprint,
+  });
+
+  if (time) {
+    console.time("createId");
+    const id = _createId();
+    console.timeEnd("createId");
+    return id;
+  }
+
+  return _createId();
+};
 

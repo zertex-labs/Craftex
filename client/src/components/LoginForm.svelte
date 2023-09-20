@@ -30,9 +30,9 @@
   >
     <input
       class="border-2 border-gray-600"
-      type="text"
       name="username"
       id="username"
+      placeholder="Username"
     />
     <br />
     <input
@@ -40,6 +40,7 @@
       type="password"
       name="password"
       id="password"
+      placeholder="Password"
     />
     <button>Sign In</button>
   </form>

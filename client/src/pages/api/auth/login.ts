@@ -1,11 +1,11 @@
 import type { APIRoute } from "astro";
 import { LuciaError } from "lucia";
 
-import { LuciaProviderIds } from "$lib/db";
+import { LuciaProviderIds } from "$lib/constants";
 import { response } from "$lib/helpers/response";
-import { usernameWithPasswordSchema } from "$lib/shared";
 import auth from "$lib/lucia";
 import type { LuciaErrorMessage } from "$lib/types";
+import { usernameWithPasswordSchema } from "$lib/validation";
 
 const safeLuciaErrors: LuciaErrorMessage[] = [
   "AUTH_INVALID_KEY_ID",

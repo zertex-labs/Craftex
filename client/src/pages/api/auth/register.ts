@@ -1,11 +1,13 @@
 import type { APIRoute } from "astro";
-import { LuciaError } from "lucia";
-
-import { LuciaProviderIds } from "$lib/db";
-import { response } from "$lib/helpers/response";
-import { passwordSchema, usernameWithPasswordSchema } from "$lib/shared";
-import auth from "$lib/lucia";
 import { z } from "zod";
+
+import { LuciaProviderIds } from "$lib/constants";
+import { response } from "$lib/helpers/response";
+import auth from "$lib/lucia";
+import {
+  passwordSchema,
+  usernameWithPasswordSchema,
+} from "$lib/validation";
 
 export const POST: APIRoute = async ({ locals, request }) => {
   const formData = await request.formData();

@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "4d61f024-9157-4d9e-9c28-b527ab599243",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "bf906c0d-a6a6-4d19-bb4b-a043e39f5173",
+  "prevId": "4b0cb2b3-b4b0-4a7f-85ae-b43a4e57fdd6",
   "tables": {
     "user_key": {
       "name": "user_key",
@@ -51,22 +51,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "uploader_id": {
-          "name": "uploader_id",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "title": {
           "name": "title",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "short_description": {
-          "name": "short_description",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
@@ -82,6 +68,13 @@
         "latest_version": {
           "name": "latest_version",
           "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "publisher_id": {
+          "name": "publisher_id",
+          "type": "varchar(15)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
