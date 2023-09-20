@@ -12,14 +12,14 @@ export type Maybe<T> = Nullable<Optional<T>>;
 
 export type Arrayable<T> = T | T[];
 
-export type FailableResponse<DataType = unknown, ErrorType = string> =
+export type FailableResponse<DataType = undefined, ErrorType = string> =
   | {
       failed: true;
       error: ErrorType;
     }
   | {
       failed: false;
-      data?: DataType;
+      data: DataType;
     };
 
 export type ValidLuciaProviderIds = "username" | "github";

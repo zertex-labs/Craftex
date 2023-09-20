@@ -35,7 +35,7 @@ export const getRequiredDataFromPluginYAML = async (
     console.error(e);
     return {
       failed: true,
-      error: "Failed to parse jszip from blob",
+      error: "Failed to parse jszip from blob. Is it a valid .jar file?",
     };
   }
 
@@ -50,7 +50,6 @@ export const getRequiredDataFromPluginYAML = async (
 
   let contents: YAMLRequiredPluginData;
   try {
-
     contents = await parsePluginYAML(pluginYml, jszip);
   } catch(e) {
     console.error(e);

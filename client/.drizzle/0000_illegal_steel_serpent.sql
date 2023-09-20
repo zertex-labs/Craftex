@@ -7,21 +7,16 @@ CREATE TABLE `user_key` (
 --> statement-breakpoint
 CREATE TABLE `plugin` (
 	`id` varchar(64) NOT NULL,
-	`uploader_id` varchar(15) NOT NULL,
-	`title` varchar(255) NOT NULL,
-	`short_description` varchar(255) NOT NULL,
+	`name` varchar(64) NOT NULL,
 	`description` varchar(1024) NOT NULL,
-	`latest_version` varchar(32) NOT NULL,
+	`phase` varchar(16) NOT NULL,
+	`versions` json NOT NULL,
+	`socials` json NOT NULL DEFAULT ('{}'),
+	`publisher_id` varchar(15) NOT NULL,
 	`created_at` timestamp NOT NULL DEFAULT (now()),
 	`updated_at` timestamp NOT NULL DEFAULT (now()),
-	CONSTRAINT `plugin_id` PRIMARY KEY(`id`)
-);
---> statement-breakpoint
-CREATE TABLE `plugin_versions` (
-	`id` varchar(64) NOT NULL,
-	`plugin_id` varchar(64) NOT NULL,
-	`versions` json NOT NULL,
-	CONSTRAINT `plugin_versions_id` PRIMARY KEY(`id`)
+	CONSTRAINT `plugin_id` PRIMARY KEY(`id`),
+	CONSTRAINT `plugin_name_unique` UNIQUE(`name`)
 );
 --> statement-breakpoint
 CREATE TABLE `user_session` (

@@ -4,16 +4,16 @@ const shouldDisableMin = true;
 const disableMin = shouldDisableMin && import.meta.env.DEV;
 
 export const uploadPluginSchema = z.object({
-  title: z
+  name: z
     .string()
     .min(disableMin ? 1 : 4)
-    .max(255),
+    .max(64)
+    .nullable()
+    .optional(),
   description: z
     .string()
     .min(disableMin ? 1 : 16)
     .max(1024),
-  version: z.string().min(1).max(32),
-  // file.size == 0 should not be valid
   file: z
     .instanceof(Blob)
     .refine((file) => file.size < 1024 * 1024 * 10, {
@@ -33,5 +33,10 @@ export const passwordSchema = z.string().min(8).max(255);
 export const usernameWithPasswordSchema = z.object({
   username: usernameSchema,
   password: passwordSchema,
+});
+
+export const requiredYAMLPluginDataSchema = z.object({
+  name: z.string(),
+  version: z.string(),
 });
 

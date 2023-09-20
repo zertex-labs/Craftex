@@ -16,15 +16,11 @@
   async function handleSubmit(e: SubmitEvent) {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
-    console.log(formData);
-
     // validate on client before sending to server to minimize useless requests
     // make sure also validated on server-side
 
     const parseRes = uploadPluginSchema.safeParse({
-      title: formData.get("title"),
       description: formData.get("description"),
-      version: formData.get("version"),
       file: formData.get("file"),
     });
 
@@ -37,7 +33,7 @@
       );
     }
 
-    const request = await fetch("/api/plugin/upload", {
+    const request = await fetch("/api/plugin/create", {
       method: "POST",
       body: formData,
     });
@@ -57,18 +53,6 @@
   enctype="multipart/form-data"
   on:submit|preventDefault={handleSubmit}
 >
-  <input
-    type="text"
-    name="title"
-    placeholder="Title"
-  />
-
-  <input
-    type="text"
-    name="version"
-    placeholder="Version"
-  />
-
   <textarea
     name="description"
     placeholder="Description"

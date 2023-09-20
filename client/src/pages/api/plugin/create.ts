@@ -10,6 +10,8 @@ import {
   fileExits,
   uploadPlugin,
 } from "$server/s3/helpers";
+import { getRequiredDataFromPluginYAML } from "$lib/helpers/parsers";
+import type { FailableResponse } from "$lib/types";
 
 export const POST: APIRoute = async ({ locals, redirect, request }) => {
   const session = await locals.auth.validate();
@@ -18,7 +20,7 @@ export const POST: APIRoute = async ({ locals, redirect, request }) => {
   // -- 1 -- Make sure the form data is valid
   const data = await request.formData();
   const parseRes = uploadPluginSchema.safeParse({
-    title: data.get("title"),
+    name: data.get("name"),
     description: data.get("description"),
     version: data.get("version"),
     file: data.get("file"),
@@ -29,16 +31,27 @@ export const POST: APIRoute = async ({ locals, redirect, request }) => {
     return response.error(`Invalid ${issue.path.join(".")}: ${issue.message}`);
   }
 
-  // -- ? -- Decompile the jar and parse the plugin.yml. Most of the metadata should be inferred from there.
+  let name: string;
+  const { description, file, name: parsedName } = parseRes.data;
 
-  const { description, file, title, version: latestVersion } = parseRes.data;
+  // -- 2 -- Parse the plugin.yml file
+  const pluginYamlData = await getRequiredDataFromPluginYAML(file);
+  if (pluginYamlData.failed) {
+    return response.error(pluginYamlData.error);
+  }
 
-  // -- 2 -- Generate a UUID for the plugin and the plugin key
+  const { name: yamlName, version } = pluginYamlData.data;
+
+  name = parsedName ?? yamlName;
+
+  // -- 4 -- Generate plugin "identifiers" (id, key)
   const pluginId = createId(true);
+
+  // TODO for some reason keys deduplication doesnt work. prob some logic error rethink things later me
 
   const key = constructPluginKey({
     id: session.user.userId,
-    latestVersion,
+    version: pluginYamlData.data.version,
   });
 
   // -- 3 -- Make sure the plugin isn't uploaded already on the cdn
@@ -56,11 +69,13 @@ export const POST: APIRoute = async ({ locals, redirect, request }) => {
   console.table(parseRes.data);
 
   const createRes = await db.insert(plugin).values({
+    phase: "draft",
     id: pluginId,
     publisherId: session.user.userId,
-    title,
+    name,
     description,
-    latestVersion,
+    versions: [version],
+    // TODO handle socials as well
   });
   console.log("Inserted plugin, affected", createRes.rowsAffected);
 
@@ -81,8 +96,7 @@ export const POST: APIRoute = async ({ locals, redirect, request }) => {
 
   return response.success({
     pluginId,
-    title,
-    version: latestVersion,
+    name,
   });
 };
 

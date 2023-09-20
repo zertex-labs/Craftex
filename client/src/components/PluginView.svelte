@@ -1,11 +1,12 @@
 <script lang="ts">
+  import type { Plugin } from "$lib/types";
   import { writable } from "svelte/store";
 
   let loading = writable(true);
 
   const pluginsPromise = fetch("/api/plugin/user_owned")
     .then((res) => res.json())
-    .then((res) => res.data)
+    .then((res) => res.data as Plugin[]);
 </script>
 
 {#await pluginsPromise}
@@ -15,7 +16,7 @@
     {#each plugins as plugin}
       <li>
         <a href={`/plugins/${plugin.id}`}>
-          {plugin.title}
+          {plugin.name} {JSON.stringify(plugin.versions)}
         </a>
       </li>
     {/each}

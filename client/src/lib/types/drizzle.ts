@@ -1,3 +1,12 @@
+export const pluginPhases = ["draft", "published", "archived"] as const;
+export type PluginPhase = (typeof pluginPhases)[number];
+
+export type PluginSocials = {
+  github?: string;
+  discord?: string;
+  website?: string;
+};
+
 export type User = {
   id: string;
   username: string;
@@ -16,23 +25,15 @@ export type Session = {
   idleExpires: number;
 };
 
-export type PluginVersionEntry = {
-  pluginId: string; // used to find the plugin in spaces
-  version: string;
-};
-
-export type PluginVersions = {
-  id: string;
-  pluginId: string;
-  versions: PluginVersionEntry[];
-};
-
 export type Plugin = {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  latestVersion: string;
+  phase: PluginPhase;
+  versions: string[];
+  socials: PluginSocials;
   publisherId: string;
   createdAt: number;
   updatedAt: number;
 };
+

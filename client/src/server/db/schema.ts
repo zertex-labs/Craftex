@@ -4,11 +4,13 @@ import {
   mysqlTable,
   timestamp,
   varchar,
+  boolean,
 } from "drizzle-orm/mysql-core";
 
-import TableNames from "./table_names";
+import { pluginPhases, type PluginSocials } from "$lib/types";
+
 import { CUID2_LENGTH } from "$lib/constants";
-import type { PluginVersionEntry } from "$lib/types";
+import TableNames from "./table_names";
 
 export const user = mysqlTable(TableNames.user, {
   id: varchar("id", {
@@ -47,34 +49,35 @@ export const session = mysqlTable(TableNames.session, {
   }).notNull(),
 });
 
-export const pluginVersions = mysqlTable(TableNames.pluginVersions, {
-  // use '$lib/helpers/cuid2.ts' to create
-  id: varchar("id", {
-    length: CUID2_LENGTH,
-  }).primaryKey(),
+// downloads POC: store in kv until new version is released, then move to mysql and start new kv counter
 
-  pluginId: varchar("plugin_id", {
-    length: CUID2_LENGTH,
-  }).notNull(),
-
-  versions: json("versions").$type<PluginVersionEntry[]>().notNull(),
-});
-
+// TODO: ratings/reviews, contributors, tags, downloads etc
 export const plugin = mysqlTable(TableNames.plugin, {
   // use '$lib/helpers/cuid2.ts' to create
   id: varchar("id", {
     length: CUID2_LENGTH,
   }).primaryKey(),
 
-  title: varchar("title", {
-    length: 255,
-  }).notNull(),
+  name: varchar("name", {
+    length: 64,
+  })
+    .unique()
+    .notNull(),
+
   description: varchar("description", {
     length: 1024,
   }).notNull(),
-  latestVersion: varchar("latest_version", {
-    length: 32,
+
+  phase: varchar("phase", {
+    enum: pluginPhases,
+    length: 16,
   }).notNull(),
+
+  // TODO: per version metadata (release date, downloads, changelog etc)
+  // new versions will be pushed to the end of the array. So sorting will be: oldest => newest
+  versions: json("versions").$type<string[]>().notNull(),
+
+  socials: json("socials").$type<PluginSocials>().default({}).notNull(),
 
   publisherId: varchar("publisher_id", {
     length: 15,
